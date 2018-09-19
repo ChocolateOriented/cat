@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    name: datasource
+    url: jdbc:mysql://127.0.0.1:3306/smartquant?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    maxActive: 50
+    initialSize: 10
+    maxWait: 10000
+    minIdle: 10
+    timeBetweenEvictionRunsMillis: 300000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+
+redis:
+  ssl: false
+  database: 0
+  host: 127.0.0.1
+  password: 123456
+  port: 6379
+  timeout: 20000
+  maxTotal: 50
+  maxWait: 10000
+  maxIdle: 10
+  minIdle: 0
+
+datacenterId: 1
+machineId: 1
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-handlers-package: com.xxx.util
+  configuration:
+    mapUnderscoreToCamelCase: true
