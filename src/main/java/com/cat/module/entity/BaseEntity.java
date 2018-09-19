@@ -9,9 +9,9 @@ public class BaseEntity implements Serializable{
 
 	private Long id;
 	private Long createBy;
-	private Date createDate;
+	private Date createTime;
 	private Long updateBy;
-	private Date updateDate;
+	private Date updateTime;
 
 
 	public Long getId() {
@@ -30,14 +30,6 @@ public class BaseEntity implements Serializable{
 		this.createBy = createBy;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
 	public Long getUpdateBy() {
 		return updateBy;
 	}
@@ -46,11 +38,21 @@ public class BaseEntity implements Serializable{
 		this.updateBy = updateBy;
 	}
 
-	public Date getUpdateDate() {
-		return updateDate;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	
 }
