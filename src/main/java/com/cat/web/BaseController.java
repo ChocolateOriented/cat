@@ -1,5 +1,6 @@
 package com.cat.web;
 
+import com.cat.module.entity.User;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,11 @@ public abstract class BaseController {
 
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+	protected User getCurrentUser(){
+
+		return null;
+	}
 
 	/**
 	 * @Description 获取字段错误信息
