@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     name: datasource
-    url: jdbc:mysql://127.0.0.1:3306/smartquant?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://127.0.0.1:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
     password: root
     type: com.alibaba.druid.pool.DruidDataSource
@@ -37,6 +37,6 @@ machineId: 1
 
 mybatis:
   mapper-locations: classpath:mapping/*.xml
-  type-handlers-package: com.xxx.util
+  type-handlers-package: com.cat.util
   configuration:
     mapUnderscoreToCamelCase: true

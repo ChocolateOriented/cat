@@ -17,14 +17,14 @@
             <property name="suppressDate" value="true"/>
         </commentGenerator>
         
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/smartquant" userId="root" password="root">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/cat" userId="root" password="root">
         </jdbcConnection>
         
         <!-- <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver> -->
         
-        <javaModelGenerator targetPackage="com.smartquant.module.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.cat.module.entity" targetProject="src/main/java">
             <!-- 自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field -->
             <property name="constructorBased" value="false"/>
             <property name="enableSubPackages" value="true"/>
@@ -37,7 +37,7 @@
         </sqlMapGenerator>
         
         <!-- ANNOTATEDMAPPER/XMLMAPPER 生成mapper注解或xml -->
-        <javaClientGenerator targetPackage="com.smartquant.mapper" type="XMLMAPPER" targetProject="src/main/java">
+        <javaClientGenerator targetPackage="com.cat.mapper" type="XMLMAPPER" targetProject="src/main/java">
             <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
             <property name="enableSubPackages" value="true"/>
     
@@ -46,7 +46,7 @@
              -->
         </javaClientGenerator>
         
-        <table schema="smartquant" tableName="strategy_deal" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+        <table schema="cat" tableName="strategy_deal" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
             enableSelectByExample="false" selectByExampleQueryId="false">
             
             
