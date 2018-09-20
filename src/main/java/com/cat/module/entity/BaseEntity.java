@@ -2,19 +2,22 @@ package com.cat.module.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.springframework.data.annotation.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue
 	private Long id;
 	private Long createBy;
 	private Date createTime;
 	private Long updateBy;
 	private Date updateTime;
-
 
 	public Long getId() {
 		return id;
@@ -56,5 +59,14 @@ public class BaseEntity implements Serializable{
 		this.updateTime = updateTime;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "BaseEntity{" +
+				"id=" + id +
+				", createBy=" + createBy +
+				", createTime=" + createTime +
+				", updateBy=" + updateBy +
+				", updateTime=" + updateTime +
+				'}';
+	}
 }

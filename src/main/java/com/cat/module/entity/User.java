@@ -1,6 +1,5 @@
 package com.cat.module.entity;
 
-
 import javax.persistence.Entity;
 
 @Entity
@@ -10,7 +9,7 @@ public class User extends BaseEntity {
   private String loginName;
   private String password;
   private String name;
-  private Long status;
+  private Integer status;
   private String dunningCycle; //示例 10100 代表Q0,Q2
 
   public Long getOrganizationId() {
@@ -48,15 +47,13 @@ public class User extends BaseEntity {
     this.name = name;
   }
 
-
-  public Long getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
-  public void setStatus(Long status) {
+  public void setStatus(Integer status) {
     this.status = status;
   }
-
 
   public String getDunningCycle() {
     return dunningCycle;
@@ -66,4 +63,15 @@ public class User extends BaseEntity {
     this.dunningCycle = dunningCycle;
   }
 
+  @Override
+  public String toString() {
+    return "User{" +
+        "organizationId=" + organizationId +
+        ", loginName='" + loginName + '\'' +
+        ", password='" + password + '\'' +
+        ", name='" + name + '\'' +
+        ", status=" + status +
+        ", dunningCycle='" + dunningCycle + '\'' +
+        "} " + super.toString();
+  }
 }

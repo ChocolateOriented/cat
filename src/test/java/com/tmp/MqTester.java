@@ -3,7 +3,6 @@ package com.tmp;
 import com.cat.CatApplication;
 import com.cat.module.entity.User;
 import com.cat.repository.UserRepository;
-import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,18 @@ public class MqTester {
 	private UserRepository userRepository;
 	
 	@Test
-	public void testMq() {
+	public void testSearch() {
 		User user = userRepository.findOne(1L);
 		System.out.println(user  );
 	}
+
+	@Test
+	public void testInsert() {
+		User user = new User();
+		user.setName("test");
+		user.setStatus(1);
+		userRepository.save(user);
+		System.out.println(user);
+	}
+
 }
