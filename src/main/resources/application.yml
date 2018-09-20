@@ -3,12 +3,20 @@ server:
 
 spring:
   datasource:
-    name: datasource
-    url: jdbc:mysql://127.0.0.1:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
-    username: root
-    password: root
-    type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.jdbc.Driver
+    default:
+      name: datasource
+      url: jdbc:mysql://127.0.0.1:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: root
+      password: root
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+    risk:
+      name: datasource
+      url: jdbc:mysql://127.0.0.1:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: root
+      password: root
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
     maxActive: 50
     initialSize: 10
     maxWait: 10000
@@ -19,6 +27,20 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+  rabbitmq:
+        username: user_cln
+        password: mo9.com
+        addresses: 192.168.3.191:5672
+        virtual-host: /
+        publisher-confirms: true
+        mq-exchange: E.CLONE.TOPIC.RAPTOR.ALL
+        listener:
+          concurrency: 5
+          max-concurrency: 10
+          #acknowledge-mode: manual
 
 redis:
   ssl: false
@@ -35,8 +57,13 @@ redis:
 datacenterId: 1
 machineId: 1
 
-mybatis:
-  mapper-locations: classpath:mapping/*.xml
-  type-handlers-package: com.cat.util
-  configuration:
-    mapUnderscoreToCamelCase: true
+rabbit:
+  customerAndOrder:
+    receivedAllRoutingKey: LOAN_TAG
+    orderRepaymentRoutingKey: REPAY_TAG
+    queue: Q.CLONE.DURABLE.RAPTOR.MIS
+
+httpclient:
+  pool:
+    maxTotal: 500
+    defaultMaxPerRoute: 200

@@ -12,6 +12,15 @@ public class BaseResponse implements Serializable {
 
 	private String message = "ok";
 
+	public BaseResponse() {
+		super();
+	}
+
+	public BaseResponse(Integer code) {
+		super();
+		this.code = code;
+	}
+
 	public Integer getCode() {
 		return code;
 	}
@@ -31,5 +40,12 @@ public class BaseResponse implements Serializable {
 	@JsonIgnore
 	public boolean isSuccess() {
 		return code != null && code == 0;
+	}
+
+	public static BaseResponse success() {
+		return new BaseResponse();
+	}
+	public static BaseResponse fail() {
+		return new BaseResponse(-1);
 	}
 }
