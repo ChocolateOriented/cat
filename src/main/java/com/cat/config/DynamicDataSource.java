@@ -19,6 +19,10 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         contextHolder.set(currentLookupKey);  
     }
 
+	public static String getCurrentDataSourceKey() {
+		return contextHolder.get();
+	}
+
 	public static void reset() {  
         contextHolder.remove();
     }

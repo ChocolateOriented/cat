@@ -18,6 +18,13 @@ public class EntitiesResponse<T> extends BaseResponse {
 		this.data = data;
 	}
 
+	public void setEntitese(List<T> entities) {
+		if (data == null) {
+			data = new Entities<>();
+		}
+		data.setEntities(entities);
+	}
+
 	@JsonIgnore
 	public List<T> getEnties() {
 		return data == null ? null : data.getEntities();
