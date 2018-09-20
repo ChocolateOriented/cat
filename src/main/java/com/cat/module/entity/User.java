@@ -1,15 +1,20 @@
 package com.cat.module.entity;
 
+import com.cat.module.enums.UserStatus;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class User extends BaseEntity {
 
   private Long organizationId;
+  @Column(nullable = false)
   private String loginName;
+  @Column(nullable = false)
   private String password;
   private String name;
-  private Integer status;
+  @Column(nullable = false)
+  private UserStatus status;
   private String dunningCycle; //示例 10100 代表Q0,Q2
 
   public Long getOrganizationId() {
@@ -47,11 +52,11 @@ public class User extends BaseEntity {
     this.name = name;
   }
 
-  public Integer getStatus() {
+  public UserStatus getStatus() {
     return status;
   }
 
-  public void setStatus(Integer status) {
+  public void setStatus(UserStatus status) {
     this.status = status;
   }
 

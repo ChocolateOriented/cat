@@ -1,6 +1,8 @@
 package com.cat.module.entity;
 
+import javax.persistence.Entity;
 
+@Entity
 public class Organization extends BaseEntity {
 
   private String name;

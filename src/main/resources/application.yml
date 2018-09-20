@@ -30,6 +30,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    show-sql: true
   rabbitmq:
         username: user_cln
         password: mo9.com
