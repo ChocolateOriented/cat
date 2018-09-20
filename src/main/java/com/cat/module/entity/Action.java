@@ -2,6 +2,8 @@ package com.cat.module.entity;
 
 import java.util.Date;
 
+import com.cat.module.enums.ActionCode;
+
 public class Action {
     private Long id;
 
@@ -17,7 +19,7 @@ public class Action {
 
     private Integer targetType;
 
-    private String actionCode;
+    private ActionCode actionCode;
 
     private String createBy;
 
@@ -83,11 +85,11 @@ public class Action {
         this.targetType = targetType;
     }
 
-    public String getActionCode() {
+    public ActionCode getActionCode() {
         return actionCode;
     }
 
-    public void setActionCode(String actionCode) {
+    public void setActionCode(ActionCode actionCode) {
         this.actionCode = actionCode;
     }
 
