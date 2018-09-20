@@ -26,6 +26,11 @@ public class CodeEnumTypeHandler<E extends Enum<E> & BaseCodeEnum> extends BaseT
 		}
 	}
 
+	public CodeEnumTypeHandler() {
+
+	}
+
+	@Override
 	public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
 		if(jdbcType == null) {
 			ps.setInt(i, parameter.getValue());
@@ -34,16 +39,19 @@ public class CodeEnumTypeHandler<E extends Enum<E> & BaseCodeEnum> extends BaseT
 		}
 	}
 
+	@Override
 	public E getNullableResult(ResultSet rs, String columnName) throws SQLException {
 		int value = rs.getInt(columnName);
 		return BaseCodeEnum.getCodeEnumByValue(type,value);
 	}
 
+	@Override
 	public E getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
 		int value = rs.getInt(columnIndex);
 		return BaseCodeEnum.getCodeEnumByValue(type,value);
 	}
 
+	@Override
 	public E getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
 		int value = cs.getInt(columnIndex);
 		return BaseCodeEnum.getCodeEnumByValue(type,value);

@@ -19,6 +19,18 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
+  rabbitmq:
+        username: user_cln
+        password: mo9.com
+        addresses: 192.168.3.191:5672
+        virtual-host: /
+        publisher-confirms: true
+        mq-exchange: E.CLONE.TOPIC.WELFARE.AWARD
+        routing-key: INVITATIONAWARD
+        listener:
+          concurrency: 5
+          max-concurrency: 10
+          #acknowledge-mode: manual
 
 redis:
   ssl: false
@@ -40,3 +52,17 @@ mybatis:
   type-handlers-package: com.cat.util
   configuration:
     mapUnderscoreToCamelCase: true
+
+rabbit:
+  userInfo:
+    routingKey:
+    queue:
+  orderReceive:
+    routingKey:
+    queue:
+  orderDelay:
+    routingKey:
+    queue:
+  orderRepayment:
+    routingKey:
+    queue:
