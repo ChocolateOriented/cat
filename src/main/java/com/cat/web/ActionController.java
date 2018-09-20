@@ -3,6 +3,7 @@ package com.cat.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +15,8 @@ import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
-import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.entity.Action;
+import com.cat.module.entity.User;
 import com.cat.service.ActionService;
 
 @RestController
@@ -26,16 +27,18 @@ public class ActionController extends BaseController {
 	private ActionService actionService;
 
 	@GetMapping(value = "/list")
-	public PageResponse<Action> list(int ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+	public PageResponse<Action> list(String ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		PageResponse<Action> pageResp = new PageResponse<>();
 		Page<Action> page = actionService.findPage(ownerId, pageNum, pageSize);
-		pageResp.setData(page);
+		PageResponse<Action> pageResp = new PageResponse<>(page.getContent(), pageNum, pageSize, page.getSize());
 		return pageResp;
 	}
 
 	@PostMapping(value = "/save")
 	public BaseResponse save(@RequestBody Action action) {
+		User user = getCurrentUser();
+		action.setCreateBy(user.getName());
+		action.setUpdateBy(user.getName());
 		actionService.save(action);
 		return BaseResponse.success();
 	}

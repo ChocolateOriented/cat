@@ -1,6 +1,17 @@
-package com.cat.module.dto.risk;
+package com.cat.module.entity.risk;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "t_risk_call_log")
 public class CallLog {
+
+	@Id
+	@GeneratedValue
+	private Long id;
 
 	private String mobile;
 

@@ -14,9 +14,9 @@ public class BaseEntity implements Serializable{
 	@Id
 	@GeneratedValue
 	private Long id;
-	private Long createBy;
+	private String createBy;
 	private Date createTime;
-	private Long updateBy;
+	private String updateBy;
 	private Date updateTime;
 
 	public Long getId() {
@@ -27,19 +27,19 @@ public class BaseEntity implements Serializable{
 		this.id = id;
 	}
 
-	public Long getCreateBy() {
+	public String getCreateBy() {
 		return createBy;
 	}
 
-	public void setCreateBy(Long createBy) {
+	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
 	}
 
-	public Long getUpdateBy() {
+	public String getUpdateBy() {
 		return updateBy;
 	}
 
-	public void setUpdateBy(Long updateBy) {
+	public void setUpdateBy(String updateBy) {
 		this.updateBy = updateBy;
 	}
 

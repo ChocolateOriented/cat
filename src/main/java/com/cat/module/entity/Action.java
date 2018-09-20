@@ -1,17 +1,25 @@
 package com.cat.module.entity;
 
-import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 import com.cat.module.enums.ActionCode;
 
-public class Action {
-    private Long id;
+@Entity
+@Table(name = "t_cat_action")
+public class Action extends BaseEntity {
 
-    private String orderId;
+	private static final long serialVersionUID = 1L;
+
+	private String orderId;
 
     private String ownerId;
 
     private String dunnerId;
+
+    private String dunnerName;
 
     private String targetTel;
 
@@ -19,23 +27,8 @@ public class Action {
 
     private Integer targetType;
 
+    @Enumerated(EnumType.STRING)
     private ActionCode actionCode;
-
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getOrderId() {
         return orderId;
@@ -61,7 +54,15 @@ public class Action {
         this.dunnerId = dunnerId;
     }
 
-    public String getTargetTel() {
+    public String getDunnerName() {
+		return dunnerName;
+	}
+
+	public void setDunnerName(String dunnerName) {
+		this.dunnerName = dunnerName;
+	}
+
+	public String getTargetTel() {
         return targetTel;
     }
 
@@ -93,35 +94,4 @@ public class Action {
         this.actionCode = actionCode;
     }
 
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

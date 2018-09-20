@@ -3,20 +3,33 @@ package com.cat.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cat.annotation.DataSource;
 import com.cat.config.DynamicDataSource;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse.Page;
-import com.cat.module.entity.Action;
+import com.cat.module.entity.risk.CallLog;
 import com.cat.module.enums.ContactTargetType;
+import com.cat.module.vo.Contact;
+import com.cat.repository.CallLogRepository;
 
 @Service
 public class ContactService extends BaseService {
 
+	@Autowired
+	private CallLogRepository callLogRepository;
+
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
-	public Page<Action> findCalllog(String mobile) {
+	public Page<Contact> findCalllog(String mobile, int pageNum, int pageSize) {
+		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
+		List<Contact> contacts = new ArrayList<>();
+		
+		for (CallLog callLog : callLogs) {
+			Contact contact = new Contact();
+		}
+		
 		return null;
 	}
 
