@@ -20,16 +20,22 @@ public class DataSourceAspect implements Ordered {
 		MethodSignature signature = (MethodSignature) point.getSignature();
 		Method method = signature.getMethod();
 		DataSource annotation = method.getAnnotation(DataSource.class);
+		String oldDataSourceKey = null;
 		if (annotation == null) {
 			return point.proceed();
 		} else {
+			oldDataSourceKey = DynamicDataSource.getCurrentDataSourceKey();
 			DynamicDataSource.setDataSourceKey(annotation.value());
 		}
 		
 		try {
 			return point.proceed();
 		} finally {
-			DynamicDataSource.reset();
+			if (oldDataSourceKey != null) {
+				DynamicDataSource.setDataSourceKey(oldDataSourceKey);
+			} else {
+				DynamicDataSource.reset();
+			}
 		}
 	}
 

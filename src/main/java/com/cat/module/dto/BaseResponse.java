@@ -32,4 +32,8 @@ public class BaseResponse implements Serializable {
 	public boolean isSuccess() {
 		return code != null && code == 0;
 	}
+
+	public static BaseResponse success() {
+		return new BaseResponse();
+	}
 }
