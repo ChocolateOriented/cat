@@ -1,4 +1,4 @@
-package com.cat.web.vo;
+package com.cat.module.vo;
 
 public class Contact {
 
