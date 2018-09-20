@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CatApplication.class)
 @EnableAutoConfiguration
-public class MqTester {
+public class UserTester {
 
 	@Autowired
 	private UserRepository userRepository;
