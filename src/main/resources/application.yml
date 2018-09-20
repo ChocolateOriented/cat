@@ -17,16 +17,19 @@ spring:
       password: root
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
-    maxActive: 5
-    initialSize: 2
+    maxActive: 50
+    initialSize: 10
     maxWait: 10000
-    minIdle: 0
+    minIdle: 10
     timeBetweenEvictionRunsMillis: 300000
     minEvictableIdleTimeMillis: 300000
     validationQuery: select 'x'
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
+  jpa:
+    hibernate:
+      ddl-auto: none
   rabbitmq:
         username: user_cln
         password: mo9.com
@@ -53,12 +56,6 @@ redis:
 
 datacenterId: 1
 machineId: 1
-
-mybatis:
-  mapper-locations: classpath:mapping/*.xml
-  type-handlers-package: com.cat.util
-  configuration:
-    mapUnderscoreToCamelCase: true
 
 rabbit:
   customerAndOrder:

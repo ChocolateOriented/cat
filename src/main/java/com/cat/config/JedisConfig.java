@@ -117,7 +117,8 @@ public class JedisConfig {
 		jedisPoolConfig.setMaxWaitMillis(maxWait);
 		jedisPoolConfig.setMaxTotal(maxTotal);
 		jedisPoolConfig.setMinIdle(minIdle);
-		JedisPool pool = new JedisPool(jedisPoolConfig, host, port, timeout, password, database, ssl);
+		JedisPool pool = null;
+				//new JedisPool(jedisPoolConfig, host, port, timeout, password, database, ssl);
 		return pool;
 	}
 
