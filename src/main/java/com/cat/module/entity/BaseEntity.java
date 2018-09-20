@@ -2,11 +2,13 @@ package com.cat.module.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.springframework.data.annotation.Id;
 
 public class BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
 	private Long id;
 	private Long createBy;
 	private Date createTime;
