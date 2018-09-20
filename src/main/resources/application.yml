@@ -33,8 +33,7 @@ spring:
         addresses: 192.168.3.191:5672
         virtual-host: /
         publisher-confirms: true
-        mq-exchange: E.CLONE.TOPIC.WELFARE.AWARD
-        routing-key: INVITATIONAWARD
+        mq-exchange: E.CLONE.TOPIC.RAPTOR.ALL
         listener:
           concurrency: 5
           max-concurrency: 10
@@ -62,18 +61,10 @@ mybatis:
     mapUnderscoreToCamelCase: true
 
 rabbit:
-  userInfo:
-    routingKey:
-    queue:
-  orderReceive:
-    routingKey:
-    queue:
-  orderDelay:
-    routingKey:
-    queue:
-  orderRepayment:
-    routingKey:
-    queue:
+  customerAndOrder:
+    receivedAllRoutingKey: LOAN_TAG
+    orderRepaymentRoutingKey: REPAY_TAG
+    queue: Q.CLONE.DURABLE.RAPTOR.MIS
 
 httpclient:
   pool:
