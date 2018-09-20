@@ -3,16 +3,24 @@ server:
 
 spring:
   datasource:
-    name: datasource
-    url: jdbc:mysql://127.0.0.1:3306/rengar?useUnicode=true&characterEncoding=utf-8&useSSL=true
-    username: root
-    password: 123456
-    type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.jdbc.Driver
-    maxActive: 50
-    initialSize: 10
+    default:
+      name: datasource
+      url: jdbc:mysql://127.0.0.1:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: root
+      password: root
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+    risk:
+      name: datasource
+      url: jdbc:mysql://127.0.0.1:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: root
+      password: root
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+    maxActive: 5
+    initialSize: 2
     maxWait: 10000
-    minIdle: 10
+    minIdle: 0
     timeBetweenEvictionRunsMillis: 300000
     minEvictableIdleTimeMillis: 300000
     validationQuery: select 'x'
@@ -34,3 +42,14 @@ redis:
 
 datacenterId: 1
 machineId: 1
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-handlers-package: com.cat.util
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+httpclient:
+  pool:
+    maxTotal: 500
+    defaultMaxPerRoute: 200
