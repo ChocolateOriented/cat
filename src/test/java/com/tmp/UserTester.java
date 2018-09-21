@@ -32,7 +32,6 @@ public class UserTester {
 	@Test
 	public void testInsert() {
 		User user = new User();
-		user.setId(2L);
 		user.setName("test13");
 		user.setStatus(UserStatus.sss);
 		userRepository.save(user);

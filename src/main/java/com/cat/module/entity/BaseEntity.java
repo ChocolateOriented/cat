@@ -2,11 +2,18 @@ package com.cat.module.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -14,9 +21,13 @@ public class BaseEntity implements Serializable{
 	@Id
 	@GeneratedValue
 	private Long id;
+	@CreatedBy
 	private String createBy;
+	@CreatedDate
 	private Date createTime;
+	@LastModifiedBy
 	private String updateBy;
+	@LastModifiedDate
 	private Date updateTime;
 
 	public Long getId() {
