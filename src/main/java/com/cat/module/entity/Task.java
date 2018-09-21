@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.cat.module.enums.CollectTaskStatus;
 import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -57,7 +58,7 @@ public class Task  extends BaseEntity {
 	private Date  taskEndTime;//任务结束时间
 	private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
-	private String  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
+	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
@@ -248,10 +249,10 @@ public class Task  extends BaseEntity {
 	public void setCollectPeriodEnd(Integer collectPeriodEnd) {
 		this.collectPeriodEnd = collectPeriodEnd;
 	}
-	public String getCollectTaskStatus() {
+	public CollectTaskStatus getCollectTaskStatus() {
 		return collectTaskStatus;
 	}
-	public void setCollectTaskStatus(String collectTaskStatus) {
+	public void setCollectTaskStatus(CollectTaskStatus collectTaskStatus) {
 		this.collectTaskStatus = collectTaskStatus;
 	}
 	public String getCollectTelRemark() {

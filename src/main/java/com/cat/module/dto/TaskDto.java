@@ -27,7 +27,7 @@ public class TaskDto extends BaseEntity{
 	private String collectorName;//催收人
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
-	private Long userId;//催收员id
+	private Long collectorId;//催收员id
 	private ActionCode actionFeedbackType;//行动码
 	
 	//------------请求参数----------
@@ -140,11 +140,11 @@ public class TaskDto extends BaseEntity{
 	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
 	}
-	public Long getUserId() {
-		return userId;
+	public Long getCollectorId() {
+		return collectorId;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUserId(Long collectorId) {
+		this.collectorId = collectorId;
 	}
 
 	
