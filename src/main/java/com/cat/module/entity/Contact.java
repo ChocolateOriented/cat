@@ -6,12 +6,12 @@ import javax.persistence.Entity;
  * Created by cyuan on 2018/9/21.
  */
 @Entity
-public class ContactInfo {
+public class Contact {
     private Long id;
     /**
      * 用户code
      */
-    private String ownerId;
+    private String customerId;
     /**
      * 用户手机号
      */
@@ -33,12 +33,12 @@ public class ContactInfo {
         this.id = id;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getMobile() {

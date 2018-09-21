@@ -14,7 +14,7 @@ public class CustomerBaseInfo extends BaseEntity {
     /**
      * 用户code
      */
-    private String ownerId;
+    private String customerId;
     /**
      * 手机号
      */
@@ -76,14 +76,23 @@ public class CustomerBaseInfo extends BaseEntity {
      */
     private Date lastLoginTime;
 
+    private String contactsList;
 
-
-    public String getOwnerId() {
-        return ownerId;
+    public String getContactsList() {
+        return contactsList;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setContactsList(String contactsList) {
+        this.contactsList = contactsList;
+    }
+
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getMobile() {
@@ -205,5 +214,6 @@ public class CustomerBaseInfo extends BaseEntity {
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
+
 
 }

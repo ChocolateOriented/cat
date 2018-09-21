@@ -1,5 +1,7 @@
 package com.cat.module.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import javax.persistence.Entity;
 
 /**
@@ -15,16 +17,18 @@ public class Bank extends BaseEntity {
     /**
      * 用户code
      */
-    private String ownerId;
+    private String customerId;
     /**
      * 银行账号
      */
+    @JSONField(name = "bankCard")
     private String bankNo;
     /**
      * 银行名字
      */
     private String bankName;
 
+    @JSONField(name = "idCard")
     private String cardId;
 
     private String userName;
@@ -43,12 +47,12 @@ public class Bank extends BaseEntity {
         this.mobile = mobile;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getBankNo() {
