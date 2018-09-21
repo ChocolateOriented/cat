@@ -1,97 +1,128 @@
 package com.cat.module.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.cat.module.enums.ActionCode;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "t_cat_action")
+@Table(name = "t_action")
+@JsonIgnoreProperties({"createBy", "createTime", "updateBy", "updateTime"})
 public class Action extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	private String orderId;
 
-    private String ownerId;
+	private String orderStatus;
 
-    private String dunnerId;
+	private Date repaymentTime;
 
-    private String dunnerName;
+    private String customerId;
 
-    private String targetTel;
+    private String collectorId;
 
-    private String targetName;
+    private String collectorName;
 
-    private Integer targetType;
+    private String contactTel;
+
+    private String contactName;
+
+    private Integer contactType;
 
     @Enumerated(EnumType.STRING)
-    private ActionCode actionCode;
+    private ActionCode actionFeedback;
 
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public String getDunnerId() {
-        return dunnerId;
-    }
-
-    public void setDunnerId(String dunnerId) {
-        this.dunnerId = dunnerId;
-    }
-
-    public String getDunnerName() {
-		return dunnerName;
+	public String getOrderId() {
+		return orderId;
 	}
 
-	public void setDunnerName(String dunnerName) {
-		this.dunnerName = dunnerName;
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
-	public String getTargetTel() {
-        return targetTel;
-    }
+	public String getOrderStatus() {
+		return orderStatus;
+	}
 
-    public void setTargetTel(String targetTel) {
-        this.targetTel = targetTel;
-    }
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 
-    public String getTargetName() {
-        return targetName;
-    }
+	public Long getRepaymentTime() {
+		return repaymentTime == null ? null : repaymentTime.getTime();
+	}
 
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
+	public void setRepaymentTime(Date repaymentTime) {
+		this.repaymentTime = repaymentTime;
+	}
 
-    public Integer getTargetType() {
-        return targetType;
-    }
+	public String getCustomerId() {
+		return customerId;
+	}
 
-    public void setTargetType(Integer targetType) {
-        this.targetType = targetType;
-    }
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
 
-    public ActionCode getActionCode() {
-        return actionCode;
-    }
+	public String getCollectorId() {
+		return collectorId;
+	}
 
-    public void setActionCode(ActionCode actionCode) {
-        this.actionCode = actionCode;
-    }
+	public void setCollectorId(String collectorId) {
+		this.collectorId = collectorId;
+	}
 
+	public String getCollectorName() {
+		return collectorName;
+	}
+
+	public void setCollectorName(String collectorName) {
+		this.collectorName = collectorName;
+	}
+
+	public String getContactTel() {
+		return contactTel;
+	}
+
+	public void setContactTel(String contactTel) {
+		this.contactTel = contactTel;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+	public Integer getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(Integer contactType) {
+		this.contactType = contactType;
+	}
+
+	public ActionCode getActionFeedback() {
+		return actionFeedback;
+	}
+
+	public void setActionFeedback(ActionCode actionFeedback) {
+		this.actionFeedback = actionFeedback;
+	}
+
+	public String getOperatorName() {
+		return super.getUpdateBy();
+	}
+
+	public Long getOperatorTime() {
+		return super.getUpdateTime() == null ? null : super.getUpdateTime().getTime();
+	}
 }

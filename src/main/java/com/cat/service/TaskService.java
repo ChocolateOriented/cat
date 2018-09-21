@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.User;
-import com.cat.module.vo.Contact;
+import com.cat.module.vo.ContactVo;
 import com.cat.repository.OrganizationRepository;
 import com.cat.repository.UserRepository;
 @Service
@@ -73,7 +73,7 @@ public class TaskService extends BaseService {
 		return false;
 	}
 
-	public List<Contact> findListAddressbook(String ownerId) {
+	public List<ContactVo> findListAddressbook(String ownerId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

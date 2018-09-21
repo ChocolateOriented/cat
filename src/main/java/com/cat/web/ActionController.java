@@ -16,7 +16,6 @@ import com.cat.module.dto.Code;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.entity.Action;
-import com.cat.module.entity.User;
 import com.cat.service.ActionService;
 
 @RestController
@@ -26,19 +25,16 @@ public class ActionController extends BaseController {
 	@Autowired
 	private ActionService actionService;
 
-	@GetMapping(value = "/list")
+	@GetMapping(value = "/list_action_records")
 	public PageResponse<Action> list(String ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		Page<Action> page = actionService.findPage(ownerId, pageNum, pageSize);
-		PageResponse<Action> pageResp = new PageResponse<>(page.getContent(), pageNum, pageSize, page.getSize());
+		Page<Action> page = actionService.findPage(ownerId, pageNum - 1, pageSize);
+		PageResponse<Action> pageResp = new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements());
 		return pageResp;
 	}
 
-	@PostMapping(value = "/save")
+	@PostMapping(value = "/add")
 	public BaseResponse save(@RequestBody Action action) {
-		User user = getCurrentUser();
-		action.setCreateBy(user.getName());
-		action.setUpdateBy(user.getName());
 		actionService.save(action);
 		return BaseResponse.success();
 	}

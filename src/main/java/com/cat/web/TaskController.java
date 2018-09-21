@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.TaskDto;
-import com.cat.module.vo.Contact;
+import com.cat.module.vo.ContactVo;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
 import com.cat.util.excel.ExportExcel;
@@ -89,8 +89,8 @@ public class TaskController extends BaseController {
 	 */
 	@RequestMapping(value="list_addressbook")
 	public BaseResponse listAddressbook(String ownerId){
-		EntitiesResponse<Contact> response = new EntitiesResponse<>();
-		List<Contact>  list = taskService.findListAddressbook(ownerId);
+		EntitiesResponse<ContactVo> response = new EntitiesResponse<>();
+		List<ContactVo>  list = taskService.findListAddressbook(ownerId);
 		response.setEntitese(list);
 		return response;
 	}
