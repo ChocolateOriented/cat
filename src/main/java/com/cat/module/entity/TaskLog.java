@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class TaskLog extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
-	private Integer dbid;		// dbid
+	private Long dbid;		// dbid
 	private String orderId;		// 订单号
 	private String dunningPeopleId;		// 催收人id
 	private String dunningPeopleName;		// 催收人姓名
@@ -31,7 +31,7 @@ public class TaskLog extends BaseEntity {
 	private String ownerName;		// 用户姓名
 	private String mobile;		// 手机号
 	private Date repaymentTime;		// 到期还款日期
-	private Integer loanNumber;		// 本金
+	private BigDecimal loanNumber;		// 本金
 	
 	private BigDecimal  lentNumber;//放款金额
 	private String  interestMode;//利息模式
@@ -45,8 +45,8 @@ public class TaskLog extends BaseEntity {
 	
 		private String behaviorStatus;		// 催收员行为状态（in,out,finished,partial,postpone）
 		private String  dunningTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
-		private String taskId;	 // 任务ID
-		private Integer overdueDays;		// 逾期天数
+		private Long taskId;	 // 任务ID
+		private Integer overdueDays;		// 逾期天数========需要计算
 	
 	private String platformext; // 渠道
 	private Integer creditamount;		// 实际应还金额 (当前应催金额)
@@ -67,11 +67,11 @@ public class TaskLog extends BaseEntity {
 	}
 
 	@NotNull(message="dbid不能为空")
-	public Integer getDbid() {
+	public Long getDbid() {
 		return dbid;
 	}
 
-	public void setDbid(Integer dbid) {
+	public void setDbid(Long dbid) {
 		this.dbid = dbid;
 	}
 	
@@ -202,12 +202,12 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public Integer getLoanNumber() {
+	public BigDecimal getLoanNumber() {
 		return loanNumber;
 	}
 
 
-	public void setLoanNumber(Integer loanNumber) {
+	public void setLoanNumber(BigDecimal loanNumber) {
 		this.loanNumber = loanNumber;
 	}
 
@@ -312,12 +312,12 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public String getTaskId() {
+	public Long getTaskId() {
 		return taskId;
 	}
 
 
-	public void setTaskId(String taskId) {
+	public void setTaskId(Long taskId) {
 		this.taskId = taskId;
 	}
 
