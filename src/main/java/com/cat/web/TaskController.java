@@ -1,13 +1,13 @@
 package com.cat.web;
 
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.EntitiesResponse;
-import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
+import com.cat.module.vo.Contact;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
 import com.cat.util.excel.ExportExcel;
 
 @RestController
 @RequestMapping(value = "/cat/task")
-public class taskController extends BaseController {
+public class TaskController extends BaseController {
 
 	@Autowired
 	private TaskService taskService;
@@ -39,8 +39,8 @@ public class taskController extends BaseController {
 	public BaseResponse list(TaskDto taskDto, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize,HttpServletRequest request){
 		String userId = request.getHeader("User-Id");
-		PageResponse<TaskDto> pageResponse =  taskService.list(taskDto,pageNum,pageSize,userId);
-		return pageResponse;
+		Page<TaskDto> pageResponse =  taskService.list(taskDto,pageNum,pageSize,userId);
+		return null;
 	}
 	/**
 	 * 导出
@@ -89,8 +89,8 @@ public class taskController extends BaseController {
 	 */
 	@RequestMapping(value="list_addressbook")
 	public BaseResponse listAddressbook(String ownerId){
-		EntitiesResponse<TaskDto> response = new EntitiesResponse<>();
-		List<TaskDto>  list = taskService.findUserList();
+		EntitiesResponse<Contact> response = new EntitiesResponse<>();
+		List<Contact>  list = taskService.findListAddressbook(ownerId);
 		response.setEntitese(list);
 		return response;
 	}

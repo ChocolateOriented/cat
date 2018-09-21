@@ -3,12 +3,17 @@ package com.cat.module.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.cat.module.entity.BaseEntity;
 import com.cat.util.NumberUtil;
 import com.cat.util.excel.annotation.ExcelField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
+@Entity
+@Table(name = "t_cat_task")
 public class TaskDto extends BaseEntity{
   
 	private String  orderId;//订单ID - 业务流水号
@@ -22,9 +27,8 @@ public class TaskDto extends BaseEntity{
 	private String dunningTelRemark;//催收备注
 	private String dunningpeopleName;//催收人
 	private Date payoffTime;//还清日期
-	private String organizationId;//机构id
-	private String userId;//催收员id
-	private String userName;//催收员姓名
+	private Long organizationId;//机构id
+	private Long userId;//催收员id
 	
 	
 	//------------请求参数----------
@@ -129,16 +133,16 @@ public class TaskDto extends BaseEntity{
 	public void setOverdueDaysEnd(Integer overdueDaysEnd) {
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
-	public String getOrganizationId() {
+	public Long getOrganizationId() {
 		return organizationId;
 	}
-	public void setOrganizationId(String organizationId) {
+	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
 	}
-	public String getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
