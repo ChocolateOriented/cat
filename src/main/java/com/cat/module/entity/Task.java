@@ -39,7 +39,7 @@ public class Task  extends BaseEntity {
 	private String  orderStatus;//订单状态
 	private BigDecimal  loanAmount;//借贷金额
 	private Integer  loanTerm;//借贷期限
-	private BigDecimal  lentAmountr;//放款金额
+	private BigDecimal  lentAmount;//放款金额
 	private String  interestMode;//利息模式
 	private BigDecimal  interestValue;//利息值
 	private String  penaltyMode;//罚息模式
@@ -219,11 +219,11 @@ public class Task  extends BaseEntity {
 	public void setLoanAmount(BigDecimal loanAmount) {
 		this.loanAmount = loanAmount;
 	}
-	public BigDecimal getLentAmountr() {
-		return lentAmountr;
+	public BigDecimal getLentAmount() {
+		return lentAmount;
 	}
-	public void setLentAmountr(BigDecimal lentAmountr) {
-		this.lentAmountr = lentAmountr;
+	public void setLentAmount(BigDecimal lentAmount) {
+		this.lentAmount = lentAmount;
 	}
 	public String getCollectorId() {
 		return collectorId;
