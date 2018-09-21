@@ -1,5 +1,6 @@
 package com.cat.config;
 
+import com.cat.module.entity.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,10 @@ public class AuditorAwareImpl implements AuditorAware<String> {
   @Override
   public String getCurrentAuditor() {
     //TODO 待实现
-    return "王老五";
+    User current = null;
+    if (current == null) {
+      return "sys";
+    }
+    return current.getName();
   }
 }
