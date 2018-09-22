@@ -6,8 +6,8 @@ package com.cat.module.enums;
  * @date 2018/9/21
  */
 public enum CollectTaskStatus {
-    UNOPEND_TASK("未开启的任务"),
-    TASK_IN_PROGRESS("任务进行中"),
+    UNOPEND_TASK("未分配任务"),
+    TASK_IN_PROGRESS("任务中"),
     TASK_FINISHED("任务结束"),
     TASK_POSTPONE("延期还款");
 

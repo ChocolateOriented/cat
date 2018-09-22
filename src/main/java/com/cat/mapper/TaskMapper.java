@@ -32,14 +32,14 @@ public interface TaskMapper  {
 	 * @param dunningcycle
 	 * @return
 	 */
-	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("dunningtaskstatus")String dunningtaskstatus,@Param("dunningcycle")String dunningcycle,@Param("begin")String begin,@Param("end")String end,@Param("debtbiztype")String debtbiztype);
-	
+	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("collectTaskStatus")String collectTaskStatus,@Param("collectCycle")String collectCycle,@Param("begin")String begin,@Param("end")String end);
+
 	/**
 	 * 根据逾期天数查询未生成任务task的订单
 	 * @param day
 	 * @return
 	 */
-	public List<TaskLog> newfingDelayOrderByNotTask(@Param("day")String day,@Param("debtbiztype")String debtbiztype);
+	public List<TaskLog> newfingDelayOrderByNotTask(@Param("day")String day);
 	
 	
 	/**
@@ -54,7 +54,7 @@ public interface TaskMapper  {
 	 * atuoq0  催收预提醒订单的优质老用户（历史逾期1天内还清）
 	 * @return
 	 */
-	public List<String> findAtuoQ0Dealcode(@Param("day")String day,@Param("payoffday")String payoffday);
+//	public List<String> findAtuoQ0Dealcode(@Param("day")String day,@Param("payoffday")String payoffday);
 	/**
 	 * 查询任务list
 	 * @param taskDto
