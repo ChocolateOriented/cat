@@ -54,7 +54,7 @@ public interface TaskMapper  {
 	 * atuoq0  催收预提醒订单的优质老用户（历史逾期1天内还清）
 	 * @return
 	 */
-	public List<String> findAtuoQ0Dealcode(@Param("day")String day,@Param("payoffday")String payoffday);
+//	public List<String> findAtuoQ0Dealcode(@Param("day")String day,@Param("payoffday")String payoffday);
 	/**
 	 * 查询任务list
 	 * @param taskDto

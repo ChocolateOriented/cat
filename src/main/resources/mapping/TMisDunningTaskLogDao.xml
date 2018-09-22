@@ -29,9 +29,6 @@
 		a.delaydays AS "delaydays"
 	</sql>
 	
-	<sql id="tMisDunningTaskLogJoins">
-	</sql>
-    
 	
 	<insert id="batchInsertTaskLog">
         INSERT INTO t_mis_dunning_task_log(

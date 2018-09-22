@@ -18,17 +18,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 public class Task  extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;	/**
 	 *  --------------------------催款任务状态----------------------------------------------
 	 */
-	public static final String STATUS_DUNNING = "dunning"; //代表催款任务正在催收中
-	public static final String STATUS_EXPIRED = "expired";  //代表催款任务超出催收周期并未催回
-	public static final String STATUS_END = "end"; //代表催款任务被结束，但并没有被还清
-	public static final String STATUS_FINISHED = "finished"; //代表催款任务的订单在催收周期内已还清
-	public static final String STATUS_TRANSFER = "transfer"; //代表催款任务在催收周期内转移给了另一个同周期催款用户
+//	public static final String STATUS_DUNNING = "dunning"; //代表催款任务正在催收中
+//	public static final String STATUS_EXPIRED = "expired";  //代表催款任务超出催收周期并未催回
+//	public static final String STATUS_END = "end"; //代表催款任务被结束，但并没有被还清
+//	public static final String STATUS_FINISHED = "finished"; //代表催款任务的订单在催收周期内已还清
+//	public static final String STATUS_TRANSFER = "transfer"; //代表催款任务在催收周期内转移给了另一个同周期催款用户
 
 	private String  orderId;//订单ID - 业务流水号
 	private String  customerId;//用户code
