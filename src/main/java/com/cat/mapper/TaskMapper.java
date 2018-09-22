@@ -32,8 +32,8 @@ public interface TaskMapper  {
 	 * @param dunningcycle
 	 * @return
 	 */
-	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("dunningtaskstatus")String dunningtaskstatus,@Param("dunningcycle")String dunningcycle,@Param("begin")String begin,@Param("end")String end,@Param("debtbiztype")String debtbiztype);
-	
+	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("collectTaskStatus")String collectTaskStatus,@Param("collectCycle")String collectCycle,@Param("begin")String begin,@Param("end")String end);
+
 	/**
 	 * 根据逾期天数查询未生成任务task的订单
 	 * @param day
