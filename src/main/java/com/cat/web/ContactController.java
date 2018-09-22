@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
@@ -35,5 +36,16 @@ public class ContactController extends BaseController {
 	public EntitiesResponse<Code> listTargetType() {
 		List<Code> targetTypes = contactService.listTargetType();
 		return new EntitiesResponse<Code>(targetTypes);
+	}
+	/**
+	 * 客户的通讯录
+	 * @param ownerId
+	 * @return
+	 */
+	@GetMapping(value="list_addressbook")
+	public BaseResponse listAddressbook(String customerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize){
+		PageResponse<ContactVo> pageResp = contactService.findListAddressbook(customerId, pageNum, pageSize);
+		return pageResp;
 	}
 }

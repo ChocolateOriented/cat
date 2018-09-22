@@ -35,31 +35,23 @@ public class TaskDto extends BaseEntity{
 	private Integer overdueDaysEnd;//逾期天数第2个值
 	private Date payoffTimeStart;//还清日期第一个值
 	private Date payoffTimeEnd;//还清日期第二个值
-	
-	@ExcelField(title = "订单编号", type = 1, align = 2, sort = 110)
 	public String getOrderId() {
 		return orderId;
 	}
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	@ExcelField(title = "姓名", type = 1, align = 2, sort = 10)
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	@ExcelField(title = "手机号", type = 1, align = 2, sort = 20)
 	public String getMobile() {
 		return mobile;
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-	@ExcelField(title = "订单状态", type = 1, align = 2, sort = 70)
-	public String getOrderStatusText() {
-		return "payment" == this.orderStatus ? "未还清" :"已还清"; 
 	}
 	public String getOrderStatus() {
 		return orderStatus;
@@ -67,19 +59,11 @@ public class TaskDto extends BaseEntity{
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	@ExcelField(title = "欠款金额", type = 1, align = 2, sort = 40)
-	public String getLoanAmountText() {
-		return null != this.loanAmount ? NumberUtil.formatTosepara(this.loanAmount) : "";
-	}
 	public BigDecimal getLoanAmount() {
 		return loanAmount;
 	}
 	public void setLoanAmount(BigDecimal loanAmount) {
 		this.loanAmount = loanAmount;
-	}
-	@ExcelField(title = "应催金额", type = 1, align = 2, sort = 30)
-	public String getRepayAmountText() {
-		return null != this.repayAmount ? NumberUtil.formatTosepara(this.repayAmount) : "";
 	}
 	public Integer getRepayAmount() {
 		return repayAmount;
@@ -87,40 +71,53 @@ public class TaskDto extends BaseEntity{
 	public void setRepayAmount(Integer repayAmount) {
 		this.repayAmount = repayAmount;
 	}
-	@ExcelField(title = "到期还款日", type = 1, align = 2, sort = 50)
 	public Date getRepaymentTime() {
 		return repaymentTime;
 	}
 	public void setRepaymentTime(Date repaymentTime) {
 		this.repaymentTime = repaymentTime;
 	}
-	@ExcelField(title = "逾期天数", type = 1, align = 2, sort = 60)
 	public Integer getOverdueDays() {
 		return overdueDays;
 	}
 	public void setOverdueDays(Integer overdueDays) {
 		this.overdueDays = overdueDays;
 	}
-	@ExcelField(title = "催收备注", type = 1, align = 2, sort = 80)
 	public String getRemark() {
 		return remark;
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	@ExcelField(title = "催收人", type = 1, align = 2, sort = 90)
 	public String getCollectorName() {
 		return collectorName;
 	}
-	public void setDunningpeopleName(String collectorName) {
+	public void setCollectorName(String collectorName) {
 		this.collectorName = collectorName;
 	}
-	@ExcelField(title = "还清日期", type = 1, align = 2, sort = 100)
 	public Date getPayoffTime() {
 		return payoffTime;
 	}
 	public void setPayoffTime(Date payoffTime) {
 		this.payoffTime = payoffTime;
+	}
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
+	}
+	public Long getCollectorId() {
+		return collectorId;
+	}
+	public void setCollectorId(Long collectorId) {
+		this.collectorId = collectorId;
+	}
+	public ActionCode getActionFeedbackType() {
+		return actionFeedbackType;
+	}
+	public void setActionFeedbackType(ActionCode actionFeedbackType) {
+		this.actionFeedbackType = actionFeedbackType;
 	}
 	public Integer getOverdueDaysStart() {
 		return overdueDaysStart;
@@ -134,18 +131,17 @@ public class TaskDto extends BaseEntity{
 	public void setOverdueDaysEnd(Integer overdueDaysEnd) {
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
-	public Long getOrganizationId() {
-		return organizationId;
+	public Date getPayoffTimeStart() {
+		return payoffTimeStart;
 	}
-	public void setOrganizationId(Long organizationId) {
-		this.organizationId = organizationId;
+	public void setPayoffTimeStart(Date payoffTimeStart) {
+		this.payoffTimeStart = payoffTimeStart;
 	}
-	public Long getCollectorId() {
-		return collectorId;
+	public Date getPayoffTimeEnd() {
+		return payoffTimeEnd;
 	}
-	public void setUserId(Long collectorId) {
-		this.collectorId = collectorId;
+	public void setPayoffTimeEnd(Date payoffTimeEnd) {
+		this.payoffTimeEnd = payoffTimeEnd;
 	}
-
 	
 }

@@ -5,16 +5,16 @@ spring:
   datasource:
     default:
       name: datasource
-      url: jdbc:mysql://192.168.3.17:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      url: jdbc:mysql://localhost:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
       username: root
-      password: rootroot
+      password: root
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     risk:
       name: datasource
-      url: jdbc:mysql://127.0.0.1:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      url: jdbc:mysql://192.168.3.17:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
       username: root
-      password: root
+      password: rootroot
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     maxActive: 50
@@ -74,7 +74,9 @@ httpclient:
   pool:
     maxTotal: 500
     defaultMaxPerRoute: 200
-
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.cat.module
 
 nest:
   url: http://nest.alpha.mo9.com/nestApi/
