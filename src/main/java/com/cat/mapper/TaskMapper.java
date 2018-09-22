@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
+import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Task;
 
 /**
@@ -54,6 +55,12 @@ public interface TaskMapper  {
 	 * @return
 	 */
 	public List<String> findAtuoQ0Dealcode(@Param("day")String day,@Param("payoffday")String payoffday);
+	/**
+	 * 查询任务list
+	 * @param taskDto
+	 * @return
+	 */
+	public List<TaskDto> findList(TaskDto taskDto);
 	
 
 }

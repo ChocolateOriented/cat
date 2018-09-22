@@ -5,40 +5,47 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.cat.mapper.TaskMapper;
+import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.User;
+import com.cat.module.enums.Role;
 import com.cat.module.vo.ContactVo;
 import com.cat.repository.OrganizationRepository;
 import com.cat.repository.UserRepository;
+import com.github.pagehelper.PageHelper;
 @Service
 public class TaskService extends BaseService {
-	@Autowired
-	OrganizationRepository organizationRepository;
 	@Autowired 
 	UserRepository userRepository;
-	public Page<TaskDto> list(TaskDto taskDto, Integer pageNum, Integer pageSize, String userId) {
-		//userid值为1是管理员身份不去查,不然去查userid是否是主管
+	@Autowired
+	TaskMapper taskMapper;
+	public PageResponse<TaskDto> list(TaskDto taskDto, Integer pageNum, Integer pageSize, String userId) {
+		//userid值为是管理员身份,不然去查userid是否是主管
 		Long id = Long.parseLong(userId);
-		if(id != 1){
-			Organization organization = organizationRepository.findTop1ByleaderId(id);
-			if(organization != null){
-				//是主管
-				taskDto.setOrganizationId(organization.getId());
-			}else{
-				//不是主管
-				taskDto.setUserId(id);
-			}
+		User user = userRepository.findOne(id);
+		if(user == null){
+			logger.warn("该用户不存在,userID={}",userId);
+			return null;
 		}
-		//然后去查
-		
-		
-		
+		//是主管
+		if(user.getRole() == Role.ORGANIZATION_LEADER){
+			taskDto.setOrganizationId(user.getOrganizationId());
+		 }
+		//是催收员
+		if(user.getRole() == Role.COLLECTOR){
+			taskDto.setUserId(id);
+		}
+		//进行查询
+		PageHelper.startPage(pageNum, pageSize);
+		List<TaskDto> list = taskMapper.findList(taskDto);
 		return null;
+		
 	}
+		
 
 	public List<TaskDto> findByOrderIds(List<String> orderIds) {
 		// TODO Auto-generated method stub

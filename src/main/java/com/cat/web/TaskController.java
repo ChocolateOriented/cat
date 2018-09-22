@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.EntitiesResponse;
+import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.vo.ContactVo;
 import com.cat.service.TaskService;
@@ -35,12 +35,12 @@ public class TaskController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="list")
+	@RequestMapping(value="list_task")
 	public BaseResponse list(TaskDto taskDto, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize,HttpServletRequest request){
 		String userId = request.getHeader("User-Id");
-		Page<TaskDto> pageResponse =  taskService.list(taskDto,pageNum,pageSize,userId);
-		return null;
+		PageResponse<TaskDto> pageResponse =  taskService.list(taskDto,pageNum,pageSize,userId);
+		return pageResponse;
 	}
 	/**
 	 * 导出
