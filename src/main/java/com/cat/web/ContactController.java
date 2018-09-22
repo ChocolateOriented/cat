@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
+import com.cat.module.dto.PageResponse.Page;
+import com.cat.module.vo.ContactVo;
 import com.cat.service.ContactService;
 
 @RestController
@@ -21,9 +23,12 @@ public class ContactController extends BaseController {
 	private ContactService contactService;
 
 	@GetMapping(value = "/list_calllog")
-	public PageResponse<String> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+	public PageResponse<ContactVo> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		return null;
+		Page<ContactVo> page = contactService.findCalllog(mobile, pageNum, pageSize);
+		PageResponse<ContactVo> pageResp = new PageResponse<>();
+		pageResp.setData(page);
+		return pageResp;
 	}
 
 	@GetMapping(value = "/list_target_type")

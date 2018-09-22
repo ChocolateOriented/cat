@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.cat.module.enums.CollectTaskStatus;
 import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -29,17 +30,16 @@ public class Task  extends BaseEntity {
 	public static final String STATUS_FINISHED = "finished"; //代表催款任务的订单在催收周期内已还清
 	public static final String STATUS_TRANSFER = "transfer"; //代表催款任务在催收周期内转移给了另一个同周期催款用户
 
-	private Long dbid;		// dbid
 	private String  orderId;//订单ID - 业务流水号
-	private String  ownerId;//用户code
-	private String ownerName;		// 用户姓名
+	private String  customerId;//用户code
+	private String customerName;		//客户姓名
 	private String mobile;		// 手机号
 	private String  orderType;//订单类型
 	private String  productType;//产品类型
 	private String  orderStatus;//订单状态
-	private BigDecimal  loanNumber;//借贷金额
+	private BigDecimal  loanAmount;//借贷金额
 	private Integer  loanTerm;//借贷期限
-	private BigDecimal  lentNumber;//放款金额
+	private BigDecimal  lentAmount;//放款金额
 	private String  interestMode;//利息模式
 	private BigDecimal  interestValue;//利息值
 	private String  penaltyMode;//罚息模式
@@ -52,16 +52,16 @@ public class Task  extends BaseEntity {
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
-	private String  dunningPeopleId;//催讨人id
-	private String  dunningPeopleName;//催讨人名
+	private String  collectorId;//催讨人id
+	private String  collectorName;//催讨人名
 	private Date  taskStartTime;//任务起始时间
 	private Date  taskEndTime;//任务结束时间
-	private Integer  dunningPeriodBegin;//催讨周期-逾期周期起始
-	private Integer  dunningPeriodEnd;//催讨周期-逾期周期截至
-	private String  dunningTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
-	private String  dunningTelRemark;//催收备注
-	private Date  dunningTime;//操作时间
-	private String  dunningCycle;//催收队列
+	private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
+	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
+	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
+	private String  collectTelRemark;//催收备注
+	private Date  collectTime;//操作时间
+	private String  collectCycle;//催收队列
 	private String  remark;//备注
 	
 	private boolean ispayoff;		// 任务所对应的订单是否还清
@@ -73,11 +73,11 @@ public class Task  extends BaseEntity {
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	public String getOwnerId() {
-		return ownerId;
+	public String getCustomerId() {
+		return customerId;
 	}
-	public void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	public String getOrderType() {
 		return orderType;
@@ -97,23 +97,11 @@ public class Task  extends BaseEntity {
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	public BigDecimal getLoanNumber() {
-		return loanNumber;
-	}
-	public void setLoanNumber(BigDecimal loanNumber) {
-		this.loanNumber = loanNumber;
-	}
 	public Integer getLoanTerm() {
 		return loanTerm;
 	}
 	public void setLoanTerm(Integer loanTerm) {
 		this.loanTerm = loanTerm;
-	}
-	public BigDecimal getLentNumber() {
-		return lentNumber;
-	}
-	public void setLentNumber(BigDecimal lentNumber) {
-		this.lentNumber = lentNumber;
 	}
 	public String getInterestMode() {
 		return interestMode;
@@ -184,18 +172,6 @@ public class Task  extends BaseEntity {
 	public void setRepaymentTime(Date repaymentTime) {
 		this.repaymentTime = repaymentTime;
 	}
-	public String getDunningPeopleId() {
-		return dunningPeopleId;
-	}
-	public void setDunningPeopleId(String dunningPeopleId) {
-		this.dunningPeopleId = dunningPeopleId;
-	}
-	public String getDunningPeopleName() {
-		return dunningPeopleName;
-	}
-	public void setDunningPeopleName(String dunningPeopleName) {
-		this.dunningPeopleName = dunningPeopleName;
-	}
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getTaskStartTime() {
 		return taskStartTime;
@@ -210,42 +186,12 @@ public class Task  extends BaseEntity {
 	public void setTaskEndTime(Date taskEndTime) {
 		this.taskEndTime = taskEndTime;
 	}
-	public Integer getDunningPeriodBegin() {
-		return dunningPeriodBegin;
-	}
-	public void setDunningPeriodBegin(Integer dunningPeriodBegin) {
-		this.dunningPeriodBegin = dunningPeriodBegin;
-	}
-	public Integer getDunningPeriodEnd() {
-		return dunningPeriodEnd;
-	}
-	public void setDunningPeriodEnd(Integer dunningPeriodEnd) {
-		this.dunningPeriodEnd = dunningPeriodEnd;
-	}
-	public String getDunningTaskStatus() {
-		return dunningTaskStatus;
-	}
-	public void setDunningTaskStatus(String dunningTaskStatus) {
-		this.dunningTaskStatus = dunningTaskStatus;
-	}
-	public String getDunningTelRemark() {
-		return dunningTelRemark;
-	}
-	public void setDunningTelRemark(String dunningTelRemark) {
-		this.dunningTelRemark = dunningTelRemark;
-	}
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getDunningTime() {
-		return dunningTime;
+	public Date getCollectTime() {
+		return collectTime;
 	}
-	public void setDunningTime(Date dunningTime) {
-		this.dunningTime = dunningTime;
-	}
-	public String getDunningCycle() {
-		return dunningCycle;
-	}
-	public void setDunningCycle(String dunningCycle) {
-		this.dunningCycle = dunningCycle;
+	public void setCollectTime(Date collectTime) {
+		this.collectTime = collectTime;
 	}
 	public String getRemark() {
 		return remark;
@@ -254,12 +200,6 @@ public class Task  extends BaseEntity {
 		this.remark = remark;
 	}
 
-	public Long getDbid() {
-		return dbid;
-	}
-	public void setDbid(Long dbid) {
-		this.dbid = dbid;
-	}
 	public boolean isIspayoff() {
 		return ispayoff;
 	}
@@ -267,11 +207,65 @@ public class Task  extends BaseEntity {
 		this.ispayoff = ispayoff;
 	}
 	
-	public String getOwnerName() {
-		return ownerName;
+	public String getCustomerName() {
+		return customerName;
 	}
-	public void setOwnerName(String ownerName) {
-		this.ownerName = ownerName;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public BigDecimal getLoanAmount() {
+		return loanAmount;
+	}
+	public void setLoanAmount(BigDecimal loanAmount) {
+		this.loanAmount = loanAmount;
+	}
+	public BigDecimal getLentAmount() {
+		return lentAmount;
+	}
+	public void setLentAmount(BigDecimal lentAmount) {
+		this.lentAmount = lentAmount;
+	}
+	public String getCollectorId() {
+		return collectorId;
+	}
+	public void setCollectorId(String collectorId) {
+		this.collectorId = collectorId;
+	}
+	public String getCollectorName() {
+		return collectorName;
+	}
+	public void setCollectorName(String collectorName) {
+		this.collectorName = collectorName;
+	}
+	public Integer getCollectPeriodBegin() {
+		return collectPeriodBegin;
+	}
+	public void setCollectPeriodBegin(Integer collectPeriodBegin) {
+		this.collectPeriodBegin = collectPeriodBegin;
+	}
+	public Integer getCollectPeriodEnd() {
+		return collectPeriodEnd;
+	}
+	public void setCollectPeriodEnd(Integer collectPeriodEnd) {
+		this.collectPeriodEnd = collectPeriodEnd;
+	}
+	public CollectTaskStatus getCollectTaskStatus() {
+		return collectTaskStatus;
+	}
+	public void setCollectTaskStatus(CollectTaskStatus collectTaskStatus) {
+		this.collectTaskStatus = collectTaskStatus;
+	}
+	public String getCollectTelRemark() {
+		return collectTelRemark;
+	}
+	public void setCollectTelRemark(String collectTelRemark) {
+		this.collectTelRemark = collectTelRemark;
+	}
+	public String getCollectCycle() {
+		return collectCycle;
+	}
+	public void setCollectCycle(String collectCycle) {
+		this.collectCycle = collectCycle;
 	}
 	public String getMobile() {
 		return mobile;

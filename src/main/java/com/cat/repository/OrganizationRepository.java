@@ -1,7 +1,6 @@
 package com.cat.repository;
 
 import com.cat.module.entity.Organization;
-import com.cat.module.entity.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -9,4 +8,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface OrganizationRepository extends PagingAndSortingRepository<Organization,Long> {
 
+	Organization findTop1ByleaderId(Long leaderId);
 }

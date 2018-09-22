@@ -1,6 +1,6 @@
 package com.cat.module.vo;
 
-public class Contact {
+public class ContactVo {
 
 	private String name;
 

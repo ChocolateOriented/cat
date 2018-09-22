@@ -2,6 +2,7 @@ package com.cat.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.entity.risk.CallLog;
 import com.cat.module.enums.ContactTargetType;
-import com.cat.module.vo.Contact;
+import com.cat.module.vo.ContactVo;
 import com.cat.repository.CallLogRepository;
 
 @Service
@@ -22,15 +23,28 @@ public class ContactService extends BaseService {
 	private CallLogRepository callLogRepository;
 
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
-	public Page<Contact> findCalllog(String mobile, int pageNum, int pageSize) {
+	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
 		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
-		List<Contact> contacts = new ArrayList<>();
 		
-		for (CallLog callLog : callLogs) {
-			Contact contact = new Contact();
-		}
+		List<ContactVo> cotactVos = callLogs.stream().distinct()
+			.map(callLog -> {
+				ContactVo cv = new ContactVo();
+				cv.setTel(callLog.getCallTel());
+				return cv;
+			})
+			.sorted((ContactVo c1, ContactVo c2) -> c1.getTel().compareTo(c2.getTel()))
+			.collect(Collectors.toList());
 		
-		return null;
+		int from = (pageNum - 1) * pageSize;
+		int to = Math.min(pageNum * pageSize, cotactVos.size());
+		
+		Page<ContactVo> page = new Page<>();
+		page.setEntities(cotactVos.subList(from, to));
+		page.setPageNum(pageNum);
+		page.setPageSize(pageSize);
+		page.setTotal(Long.valueOf(cotactVos.size()));
+		
+		return page;
 	}
 
 	public List<Code> listTargetType() {
