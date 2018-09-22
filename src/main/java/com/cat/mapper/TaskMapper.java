@@ -39,7 +39,7 @@ public interface TaskMapper  {
 	 * @param day
 	 * @return
 	 */
-	public List<TaskLog> newfingDelayOrderByNotTask(@Param("day")String day,@Param("debtbiztype")String debtbiztype);
+	public List<TaskLog> newfingDelayOrderByNotTask(@Param("day")String day);
 	
 	
 	/**
