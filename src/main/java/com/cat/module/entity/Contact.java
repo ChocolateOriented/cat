@@ -1,12 +1,14 @@
 package com.cat.module.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * Created by cyuan on 2018/9/21.
  */
 @Entity
 public class Contact {
+    @Id
     private Long id;
     /**
      * 用户code

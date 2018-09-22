@@ -24,7 +24,7 @@ public class UserTester {
 	
 	@Test
 	public void testSearch() {
-		User user = userRepository.findByloginNameAndPassword("ljx", null);
+		User user = userRepository.findOne(1L);
 		System.out.println(user);
 	}
 

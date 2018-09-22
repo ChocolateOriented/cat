@@ -11,14 +11,20 @@ import javax.persistence.Table;
 public class User extends BaseEntity {
 
   private Long organizationId;
+
   @Column(nullable = false)
   private String email;
+
   @Column(nullable = false)
   private String password;
+
   private String name;
+
   @Column(nullable = false)
   private UserStatus status;
+
   private String collectCycle; //示例 10100 代表Q0,Q2
+
   private Role role;//角色
 
   public String getEmail() {
