@@ -24,16 +24,15 @@ public class UserTester {
 	
 	@Test
 	public void testSearch() {
-		User user = userRepository.findOne(1L);
-		System.out.println(userLongPagingAndSortingRepository.findOne(2L));
-		System.out.println(user  );
+		User user = userRepository.findByloginNameAndPassword("ljx", null);
+		System.out.println(user);
 	}
 
 	@Test
 	public void testInsert() {
 		User user = new User();
 		user.setName("test13");
-		user.setStatus(UserStatus.sss);
+		user.setStatus(UserStatus.LEAVE);
 		userRepository.save(user);
 		System.out.println(user);
 	}

@@ -1,21 +1,41 @@
 package com.cat.module.entity;
 
 import com.cat.module.enums.UserStatus;
+import com.cat.module.enums.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "t_user")
 public class User extends BaseEntity {
 
   private Long organizationId;
   @Column(nullable = false)
-  private String loginName;
+  private String email;
   @Column(nullable = false)
   private String password;
   private String name;
   @Column(nullable = false)
   private UserStatus status;
-  private String dunningCycle; //示例 10100 代表Q0,Q2
+  private String collectCycle; //示例 10100 代表Q0,Q2
+  private Role role;//角色
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
 
   public Long getOrganizationId() {
     return organizationId;
@@ -25,16 +45,6 @@ public class User extends BaseEntity {
     this.organizationId = organizationId;
   }
 
-
-  public String getLoginName() {
-    return loginName;
-  }
-
-  public void setLoginName(String loginName) {
-    this.loginName = loginName;
-  }
-
-
   public String getPassword() {
     return password;
   }
@@ -42,7 +52,6 @@ public class User extends BaseEntity {
   public void setPassword(String password) {
     this.password = password;
   }
-
 
   public String getName() {
     return name;
@@ -60,23 +69,24 @@ public class User extends BaseEntity {
     this.status = status;
   }
 
-  public String getDunningCycle() {
-    return dunningCycle;
+  public String getCollectCycle() {
+    return collectCycle;
   }
 
-  public void setDunningCycle(String dunningCycle) {
-    this.dunningCycle = dunningCycle;
+  public void setCollectCycle(String collectCycle) {
+    this.collectCycle = collectCycle;
   }
 
   @Override
   public String toString() {
     return "User{" +
         "organizationId=" + organizationId +
-        ", loginName='" + loginName + '\'' +
+        ", email='" + email + '\'' +
         ", password='" + password + '\'' +
         ", name='" + name + '\'' +
         ", status=" + status +
-        ", dunningCycle='" + dunningCycle + '\'' +
+        ", collectCycle='" + collectCycle + '\'' +
+        ", role=" + role +
         "} " + super.toString();
   }
 }
