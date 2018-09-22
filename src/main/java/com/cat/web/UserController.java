@@ -1,6 +1,7 @@
 package com.cat.web;
 
 import com.cat.module.dto.RegisterDto;
+import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
 import com.cat.service.UserService;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/cat/account")
-public class UserController {
+public class UserController extends BaseController {
   @Autowired
   UserService userService;
 
@@ -30,11 +31,21 @@ public class UserController {
 
   @PostMapping("register")
   public Results register(@RequestBody RegisterDto registerDto,HttpServletRequest request){
-    //TODO 密码MD5, 支持原系统密码
-    System.out.println(registerDto);
-    userService.registerByEmail(registerDto,request);
-    //生成token, 返回, 并存入redis
-    String Key = "user";
+    try {
+      userService.registerByEmail(registerDto,request);
+    }catch (Exception e){
+      return new Results(ResultConstant.INNER_ERROR,"注册失败");
+    }
+    return Results.ok();
+  }
+
+  @PostMapping("send_validate_code")
+  public Results sendValidateCode(@RequestBody String email,HttpServletRequest request){
+    try {
+      userService.sendValidateCode(email);
+    }catch (Exception e){
+      return new Results(ResultConstant.INNER_ERROR,"发送验证码失败");
+    }
     return Results.ok();
   }
 }
