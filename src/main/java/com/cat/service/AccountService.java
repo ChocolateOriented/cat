@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * Created by jxli on 2018/9/21.
  */
 @Service
-public class UserService extends BaseService {
+public class AccountService extends BaseService {
   @Autowired
   UserRepository userRepository;
   @Autowired

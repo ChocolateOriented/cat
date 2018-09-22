@@ -8,14 +8,18 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.cat.module.enums.CollectTaskStatus;
-import com.cat.service.ScheduledTaskService;
+/*import com.cat.service.ScheduledTaskService;*/
 import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 催收任务Entity
  * @author 徐盛
  * @version 2016-07-12
  */
+@Entity
+@Table(name = "t_task")
 public class Task  extends BaseEntity {
 
 	/**
@@ -52,7 +56,7 @@ public class Task  extends BaseEntity {
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
-	private String  collectorId;//催讨人id
+	private String collectorId;
 	private String  collectorName;//催讨人名
 	private Date  taskStartTime;//任务起始时间
 	private Date  taskEndTime;//任务结束时间
@@ -225,12 +229,15 @@ public class Task  extends BaseEntity {
 	public void setLentAmount(BigDecimal lentAmount) {
 		this.lentAmount = lentAmount;
 	}
+
 	public String getCollectorId() {
 		return collectorId;
 	}
+
 	public void setCollectorId(String collectorId) {
 		this.collectorId = collectorId;
 	}
+
 	public String getCollectorName() {
 		return collectorName;
 	}
@@ -277,12 +284,12 @@ public class Task  extends BaseEntity {
 	 *  获取当前逾期天数
 	 * @return
 	 */
-	public int getCurrentOverdueDays()
+/*	public int getCurrentOverdueDays()
 	{
 //		Date now  = new Date();
 		return ScheduledTaskService.GetOverdueDay(repaymentTime);
 //		return (int)((toDate(now).getTime() - toDate(repaymentTime).getTime()) / (24 * 60 * 60 * 1000));
-	}
+	}*/
 
 	private Date toDate(Date date) {
 		Calendar calendar = Calendar.getInstance();

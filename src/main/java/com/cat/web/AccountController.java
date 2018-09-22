@@ -3,7 +3,7 @@ package com.cat.web;
 import com.cat.module.dto.RegisterDto;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
-import com.cat.service.UserService;
+import com.cat.service.AccountService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/cat/account")
-public class UserController extends BaseController {
+public class AccountController extends BaseController {
   @Autowired
-  UserService userService;
+  AccountService accountService;
 
   @PostMapping("login")
   public Results Login(String userName, String password){
@@ -32,7 +32,7 @@ public class UserController extends BaseController {
   @PostMapping("register")
   public Results register(@RequestBody RegisterDto registerDto,HttpServletRequest request){
     try {
-      userService.registerByEmail(registerDto,request);
+      accountService.registerByEmail(registerDto,request);
     }catch (Exception e){
       return new Results(ResultConstant.INNER_ERROR,"注册失败");
     }
@@ -42,7 +42,7 @@ public class UserController extends BaseController {
   @PostMapping("send_validate_code")
   public Results sendValidateCode(@RequestBody String email,HttpServletRequest request){
     try {
-      userService.sendValidateCode(email);
+      accountService.sendValidateCode(email);
     }catch (Exception e){
       return new Results(ResultConstant.INNER_ERROR,"发送验证码失败");
     }

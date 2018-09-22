@@ -4,6 +4,8 @@ import com.cat.module.enums.Role;
 import com.cat.module.enums.UserStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -21,10 +23,12 @@ public class User extends AuditingEntity {
   private String name;
 
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   private UserStatus status;
 
-  private String collectCycle; //示例 10100 代表Q0,Q2
+  private String collectCycle;
 
+  @Enumerated(EnumType.STRING)
   private Role role;//角色
 
   private Boolean autoDivision;//是否自动分案
