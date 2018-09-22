@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mo9.risk.modules.dunning.dao.TMisDunningTaskLogDao">
+    
+	<insert id="batchInsertTaskLog">
+        INSERT INTO t_mis_dunning_task_log(
+			orderId,
+            collectorId,
+            collectorName,
+            collectCycle,
+            orderStatus,
+            payoffTime,
+            loanTerm,
+            customerId,
+            customerName,
+            mobile,
+            repaymentTime,
+            loanAmount,
+            lentAmount,
+            interestMode,
+            interestValue,
+            penaltyMode,
+            penaltyValue,
+            reliefAmount,
+            chargeValue,
+            postponeUnitCharge,
+            postponeCount,
+            behaviorStatus,
+            collectTaskStatus,
+            taskId,
+            overdueDays,
+            platformext,
+            creditamount
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+              #{item.orderId}
+            , #{,ectorId}
+            , #{item.collectorName}
+            , #{item.collectCycle} 
+            , #{item.orderStatus} 
+            , #{item.payoffTime} 
+            , #{item.loanTerm} 
+            , #{item.customerId} 
+            , #{item.customerName} 
+            , #{item.mobile} 
+            , #{item.repaymentTime} 
+            , #{item.loanAmount} 
+            , #{item.lentAmount} 
+            , #{item.interestMode} 
+            , #{item.interestValue} 
+            , #{item.penaltyMode} 
+            , #{item.penaltyValue} 
+            , #{item.reliefAmount} 
+            , #{item.chargeValue} 
+            , #{item.postponeUnitCharge} 
+            , #{item.postponeCount} 
+            , #{item.behaviorStatus} 
+            , #{item.collectTaskStatus} 
+            , #{item.taskId} 
+            , #{item.overdueDays} 
+            , #{item.platformext} 
+            , #{item.creditamount} 
+            )
+        </foreach>
+    </insert>
+	
+</mapper>
