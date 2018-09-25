@@ -42,4 +42,11 @@
 <delete id="deleteContact" >
     DELETE FROM `t_contact` WHERE `customer_id` = #{customerId}
 </delete>
+<select id="findListByCustomerId" resultType="com.cat.module.vo.ContactVo">
+    SELECT 
+    contact_name AS name,
+    contact_mobile AS tel
+    FROM `t_contact` WHERE `customer_id` = #{customerId}
+</select>
+
 </mapper>

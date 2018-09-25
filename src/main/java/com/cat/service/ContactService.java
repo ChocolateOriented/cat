@@ -74,9 +74,7 @@ public class ContactService extends BaseService {
 	 */
 	public PageResponse<ContactVo> findListAddressbook(String customerId, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		List<ContactVo> list = new ArrayList<>();
-		//TODO去查询通讯录
-//		List<ContactVo> list = this.findList(customerId);
+		List<ContactVo> list = contactMapper.findListByCustomerId(customerId);
 		PageInfo<ContactVo> pageInfo = new PageInfo<>(list);
 		return new PageResponse<ContactVo>(list, pageNum, pageSize, pageInfo.getTotal());
 	}
