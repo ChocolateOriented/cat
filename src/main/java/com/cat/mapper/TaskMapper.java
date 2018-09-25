@@ -6,10 +6,10 @@ package com.cat.mapper;
 
 import java.util.List;
 
+import com.cat.module.dto.TaskDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
-import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Task;
 
 /**
@@ -63,4 +63,7 @@ public interface TaskMapper  {
 	public List<TaskDto> findList(TaskDto taskDto);
 	
 
+	Task findTaskByOrderId(String orderId);
+
+    void insert(Task task);
 }

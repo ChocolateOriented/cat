@@ -11,8 +11,6 @@ import com.cat.module.entity.TaskLog;
 
 /**
  * 催收任务logDAO接口
- * @author 徐盛
- * @version 2017-03-01
  */
 public interface TaskLogMapper  {
 	
@@ -24,5 +22,5 @@ public interface TaskLogMapper  {
 	 */
 	public int batchInsertTaskLog(@Param("list")List<TaskLog> list);
 	
-	
+	public void insert(TaskLog taskLog);
 }

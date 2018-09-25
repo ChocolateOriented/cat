@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cat.mapper.ContactMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,8 @@ public class ContactService extends BaseService {
 	@Autowired
 	private CallLogRepository callLogRepository;
 
+	@Autowired
+	private ContactMapper contactMapper;
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
 	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
 		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
@@ -41,13 +44,13 @@ public class ContactService extends BaseService {
 		
 		int from = (pageNum - 1) * pageSize;
 		int to = Math.min(pageNum * pageSize, cotactVos.size());
-		
+
 		Page<ContactVo> page = new Page<>();
 		page.setEntities(cotactVos.subList(from, to));
 		page.setPageNum(pageNum);
 		page.setPageSize(pageSize);
 		page.setTotal(Long.valueOf(cotactVos.size()));
-		
+
 		return page;
 	}
 
@@ -61,7 +64,7 @@ public class ContactService extends BaseService {
 		}
 		return codes;
 	}
-	
+
 	/**
 	 * 通讯录
 	 * @param customerId
@@ -76,5 +79,18 @@ public class ContactService extends BaseService {
 //		List<ContactVo> list = this.findList(customerId);
 		PageInfo<ContactVo> pageInfo = new PageInfo<>(list);
 		return new PageResponse<ContactVo>(list, pageNum, pageSize, pageInfo.getTotal());
+	}
+
+	public Integer countByCustomerId(String customerId) {
+		return contactMapper.countByCustomerId(customerId);
+	}
+
+	public void deleteContact(String customerId) {
+		contactMapper.deleteContact(customerId);
+	}
+
+
+	public void insert(com.cat.module.entity.Contact  contact) {
+		contactMapper.insert(contact);
 	}
 }
