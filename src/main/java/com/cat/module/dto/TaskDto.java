@@ -1,18 +1,20 @@
 package com.cat.module.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
 
-import com.cat.module.entity.BaseEntity;
 import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @Entity
-public class TaskDto extends BaseEntity{
+public class TaskDto implements Serializable{
   
+	private static final long serialVersionUID = 1L;
+	
 	private String  orderId;//订单ID - 业务流水号
 	private String  name;//客户姓名
 	private String  mobile;//用户手机号

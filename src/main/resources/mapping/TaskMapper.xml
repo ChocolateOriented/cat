@@ -147,13 +147,16 @@
     </select>
 
     <select id="findTaskList" resultType="com.cat.module.dto.TaskDto">
+    
         SELECT
         u.name AS "name",
         t.mobile AS "mobile",
         CASE
         WHEN t.order_status = 'payoff' THEN 0
-        WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time)>0
+        WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
         THEN DATEDIFF(CURDATE(), t.repayment_time)*t.penalty_value + IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
+        WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ <= ]]>0
+        THEN IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
         END  AS "repayAmount",
         IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0) AS "loanAmount",
         t.repayment_time AS "repaymentTime",
@@ -182,8 +185,8 @@
             <if test="collectorId != null and collectorId != ''">
                 AND t.collector_id = #{collectorId}
             </if>
-            <if test="actionFeedbackType != null and actionFeedbackType != ''">
-                AND t.action_feedback = #{actionFeedbackType}
+            <if test="actionFeedback != null and actionFeedback != ''">
+                AND t.action_feedback = #{actionFeedback}
             </if>
             <if test="orderStatus != null and orderStatus != ''">
                 AND t.order_status = #{orderStatus}
@@ -200,7 +203,7 @@
                 <!--   主管 -->
                 AND u.organization_id = #{organizationId}
             </if>
-            and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_POSTPONE")
+            and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
 
         </where>
 
