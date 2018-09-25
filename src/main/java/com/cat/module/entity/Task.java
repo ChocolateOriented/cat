@@ -65,6 +65,7 @@ public class Task  extends BaseEntity {
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
 	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
+	private String  actionFeedback;//行动码
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
 	private String  remark;//备注
@@ -284,6 +285,14 @@ public class Task  extends BaseEntity {
 	public void setCollectTelRemark(String collectTelRemark) {
 		this.collectTelRemark = collectTelRemark;
 	}
+	public String getActionFeedback() {
+		return actionFeedback;
+	}
+
+	public void setActionFeedback(String actionFeedback) {
+		this.actionFeedback = actionFeedback;
+	}
+
 	public String getCollectCycle() {
 		return collectCycle;
 	}

@@ -21,6 +21,12 @@ public class BaseResponse implements Serializable {
 		this.code = code;
 	}
 
+	public BaseResponse(Integer code, String message) {
+		super();
+		this.code = code;
+		this.message = message;
+	}
+
 	public Integer getCode() {
 		return code;
 	}
@@ -45,6 +51,7 @@ public class BaseResponse implements Serializable {
 	public static BaseResponse success() {
 		return new BaseResponse();
 	}
+
 	public static BaseResponse fail() {
 		return new BaseResponse(-1);
 	}
