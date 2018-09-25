@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.mapper.TaskMapper">
+    <resultMap id="BaseResultMap" type="com.cat.module.entity.Task">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+        <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="order_type" jdbcType="VARCHAR" property="orderType" />
+        <result column="product_type" jdbcType="VARCHAR" property="productType" />
+        <result column="bank_no" jdbcType="VARCHAR" property="bankNo" />
+        <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+        <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount" />
+        <result column="loan_term" jdbcType="INTEGER" property="loanTerm" />
+        <result column="lent_amount" jdbcType="DECIMAL" property="lentAmount" />
+        <result column="interest_mode" jdbcType="VARCHAR" property="interestMode" />
+        <result column="interest_value" jdbcType="DECIMAL" property="interestValue" />
+        <result column="penalty_mode" jdbcType="VARCHAR" property="penaltyMode" />
+        <result column="penalty_value" jdbcType="DECIMAL" property="penaltyValue" />
+        <result column="relief_amount" jdbcType="DECIMAL" property="reliefAmount" />
+        <result column="charge_value" jdbcType="DECIMAL" property="chargeValue" />
+        <result column="postpone_unit_charge" jdbcType="DECIMAL" property="postponeUnitCharge" />
+        <result column="postpone_count" jdbcType="INTEGER" property="postponeCount" />
+        <result column="postpone_total_amount" property="postponeTotalAmount"/>
+        <result column="lend_time" jdbcType="TIMESTAMP" property="lendTime" />
+        <result column="payoff_time" jdbcType="TIMESTAMP" property="payoffTime" />
+        <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+        <result column="ispayoff" jdbcType="TINYINT" property="ispayoff" />
+        <result column="collector_id" jdbcType="VARCHAR" property="collectorId" />
+        <result column="collector_name" jdbcType="VARCHAR" property="collectorName" />
+        <result column="task_start_time" jdbcType="TIMESTAMP" property="taskStartTime" />
+        <result column="task_end_time" jdbcType="TIMESTAMP" property="taskEndTime" />
+        <result column="collect_period_begin" jdbcType="INTEGER" property="collectPeriodBegin" />
+        <result column="collect_period_end" jdbcType="INTEGER" property="collectPeriodEnd" />
+        <result column="collect_task_status" jdbcType="VARCHAR" property="collectTaskStatus" />
+        <result column="collect_tel_remark" jdbcType="VARCHAR" property="collectTelRemark" />
+        <result column="action_feedback" jdbcType="VARCHAR" property="actionFeedback" />
+        <result column="collect_time" jdbcType="TIMESTAMP" property="collectTime" />
+        <result column="collect_cycle" jdbcType="VARCHAR" property="collectCycle" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    <sql id="baseSql">
+        id, order_id, customer_id, customer_name, mobile, order_type, product_type,
+    bank_no, order_status, loan_amount, loan_term, lent_amount, interest_mode, interest_value,
+    penalty_mode, penalty_value, relief_amount, charge_value, postpone_unit_charge, postpone_count,postpone_total_amount,
+    lend_time, payoff_time, repayment_time, ispayoff, collector_id, collector_name, task_start_time,
+    task_end_time, collect_period_begin, collect_period_end, collect_task_status, collect_tel_remark,
+    action_feedback, collect_time, collect_cycle, create_time, create_by, update_time,
+    update_by, remark
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_task
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.cat.module.entity.Task">
+        insert into t_task (id, order_id, customer_id,
+        customer_name, mobile, order_type,
+        product_type, bank_no, order_status,
+        loan_amount, loan_term, lent_amount,
+        interest_mode, interest_value, penalty_mode,
+        penalty_value, relief_amount, charge_value,
+        postpone_unit_charge, postpone_count, postpone_total_amount,lend_time,
+        payoff_time, repayment_time, ispayoff,
+        collector_id, collector_name, task_start_time,
+        task_end_time, collect_period_begin, collect_period_end,
+        collect_task_status, collect_tel_remark, action_feedback,
+        collect_time, collect_cycle, create_time,
+        create_by, update_time, update_by,
+        remark)
+        values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
+        #{customerName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR},
+        #{productType,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR},
+        #{loanAmount,jdbcType=DECIMAL}, #{loanTerm,jdbcType=INTEGER}, #{lentAmount,jdbcType=DECIMAL},
+        #{interestMode,jdbcType=VARCHAR}, #{interestValue,jdbcType=DECIMAL}, #{penaltyMode,jdbcType=VARCHAR},
+        #{penaltyValue,jdbcType=DECIMAL}, #{reliefAmount,jdbcType=DECIMAL}, #{chargeValue,jdbcType=DECIMAL},
+        #{postponeUnitCharge,jdbcType=DECIMAL}, #{postponeCount,jdbcType=INTEGER}, #{postponeTotalAmount},#{lendTime,jdbcType=TIMESTAMP},
+        #{payoffTime,jdbcType=TIMESTAMP}, #{repaymentTime,jdbcType=TIMESTAMP}, #{ispayoff,jdbcType=TINYINT},
+        #{collectorId,jdbcType=VARCHAR}, #{collectorName,jdbcType=VARCHAR}, #{taskStartTime,jdbcType=TIMESTAMP},
+        #{taskEndTime,jdbcType=TIMESTAMP}, #{collectPeriodBegin,jdbcType=INTEGER}, #{collectPeriodEnd,jdbcType=INTEGER},
+        #{collectTaskStatus,jdbcType=VARCHAR}, #{collectTelRemark,jdbcType=VARCHAR}, #{actionFeedback,jdbcType=VARCHAR},
+        #{collectTime,jdbcType=TIMESTAMP}, #{collectCycle,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Task">
+        update t_task
+        set order_id = #{orderId,jdbcType=VARCHAR},
+        customer_id = #{customerId,jdbcType=VARCHAR},
+        customer_name = #{customerName,jdbcType=VARCHAR},
+        mobile = #{mobile,jdbcType=VARCHAR},
+        order_type = #{orderType,jdbcType=VARCHAR},
+        product_type = #{productType,jdbcType=VARCHAR},
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+        loan_amount = #{loanAmount,jdbcType=DECIMAL},
+        loan_term = #{loanTerm,jdbcType=INTEGER},
+        lent_amount = #{lentAmount,jdbcType=DECIMAL},
+        interest_mode = #{interestMode,jdbcType=VARCHAR},
+        interest_value = #{interestValue,jdbcType=DECIMAL},
+        penalty_mode = #{penaltyMode,jdbcType=VARCHAR},
+        penalty_value = #{penaltyValue,jdbcType=DECIMAL},
+        relief_amount = #{reliefAmount,jdbcType=DECIMAL},
+        charge_value = #{chargeValue,jdbcType=DECIMAL},
+        postpone_unit_charge = #{postponeUnitCharge,jdbcType=DECIMAL},
+        postpone_count = #{postponeCount,jdbcType=INTEGER},
+        postpone_total_amount = #{postponeTotalAmount},
+        lend_time = #{lendTime,jdbcType=TIMESTAMP},
+        payoff_time = #{payoffTime,jdbcType=TIMESTAMP},
+        repayment_time = #{repaymentTime,jdbcType=TIMESTAMP},
+        ispayoff = #{ispayoff,jdbcType=TINYINT},
+        collector_id = #{collectorId,jdbcType=VARCHAR},
+        collector_name = #{collectorName,jdbcType=VARCHAR},
+        task_start_time = #{taskStartTime,jdbcType=TIMESTAMP},
+        task_end_time = #{taskEndTime,jdbcType=TIMESTAMP},
+        collect_period_begin = #{collectPeriodBegin,jdbcType=INTEGER},
+        collect_period_end = #{collectPeriodEnd,jdbcType=INTEGER},
+        collect_task_status = #{collectTaskStatus,jdbcType=VARCHAR},
+        collect_tel_remark = #{collectTelRemark,jdbcType=VARCHAR},
+        action_feedback = #{actionFeedback,jdbcType=VARCHAR},
+        collect_time = #{collectTime,jdbcType=TIMESTAMP},
+        collect_cycle = #{collectCycle,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        create_by = #{createBy,jdbcType=VARCHAR},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select <include refid="baseSql"/>
+        from t_task
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="baseSql"/>
+        from t_task
+    </select>
+
+    <select id="findTaskByOrderId" resultType="com.cat.module.entity.Task">
+        SELECT <include refid="baseSql"/>
+        FROM `t_task` WHERE `order_id` = #{orderId}
+    </select>
+</mapper>

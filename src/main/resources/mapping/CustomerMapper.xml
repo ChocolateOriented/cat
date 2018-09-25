@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.mapper.CustomerMapper">
+<resultMap id="BaseResultMap" type="com.cat.module.entity.CustomerBaseInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="id_card_address" jdbcType="VARCHAR" property="idCardAddress" />
+    <result column="permanent_address" jdbcType="VARCHAR" property="permanentAddress" />
+    <result column="salary_time" jdbcType="TIMESTAMP" property="salaryTime" />
+    <result column="salary" jdbcType="INTEGER" property="salary" />
+    <result column="credit_status" jdbcType="VARCHAR" property="creditStatus" />
+    <result column="mobile_contacts" jdbcType="TINYINT" property="mobileContacts" />
+    <result column="call_history" jdbcType="TINYINT" property="callHistory" />
+    <result column="user_ip" jdbcType="VARCHAR" property="userIp" />
+    <result column="login_enable" jdbcType="TINYINT" property="loginEnable" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+</resultMap>
+<sql id="baseSql">
+    id, customer_id, mobile, real_name, id_card, gender, id_card_address, permanent_address,
+    salary_time, salary, credit_status, mobile_contacts, call_history, user_ip, login_enable,
+    deleted, last_login_time, create_time, update_time
+</sql>
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_customer_info
+    where id = #{id,jdbcType=BIGINT}
+</delete>
+<insert id="insert" parameterType="com.cat.module.entity.CustomerBaseInfo">
+    insert into t_customer_info (id, customer_id, mobile,
+    real_name, id_card, gender,
+    id_card_address, permanent_address, salary_time,
+    salary, credit_status, mobile_contacts,
+    call_history, user_ip, login_enable,
+    deleted, last_login_time, create_time,
+    update_time)
+    values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+    #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
+    #{idCardAddress,jdbcType=VARCHAR}, #{permanentAddress,jdbcType=VARCHAR}, #{salaryTime,jdbcType=TIMESTAMP},
+    #{salary,jdbcType=INTEGER}, #{creditStatus,jdbcType=VARCHAR}, #{mobileContacts,jdbcType=TINYINT},
+    #{callHistory,jdbcType=TINYINT}, #{userIp,jdbcType=VARCHAR}, #{loginEnable,jdbcType=TINYINT},
+    #{deleted,jdbcType=TINYINT}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP})
+</insert>
+<update id="updateByPrimaryKey" parameterType="com.cat.module.entity.CustomerBaseInfo">
+    update t_customer_info
+    set customer_id = #{customerId,jdbcType=VARCHAR},
+    mobile = #{mobile,jdbcType=VARCHAR},
+    real_name = #{realName,jdbcType=VARCHAR},
+    id_card = #{idCard,jdbcType=VARCHAR},
+    gender = #{gender,jdbcType=VARCHAR},
+    id_card_address = #{idCardAddress,jdbcType=VARCHAR},
+    permanent_address = #{permanentAddress,jdbcType=VARCHAR},
+    salary_time = #{salaryTime,jdbcType=TIMESTAMP},
+    salary = #{salary,jdbcType=INTEGER},
+    credit_status = #{creditStatus,jdbcType=VARCHAR},
+    mobile_contacts = #{mobileContacts,jdbcType=TINYINT},
+    call_history = #{callHistory,jdbcType=TINYINT},
+    user_ip = #{userIp,jdbcType=VARCHAR},
+    login_enable = #{loginEnable,jdbcType=TINYINT},
+    deleted = #{deleted,jdbcType=TINYINT},
+    last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+</update>
+<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="baseSql"/>
+    from t_customer_info
+    where id = #{id,jdbcType=BIGINT}
+</select>
+<select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="baseSql"/>
+    from t_customer_info
+</select>
+
+<select id="fetchCustomerByCustomerId" resultType="com.cat.module.entity.CustomerBaseInfo">
+    SELECT <include refid="baseSql"/>
+    FROM `t_customer_info`
+    WHERE `customer_id` = #{customerId}
+</select>
+
+</mapper>

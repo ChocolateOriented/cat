@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.mapper.ContactMapper">
+<resultMap id="BaseResultMap" type="com.cat.module.entity.Contact">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_mobile" jdbcType="VARCHAR" property="contactMobile" />
+</resultMap>
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_contact
+    where id = #{id,jdbcType=BIGINT}
+</delete>
+<insert id="insert" parameterType="com.cat.module.entity.Contact">
+    insert into t_contact (id, customer_id, mobile,
+    contact_name, contact_mobile)
+    values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+    #{contactName,jdbcType=VARCHAR}, #{contactMobile,jdbcType=VARCHAR})
+</insert>
+<update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Contact">
+    update t_contact
+    set customer_id = #{customerId,jdbcType=VARCHAR},
+    mobile = #{mobile,jdbcType=VARCHAR},
+    contact_name = #{contactName,jdbcType=VARCHAR},
+    contact_mobile = #{contactMobile,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+</update>
+<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, customer_id, mobile, contact_name, contact_mobile
+    from t_contact
+    where id = #{id,jdbcType=BIGINT}
+</select>
+<select id="selectAll" resultMap="BaseResultMap">
+    select id, customer_id, mobile, contact_name, contact_mobile
+    from t_contact
+</select>
+
+<select id="countByCustomerId" resultType="INTEGER">
+    SELECT COUNT(*) FROM `t_contact` WHERE `customer_id` = #{customerId}
+</select>
+<delete id="deleteContact" >
+    DELETE FROM `t_contact` WHERE `customer_id` = #{customerId}
+</delete>
+</mapper>

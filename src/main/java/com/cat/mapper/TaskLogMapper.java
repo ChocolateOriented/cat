@@ -24,5 +24,5 @@ public interface TaskLogMapper  {
 	 */
 	public int batchInsertTaskLog(@Param("list")List<TaskLog> list);
 	
-	
+	public void insert(TaskLog taskLog);
 }

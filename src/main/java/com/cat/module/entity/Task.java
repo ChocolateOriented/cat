@@ -7,8 +7,11 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.org.apache.regexp.internal.RE;
+import sun.util.resources.LocaleData;
 
 /**
  * 催收任务Entity
@@ -31,8 +34,10 @@ public class Task  extends BaseEntity {
 
 	private String  orderId;//订单ID - 业务流水号
 	private String  customerId;//用户code
+	@JSONField(name = "userName")
 	private String customerName;		//客户姓名
 	private String mobile;		// 手机号
+	private String bankNo;
 	private String  orderType;//订单类型
 	private String  productType;//产品类型
 	private String  orderStatus;//订单状态
@@ -47,7 +52,8 @@ public class Task  extends BaseEntity {
 	private BigDecimal  chargeValue;//服务费值
 	private BigDecimal  postponeUnitCharge;//延期单位服务费
 	private Integer  postponeCount;//延期次数
-	
+	private BigDecimal postponeTotalAmount;//续期总金额
+	@JSONField(name = "applyTime")
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
@@ -64,8 +70,23 @@ public class Task  extends BaseEntity {
 	private String  remark;//备注
 	
 	private boolean ispayoff;		// 任务所对应的订单是否还清
-	
-	
+
+	public String getBankNo() {
+		return bankNo;
+	}
+
+	public void setBankNo(String bankNo) {
+		this.bankNo = bankNo;
+	}
+
+	public BigDecimal getPostponeTotalAmount() {
+		return postponeTotalAmount;
+	}
+
+	public void setPostponeTotalAmount(BigDecimal postponeTotalAmount) {
+		this.postponeTotalAmount = postponeTotalAmount;
+	}
+
 	public String getOrderId() {
 		return orderId;
 	}
@@ -281,6 +302,40 @@ public class Task  extends BaseEntity {
 //		Date now  = new Date();
 		return ScheduledTaskService.GetOverdueDay(repaymentTime);
 //		return (int)((toDate(now).getTime() - toDate(repaymentTime).getTime()) / (24 * 60 * 60 * 1000));
+	}
+
+	/**
+	 * 应催金额:本金+利息+逾期费   利息:interestValue固定的值
+	 * @return
+	 */
+	public BigDecimal getRepayAmount() {
+		//逾期费
+		BigDecimal overDueAmount = getOverDueAmount();
+		//订单金额
+		BigDecimal orderAmount = getOrderAmount();
+		return orderAmount.add(overDueAmount);
+	}
+
+	/**
+	 * 逾期费:(当前日期-还款日志)*罚息值
+	 * @return
+	 */
+	public BigDecimal getOverDueAmount() {
+		long betweenDays = (long)(System.currentTimeMillis() - repaymentTime.getTime())/(1000*60*60*24);
+		if (betweenDays <= 0) {
+			betweenDays = 0;
+		}
+
+		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays)).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
+		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
+	}
+
+	/**
+	 * 订单金额:本金+利息
+	 * @return
+	 */
+	public BigDecimal getOrderAmount() {
+		return loanAmount.add(interestValue);
 	}
 
 	private Date toDate(Date date) {

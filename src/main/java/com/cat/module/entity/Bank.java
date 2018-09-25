@@ -29,7 +29,7 @@ public class Bank extends BaseEntity {
     private String bankName;
 
     @JSONField(name = "idCard")
-    private String cardId;
+    private String idCard;
 
     private String userName;
 
@@ -71,12 +71,12 @@ public class Bank extends BaseEntity {
         this.bankName = bankName;
     }
 
-    public String getCardId() {
-        return cardId;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
     public String getUserName() {

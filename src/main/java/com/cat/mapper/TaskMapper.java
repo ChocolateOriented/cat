@@ -54,6 +54,9 @@ public interface TaskMapper  {
 	 * @return
 	 */
 	public List<String> findAtuoQ0Dealcode(@Param("day")String day,@Param("payoffday")String payoffday);
-	
 
+
+	Task findTaskByOrderId(String orderId);
+
+    void insert(Task task);
 }

@@ -3,6 +3,7 @@ package com.cat.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cat.mapper.ContactMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class ContactService extends BaseService {
 	@Autowired
 	private CallLogRepository callLogRepository;
 
+	@Autowired
+	private ContactMapper contactMapper;
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
 	public Page<Contact> findCalllog(String mobile, int pageNum, int pageSize) {
 		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
@@ -42,5 +45,18 @@ public class ContactService extends BaseService {
 			codes.add(code);
 		}
 		return codes;
+	}
+
+	public Integer countByCustomerId(String customerId) {
+		return contactMapper.countByCustomerId(customerId);
+	}
+
+	public void deleteContact(String customerId) {
+		contactMapper.deleteContact(customerId);
+	}
+
+
+	public void insert(com.cat.module.entity.Contact  contact) {
+		contactMapper.insert(contact);
 	}
 }
