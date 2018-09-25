@@ -2,6 +2,8 @@ package com.cat.repository;
 
 import com.cat.module.dto.DivisionUserDto;
 import com.cat.module.entity.Task;
+
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -36,7 +38,9 @@ public interface TaskRepository extends PagingAndSortingRepository<Task,Long> {
   List<DivisionUserDto> findPeopleSumcorpusamountByDunningcycle(String dunningcycle);
 
     @Modifying
-    @Query("update Task t set t.actionFeedback = ?2, t.collectTelRemark = ?3"
+    @Query("update Task t set t.actionFeedback = ?2, t.collectTelRemark = ?3, t.collectTime = ?4"
     		+ " where t.orderId = ?1")
-    int updateTaskActionByOrderId(String orderId, String actionFeedback, String remark);
+    int updateTaskActionByOrderId(String orderId, String actionFeedback, String remark, Date collectTime);
+
+    Task findTopByOrderId(String orderId);
 }

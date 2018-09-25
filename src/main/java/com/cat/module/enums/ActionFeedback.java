@@ -1,5 +1,7 @@
 package com.cat.module.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum ActionFeedback {
 
 	ALPA("声称已还"),
@@ -29,4 +31,14 @@ public enum ActionFeedback {
 		return desc;
 	}
 
+	@JsonCreator
+	public static ActionFeedback getActionFeedback(String name) {
+		ActionFeedback actionFeedback = null;
+		try {
+			actionFeedback = ActionFeedback.valueOf(name);
+		} catch (Exception e) {
+			// invalid enum name
+		}
+		return actionFeedback;
+	}
 }

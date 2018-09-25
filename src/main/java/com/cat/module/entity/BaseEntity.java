@@ -1,11 +1,9 @@
 package com.cat.module.entity;
 
 import java.io.Serializable;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 public class BaseEntity extends AuditingEntity implements Serializable{

@@ -32,7 +32,7 @@ public class ContactController extends BaseController {
 		return pageResp;
 	}
 
-	@GetMapping(value = "/list_target_type")
+	@GetMapping(value = "/list_contact_type")
 	public EntitiesResponse<Code> listTargetType() {
 		List<Code> targetTypes = contactService.listTargetType();
 		return new EntitiesResponse<Code>(targetTypes);

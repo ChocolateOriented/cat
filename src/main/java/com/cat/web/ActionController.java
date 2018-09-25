@@ -28,7 +28,7 @@ public class ActionController extends BaseController {
 	@Autowired
 	private ActionService actionService;
 
-	@GetMapping(value = "/list_action_records")
+	@GetMapping(value = "/list_action_record")
 	public PageResponse<Action> list(String ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
 		Page<Action> page = actionService.findPage(ownerId, pageNum - 1, pageSize);
@@ -46,9 +46,9 @@ public class ActionController extends BaseController {
 		return BaseResponse.success();
 	}
 
-	@GetMapping(value = "/list_action_feedback_type")
+	@GetMapping(value = "/list_action_feedback")
 	public EntitiesResponse<Code> listCode() {
-		List<Code> actionCodes = actionService.listActionCode();
+		List<Code> actionCodes = actionService.listActionFeedback();
 		return new EntitiesResponse<Code>(actionCodes);
 	}
 }
