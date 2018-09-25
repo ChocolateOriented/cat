@@ -34,7 +34,7 @@ public class UserTester {
 	@Test
 	public void testInsert() {
 		User user = new User();
-		user.setId(1002L);
+		user.setId("1111");
 		user.setName("test13");
 		user.setStatus(UserStatus.LEAVE);
 		user.setAutoDivision(false);

@@ -12,7 +12,7 @@ public enum ResultConstant {
 
     public final long code;
     public final String message;
-    public static final String BASE_CODE = "111X" ;
+    public static final String BASE_CODE = "1110" ;
 
     /**
      * @Description 报错号共8位  {####}(平台号)+{##}(模块)+{##}(异常)
