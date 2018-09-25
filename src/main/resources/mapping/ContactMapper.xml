@@ -36,10 +36,13 @@
     from t_contact
 </select>
 
-<select id="countByCustomerId" resultType="INTEGER">
-    SELECT COUNT(*) FROM `t_contact` WHERE `customer_id` = #{customerId}
+<select id="fetchContactsByCustomerId" resultMap="BaseResultMap">
+    select id, customer_id, mobile, contact_name, contact_mobile
+    from t_contact
+     WHERE `customer_id` = #{customerId}
 </select>
-<delete id="deleteContact" >
+<update id="deleteContact" >
+  UPDATE `t_contact` SET
     DELETE FROM `t_contact` WHERE `customer_id` = #{customerId}
-</delete>
+</update>
 </mapper>

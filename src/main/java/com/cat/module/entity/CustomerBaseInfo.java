@@ -1,5 +1,7 @@
 package com.cat.module.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import javax.persistence.Entity;
 import javax.xml.crypto.Data;
 import java.util.Date;
@@ -90,7 +92,7 @@ public class CustomerBaseInfo extends BaseEntity {
     public String getCustomerId() {
         return customerId;
     }
-
+    @JSONField(name = "userCode")
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
@@ -131,6 +133,7 @@ public class CustomerBaseInfo extends BaseEntity {
         return idCardAddress;
     }
 
+    @JSONField(name = "ocrIdCardAddress")
     public void setIdCardAddress(String idCardAddress) {
         this.idCardAddress = idCardAddress;
     }

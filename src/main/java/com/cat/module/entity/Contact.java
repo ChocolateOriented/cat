@@ -66,4 +66,19 @@ public class Contact {
     public void setContactMobile(String contactMobile) {
         this.contactMobile = contactMobile;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+
+        return contactMobile != null ? contactMobile.equals(contact.contactMobile) : contact.contactMobile == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return contactMobile != null ? contactMobile.hashCode() : 0;
+    }
 }

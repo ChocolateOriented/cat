@@ -9,7 +9,7 @@ import java.util.List;
  * Created by cyuan on 2018/9/21.
  */
 public interface ContactMapper {
-    Integer countByCustomerId(String customerId);
+    List<Contact> fetchContactsByCustomerId(String customerId);
 
     void deleteContact(String customerId);
 

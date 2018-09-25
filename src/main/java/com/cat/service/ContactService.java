@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.cat.mapper.ContactMapper;
+import com.cat.module.entity.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,6 @@ import com.cat.annotation.DataSource;
 import com.cat.config.DynamicDataSource;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse;
-import com.cat.module.dto.TaskDto;
 import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.entity.risk.CallLog;
 import com.cat.module.enums.ContactTargetType;
@@ -81,8 +81,8 @@ public class ContactService extends BaseService {
 		return new PageResponse<ContactVo>(list, pageNum, pageSize, pageInfo.getTotal());
 	}
 
-	public Integer countByCustomerId(String customerId) {
-		return contactMapper.countByCustomerId(customerId);
+	public List<Contact> fetchContactsByCustomerId(String customerId) {
+		return contactMapper.fetchContactsByCustomerId(customerId);
 	}
 
 	public void deleteContact(String customerId) {

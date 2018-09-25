@@ -6,22 +6,74 @@ import java.math.BigDecimal;
  * Created by cyuan on 2018/9/21.
  */
 public class RepaymentMessage {
+
+    /**
+     * 借款订单号id
+     */
     private String orderId;
+    /**
+     * 用户code
+     */
     private String userCode;
+    /**
+     * 还款类型
+     */
     private String payType;
+    /**
+     * 延期次数
+     */
     private Integer postponeCount;
+    /**
+     * 还款订单号
+     */
     private String payOrderId;
+    /**
+     * 还款申请金额
+     */
     private BigDecimal repayAmount;
+    /**
+     * 渠道返回的还款数目
+     */
     private BigDecimal channelRepayNumber;
+    /**
+     * 渠道
+     */
     private String channel;
+    /**
+     * 客户端Id
+     */
     private String clientId;
+    /**
+     * 客户端版本号
+     */
     private String clientVersion;
+    /**
+     * 还款银行卡
+     */
     private String bankCard;
+    /**
+     * 银行预留手机
+     */
     private String bankMobile;
+    /**
+     * 用户真实姓名
+     */
     private String userName;
+    /**
+     * 身份证号
+     */
     private String idCard;
+    /**
+     * 放款流水号, 比如 mo9WDAFERANBPKCHOOA
+     */
     private String dealCode;
+    /**
+     * 延期天数
+     */
     private Integer postponeDays;
+    /**
+     * 是否入账完成
+     */
     private Boolean isEntryDone;
 
     public String getOrderId() {

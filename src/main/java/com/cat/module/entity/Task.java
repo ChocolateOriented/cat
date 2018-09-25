@@ -35,7 +35,6 @@ public class Task  extends BaseEntity {
 
 	private String  orderId;//订单ID - 业务流水号
 	private String  customerId;//用户code
-	@JSONField(name = "userName")
 	private String customerName;		//客户姓名
 	private String mobile;		// 手机号
 	private String bankNo;
@@ -53,8 +52,7 @@ public class Task  extends BaseEntity {
 	private BigDecimal  chargeValue;//服务费值
 	private BigDecimal  postponeUnitCharge;//延期单位服务费
 	private Integer  postponeCount;//延期次数
-	private BigDecimal postponeTotalAmount;//续期总金额
-	@JSONField(name = "applyTime")
+	private BigDecimal postponeTotalAmount;//延期总金额
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
@@ -68,14 +66,14 @@ public class Task  extends BaseEntity {
 	private String  collectTelRemark;//催收备注
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
-	private String  remark;//备注
+	private String  remark;//e
 	
 	private boolean ispayoff;		// 任务所对应的订单是否还清
 
 	public String getBankNo() {
 		return bankNo;
 	}
-
+	@JSONField(name = "bankCard")
 	public void setBankNo(String bankNo) {
 		this.bankNo = bankNo;
 	}
@@ -91,12 +89,14 @@ public class Task  extends BaseEntity {
 	public String getOrderId() {
 		return orderId;
 	}
+	@JSONField(name = "loanOrderId")
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 	public String getCustomerId() {
 		return customerId;
 	}
+	@JSONField(name = "userCode")
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
@@ -176,6 +176,7 @@ public class Task  extends BaseEntity {
 	public Date getLendTime() {
 		return lendTime;
 	}
+	@JSONField(name = "applyTime")
 	public void setLendTime(Date lendTime) {
 		this.lendTime = lendTime;
 	}
@@ -231,18 +232,21 @@ public class Task  extends BaseEntity {
 	public String getCustomerName() {
 		return customerName;
 	}
+	@JSONField(name = "realName")
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
 	public BigDecimal getLoanAmount() {
 		return loanAmount;
 	}
+	@JSONField(name = "loanNumber")
 	public void setLoanAmount(BigDecimal loanAmount) {
 		this.loanAmount = loanAmount;
 	}
 	public BigDecimal getLentAmount() {
 		return lentAmount;
 	}
+	@JSONField(name = "lentNumber")
 	public void setLentAmount(BigDecimal lentAmount) {
 		this.lentAmount = lentAmount;
 	}
