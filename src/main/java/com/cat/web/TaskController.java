@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.EntitiesResponse;
+import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
-import com.cat.module.vo.Contact;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
 import com.cat.util.excel.ExportExcel;
@@ -35,20 +35,46 @@ public class TaskController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="list")
+	@GetMapping(value="list_task")
 	public BaseResponse list(TaskDto taskDto, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize,HttpServletRequest request){
 		String userId = request.getHeader("User-Id");
-		Page<TaskDto> pageResponse =  taskService.list(taskDto,pageNum,pageSize,userId);
-		return null;
+		PageResponse<TaskDto> pageResponse =  taskService.list(taskDto,pageNum,pageSize,userId);
+		return pageResponse;
 	}
+
+	/**
+	 * 获取催收员信息
+	 * @return
+	 */
+	@GetMapping(value="list_collector_info")
+	public BaseResponse listCollectorInfo(){
+		EntitiesResponse<TaskDto> response = new EntitiesResponse<>();
+		List<TaskDto>  list = taskService.findUserList();
+		response.setEntitese(list);
+		return response;
+	}
+	
+	/**
+	 *手动分案
+	 * @param orderIds
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="assign")
+	public BaseResponse assign(@RequestBody List<String> orderIds,String userId){
+	boolean bol = taskService.assign(orderIds,userId);
+		return bol ? BaseResponse.success() : BaseResponse.fail();
+	}
+	
 	/**
 	 * 导出
 	 * @param orderIds
 	 */
-	@RequestMapping(value="export")
+//	@RequestMapping(value="export_task")
 	public void export(@RequestBody List<String> orderIds, HttpServletResponse response){
-		List<TaskDto> exportList = taskService.findByOrderIds(orderIds);
+		TaskDto taskDto = new TaskDto();
+		List<TaskDto> exportList = taskService.findList(taskDto);
 		if (null == exportList || exportList.isEmpty()) {
 			logger.warn("未查询到数据,orderIds={}",orderIds);
 			return;
@@ -59,39 +85,5 @@ public class TaskController extends BaseController {
 		} catch (Exception e) {
 			logger.warn("导出失败！失败信息：" + e.getMessage());
 		}
-	}
-	/**
-	 * 手动分案页面所需数据
-	 * @return
-	 */
-	@RequestMapping(value="manual_division_page")
-	public BaseResponse manualDivisionPage(){
-		EntitiesResponse<TaskDto> response = new EntitiesResponse<>();
-		List<TaskDto>  list = taskService.findUserList();
-		response.setEntitese(list);
-		return response;
-	}
-	/**
-	 *手动分案操作
-	 * @param orderIds
-	 * @param userId
-	 * @return
-	 */
-	@RequestMapping(value="manual_division_operation")
-	public BaseResponse manualDivisionOperation(@RequestBody List<String> orderIds,String userId){
-	boolean bol = taskService.manualDivisionOperation(orderIds,userId);
-		return bol ? BaseResponse.success() : BaseResponse.fail();
-	}
-	/**
-	 * 用户的通讯录
-	 * @param ownerId
-	 * @return
-	 */
-	@RequestMapping(value="list_addressbook")
-	public BaseResponse listAddressbook(String ownerId){
-		EntitiesResponse<Contact> response = new EntitiesResponse<>();
-		List<Contact>  list = taskService.findListAddressbook(ownerId);
-		response.setEntitese(list);
-		return response;
 	}
 }

@@ -7,30 +7,30 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.cat.service.ScheduledTaskService;
+import com.cat.module.enums.CollectTaskStatus;
+/*import com.cat.service.ScheduledTaskService;*/
 import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import com.sun.org.apache.regexp.internal.RE;
-import sun.util.resources.LocaleData;
 
 /**
  * 催收任务Entity
  * @author 徐盛
  * @version 2016-07-12
  */
+@Entity
+@Table(name = "t_task")
 public class Task  extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;	/**
 	 *  --------------------------催款任务状态----------------------------------------------
 	 */
-	public static final String STATUS_DUNNING = "dunning"; //代表催款任务正在催收中
-	public static final String STATUS_EXPIRED = "expired";  //代表催款任务超出催收周期并未催回
-	public static final String STATUS_END = "end"; //代表催款任务被结束，但并没有被还清
-	public static final String STATUS_FINISHED = "finished"; //代表催款任务的订单在催收周期内已还清
-	public static final String STATUS_TRANSFER = "transfer"; //代表催款任务在催收周期内转移给了另一个同周期催款用户
+//	public static final String STATUS_DUNNING = "dunning"; //代表催款任务正在催收中
+//	public static final String STATUS_EXPIRED = "expired";  //代表催款任务超出催收周期并未催回
+//	public static final String STATUS_END = "end"; //代表催款任务被结束，但并没有被还清
+//	public static final String STATUS_FINISHED = "finished"; //代表催款任务的订单在催收周期内已还清
+//	public static final String STATUS_TRANSFER = "transfer"; //代表催款任务在催收周期内转移给了另一个同周期催款用户
 
 	private String  orderId;//订单ID - 业务流水号
 	private String  customerId;//用户code
@@ -43,7 +43,7 @@ public class Task  extends BaseEntity {
 	private String  orderStatus;//订单状态
 	private BigDecimal  loanAmount;//借贷金额
 	private Integer  loanTerm;//借贷期限
-	private BigDecimal  lentAmountr;//放款金额
+	private BigDecimal  lentAmount;//放款金额
 	private String  interestMode;//利息模式
 	private BigDecimal  interestValue;//利息值
 	private String  penaltyMode;//罚息模式
@@ -57,13 +57,13 @@ public class Task  extends BaseEntity {
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
-	private String  collectorId;//催讨人id
+	private Long collectorId;
 	private String  collectorName;//催讨人名
 	private Date  taskStartTime;//任务起始时间
 	private Date  taskEndTime;//任务结束时间
 	private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
-	private String  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
+	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
@@ -239,18 +239,21 @@ public class Task  extends BaseEntity {
 	public void setLoanAmount(BigDecimal loanAmount) {
 		this.loanAmount = loanAmount;
 	}
-	public BigDecimal getLentAmountr() {
-		return lentAmountr;
+	public BigDecimal getLentAmount() {
+		return lentAmount;
 	}
-	public void setLentAmountr(BigDecimal lentAmountr) {
-		this.lentAmountr = lentAmountr;
+	public void setLentAmount(BigDecimal lentAmount) {
+		this.lentAmount = lentAmount;
 	}
-	public String getCollectorId() {
+
+	public Long getCollectorId() {
 		return collectorId;
 	}
-	public void setCollectorId(String collectorId) {
+
+	public void setCollectorId(Long collectorId) {
 		this.collectorId = collectorId;
 	}
+
 	public String getCollectorName() {
 		return collectorName;
 	}
@@ -269,10 +272,10 @@ public class Task  extends BaseEntity {
 	public void setCollectPeriodEnd(Integer collectPeriodEnd) {
 		this.collectPeriodEnd = collectPeriodEnd;
 	}
-	public String getCollectTaskStatus() {
+	public CollectTaskStatus getCollectTaskStatus() {
 		return collectTaskStatus;
 	}
-	public void setCollectTaskStatus(String collectTaskStatus) {
+	public void setCollectTaskStatus(CollectTaskStatus collectTaskStatus) {
 		this.collectTaskStatus = collectTaskStatus;
 	}
 	public String getCollectTelRemark() {
@@ -297,12 +300,12 @@ public class Task  extends BaseEntity {
 	 *  获取当前逾期天数
 	 * @return
 	 */
-	public int getCurrentOverdueDays()
+/*	public int getCurrentOverdueDays()
 	{
 //		Date now  = new Date();
 		return ScheduledTaskService.GetOverdueDay(repaymentTime);
 //		return (int)((toDate(now).getTime() - toDate(repaymentTime).getTime()) / (24 * 60 * 60 * 1000));
-	}
+	}*/
 
 	/**
 	 * 应催金额:本金+利息+逾期费   利息:interestValue固定的值

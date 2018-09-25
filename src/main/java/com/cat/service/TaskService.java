@@ -5,44 +5,58 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.cat.mapper.TaskMapper;
+import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
-import com.cat.module.entity.Organization;
 import com.cat.module.entity.User;
-import com.cat.module.vo.Contact;
-import com.cat.repository.OrganizationRepository;
+import com.cat.module.enums.Role;
 import com.cat.repository.UserRepository;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 @Service
 public class TaskService extends BaseService {
-	@Autowired
-	OrganizationRepository organizationRepository;
 	@Autowired 
 	UserRepository userRepository;
-	public Page<TaskDto> list(TaskDto taskDto, Integer pageNum, Integer pageSize, String userId) {
-		//userid值为1是管理员身份不去查,不然去查userid是否是主管
+	@Autowired
+	TaskMapper taskMapper;
+	
+	/**
+	 * 获取任务列表
+	 * @param taskDto
+	 * @param pageNum
+	 * @param pageSize
+	 * @param userId
+	 * @return
+	 */
+	public PageResponse<TaskDto> list(TaskDto taskDto, Integer pageNum, Integer pageSize, String userId) {
+		//userid值为是管理员身份,不然去查userid是否是主管
 		Long id = Long.parseLong(userId);
-		if(id != 1){
-			Organization organization = organizationRepository.findTop1ByleaderId(id);
-			if(organization != null){
-				//是主管
-				taskDto.setOrganizationId(organization.getId());
-			}else{
-				//不是主管
-				taskDto.setUserId(id);
-			}
+		User user = userRepository.findOne(id);
+		if(user == null){
+			logger.warn("该用户不存在,userID={}",userId);
+			return null;
 		}
-		//然后去查
+		//是主管
+		if(user.getRole() == Role.ORGANIZATION_LEADER){
+			taskDto.setOrganizationId(user.getOrganizationId());
+			taskDto.setCollectorId(null);
+		 }
+		//是催收员
+		if(user.getRole() == Role.COLLECTOR){
+			taskDto.setCollectorId(id);
+		}
+		//进行查询
+		PageHelper.startPage(pageNum, pageSize);
+		List<TaskDto> list = this.findList(taskDto);
+		PageInfo<TaskDto> pageInfo = new PageInfo<>(list);
+		return new PageResponse<TaskDto>(list, pageNum, pageSize, pageInfo.getTotal());
 		
-		
-		
-		return null;
 	}
-
-	public List<TaskDto> findByOrderIds(List<String> orderIds) {
-		// TODO Auto-generated method stub
-		return null;
+		
+	public List<TaskDto> findList(TaskDto taskDto) {
+		return taskMapper.findList(taskDto);
 	}
 	
 	/**
@@ -55,27 +69,23 @@ public class TaskService extends BaseService {
 		Iterator<User> iterator = itreable.iterator();
 		if(iterator.hasNext()){
 			TaskDto taskDto = new TaskDto();
-			taskDto.setUserId(iterator.next().getId());
-			taskDto.setDunningpeopleName(iterator.next().getName());
+			User next = iterator.next();
+			taskDto.setCollectorId(next.getId());
+			taskDto.setCollectorName(next.getName());
 			list.add(taskDto);
 		}
 		
 		return list;
 	}
 	/**
-	 * 手动分案操作
+	 * 手动分案
 	 * 
 	 * @param orderIds
 	 * @param userId
 	 * @return
 	 */
-	public boolean manualDivisionOperation(List<String> orderIds, String userId) {
+	public boolean assign(List<String> orderIds, String userId) {
 		return false;
-	}
-
-	public List<Contact> findListAddressbook(String ownerId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 

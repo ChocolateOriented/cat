@@ -1,8 +1,10 @@
 package com.cat.module.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "t_organization")
 public class Organization extends BaseEntity {
 
   private String name;

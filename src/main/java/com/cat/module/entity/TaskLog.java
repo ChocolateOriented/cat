@@ -8,6 +8,8 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.cat.module.enums.BehaviorStatus;
+import com.cat.module.enums.CollectTaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -18,22 +20,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class TaskLog extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
-	private Long dbid;		// dbid
 	private String orderId;		// 订单号
-	private String dunningPeopleId;		// 催收人id
-	private String dunningPeopleName;		// 催收人姓名
-	private String dunningCycle;		// 催收周期(队列)
+	private Long collectorId;		// 催收人id
+	private String collectorName;		// 催收人姓名
+	private String collectCycle;		// 催收周期(队列)
 		
 	private String orderStatus;		// 订单状态
 	private Date payoffTime;		// 还清时间
 	private Integer loanTerm;		// 借贷期限
-	private String  ownerId;//用户code
-	private String ownerName;		// 用户姓名
+	private String  customerId;//用户code
+	private String customerName;		// 用户姓名
 	private String mobile;		// 手机号
 	private Date repaymentTime;		// 到期还款日期
-	private BigDecimal loanNumber;		// 本金
+	private BigDecimal loanAmount;		// 本金
 	
-	private BigDecimal  lentNumber;//放款金额
+	private BigDecimal  lentAmount;//放款金额
 	private String  interestMode;//利息模式
 	private BigDecimal  interestValue;//利息值
 	private String  penaltyMode;//罚息模式
@@ -43,8 +44,8 @@ public class TaskLog extends BaseEntity {
 	private BigDecimal  postponeUnitCharge;//延期单位服务费
 	private Integer  postponeCount;//延期次数
 	
-		private String behaviorStatus;		// 催收员行为状态（in,out,finished,partial,postpone）
-		private String  dunningTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
+		private BehaviorStatus behaviorStatus;		// 催收员行为状态（in,out,finished,partial,postpone）
+		private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 		private Long taskId;	 // 任务ID
 		private Integer overdueDays;		// 逾期天数========需要计算
 	
@@ -57,24 +58,17 @@ public class TaskLog extends BaseEntity {
 	}
 
 	
-	public TaskLog(String orderId,String dunningPeopleId,String dunningPeopleName,String dunningCycle,String behaviorStatus){
+	public TaskLog(String orderId, Long collectorId, String collectorName, String collectCycle,
+			BehaviorStatus behaviorStatus) {
+		super();
 		this.orderId = orderId;
-		this.dunningPeopleId = dunningPeopleId;
-		this.dunningPeopleName = dunningPeopleName;
-		this.dunningCycle = dunningCycle;
+		this.collectorId = collectorId;
+		this.collectorName = collectorName;
+		this.collectCycle = collectCycle;
 		this.behaviorStatus = behaviorStatus;
-//		this.debtbiztype = debtbiztype;
 	}
 
-	@NotNull(message="dbid不能为空")
-	public Long getDbid() {
-		return dbid;
-	}
 
-	public void setDbid(Long dbid) {
-		this.dbid = dbid;
-	}
-	
 	public String getMobile() {
 		return mobile;
 	}
@@ -112,34 +106,6 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public String getDunningPeopleId() {
-		return dunningPeopleId;
-	}
-
-
-	public void setDunningPeopleId(String dunningPeopleId) {
-		this.dunningPeopleId = dunningPeopleId;
-	}
-
-
-	public String getDunningPeopleName() {
-		return dunningPeopleName;
-	}
-
-
-	public void setDunningPeopleName(String dunningPeopleName) {
-		this.dunningPeopleName = dunningPeopleName;
-	}
-
-
-	public String getDunningCycle() {
-		return dunningCycle;
-	}
-
-
-	public void setDunningCycle(String dunningCycle) {
-		this.dunningCycle = dunningCycle;
-	}
 
 
 	public String getOrderStatus() {
@@ -172,24 +138,6 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public String getOwnerId() {
-		return ownerId;
-	}
-
-
-	public void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
-	}
-
-
-	public String getOwnerName() {
-		return ownerName;
-	}
-
-
-	public void setOwnerName(String ownerName) {
-		this.ownerName = ownerName;
-	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getRepaymentTime() {
@@ -202,24 +150,6 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public BigDecimal getLoanNumber() {
-		return loanNumber;
-	}
-
-
-	public void setLoanNumber(BigDecimal loanNumber) {
-		this.loanNumber = loanNumber;
-	}
-
-
-	public BigDecimal getLentNumber() {
-		return lentNumber;
-	}
-
-
-	public void setLentNumber(BigDecimal lentNumber) {
-		this.lentNumber = lentNumber;
-	}
 
 
 	public String getInterestMode() {
@@ -302,14 +232,6 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public String getBehaviorStatus() {
-		return behaviorStatus;
-	}
-
-
-	public void setBehaviorStatus(String behaviorStatus) {
-		this.behaviorStatus = behaviorStatus;
-	}
 
 
 	public Long getTaskId() {
@@ -332,14 +254,96 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public String getDunningTaskStatus() {
-		return dunningTaskStatus;
+	public Long getCollectorId() {
+		return collectorId;
 	}
 
 
-	public void setDunningTaskStatus(String dunningTaskStatus) {
-		this.dunningTaskStatus = dunningTaskStatus;
+	public void setCollectorId(Long collectorId) {
+		this.collectorId = collectorId;
 	}
+
+
+	public String getCollectorName() {
+		return collectorName;
+	}
+
+
+	public void setCollectorName(String collectorName) {
+		this.collectorName = collectorName;
+	}
+
+
+	public String getCollectCycle() {
+		return collectCycle;
+	}
+
+
+	public void setCollectCycle(String collectCycle) {
+		this.collectCycle = collectCycle;
+	}
+
+
+	public String getCustomerId() {
+		return customerId;
+	}
+
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+
+	public BigDecimal getLoanAmount() {
+		return loanAmount;
+	}
+
+
+	public void setLoanAmount(BigDecimal loanAmount) {
+		this.loanAmount = loanAmount;
+	}
+
+
+	public BigDecimal getLentAmount() {
+		return lentAmount;
+	}
+
+
+	public void setLentAmount(BigDecimal lentAmount) {
+		this.lentAmount = lentAmount;
+	}
+
+
+	public BehaviorStatus getBehaviorStatus() {
+		return behaviorStatus;
+	}
+
+
+	public void setBehaviorStatus(BehaviorStatus behaviorStatus) {
+		this.behaviorStatus = behaviorStatus;
+	}
+
+
+	public CollectTaskStatus getCollectTaskStatus() {
+		return collectTaskStatus;
+	}
+
+
+	public void setCollectTaskStatus(CollectTaskStatus collectTaskStatus) {
+		this.collectTaskStatus = collectTaskStatus;
+	}
+
+
 
 	
 	

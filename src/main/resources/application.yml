@@ -5,16 +5,16 @@ spring:
   datasource:
     default:
       name: datasource
-      url: jdbc:mysql://127.0.0.1:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      url: jdbc:mysql://localhost:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
       username: root
       password: root
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     risk:
       name: datasource
-      url: jdbc:mysql://127.0.0.1:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      url: jdbc:mysql://192.168.3.17:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
       username: root
-      password: root
+      password: rootroot
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     maxActive: 50
@@ -44,11 +44,17 @@ spring:
           #acknowledge-mode: manual
 
 redis:
+  default:
+    database: 0
+    host: 127.0.0.1
+    password: 123456
+    port: 6379
+  nest:
+    database: 6
+    host: 192.168.3.31
+    password: dev@Mo9.com
+    port: 6379
   ssl: false
-  database: 0
-  host: 127.0.0.1
-  password: 123456
-  port: 6379
   timeout: 20000
   maxTotal: 50
   maxWait: 10000
@@ -68,3 +74,16 @@ httpclient:
   pool:
     maxTotal: 500
     defaultMaxPerRoute: 200
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.cat.module
+
+nest:
+  url: http://nest.alpha.mo9.com/nestApi/
+  key: 43113fd8d67c4e0aa1eb3e857358ab3c
+  secret: b49bdfc7fab246968806007696fe65dc
+  code: Cat
+  group: CatGroup
+  mode: ALONE
+  exclude:
+    urls: /cat/account/login, /cat/account/register

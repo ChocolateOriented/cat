@@ -1,21 +1,53 @@
 package com.cat.module.entity;
 
+import com.cat.module.enums.Role;
 import com.cat.module.enums.UserStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class User extends BaseEntity {
+@Table(name = "t_user")
+public class User extends AuditingEntity {
+  @Id
+  private Long Id;
 
   private Long organizationId;
+
   @Column(nullable = false)
-  private String loginName;
-  @Column(nullable = false)
-  private String password;
+  private String email;
+
   private String name;
+
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   private UserStatus status;
-  private String dunningCycle; //示例 10100 代表Q0,Q2
+
+  private String collectCycle;
+
+  @Enumerated(EnumType.STRING)
+  private Role role;//角色
+
+  private Boolean autoDivision;//是否自动分案
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
 
   public Long getOrganizationId() {
     return organizationId;
@@ -25,24 +57,26 @@ public class User extends BaseEntity {
     this.organizationId = organizationId;
   }
 
-
-  public String getLoginName() {
-    return loginName;
+  public Long getId() {
+    return Id;
   }
 
-  public void setLoginName(String loginName) {
-    this.loginName = loginName;
+  public void setId(Long id) {
+    Id = id;
   }
 
-
-  public String getPassword() {
-    return password;
+  @Override
+  public String toString() {
+    return "User{" +
+        "organizationId=" + organizationId +
+        ", email='" + email + '\'' +
+        ", name='" + name + '\'' +
+        ", status=" + status +
+        ", collectCycle='" + collectCycle + '\'' +
+        ", role=" + role +
+        ", autoDivision=" + autoDivision +
+        "} " + super.toString();
   }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
 
   public String getName() {
     return name;
@@ -60,23 +94,20 @@ public class User extends BaseEntity {
     this.status = status;
   }
 
-  public String getDunningCycle() {
-    return dunningCycle;
+  public String getCollectCycle() {
+    return collectCycle;
   }
 
-  public void setDunningCycle(String dunningCycle) {
-    this.dunningCycle = dunningCycle;
+  public void setCollectCycle(String collectCycle) {
+    this.collectCycle = collectCycle;
   }
 
-  @Override
-  public String toString() {
-    return "User{" +
-        "organizationId=" + organizationId +
-        ", loginName='" + loginName + '\'' +
-        ", password='" + password + '\'' +
-        ", name='" + name + '\'' +
-        ", status=" + status +
-        ", dunningCycle='" + dunningCycle + '\'' +
-        "} " + super.toString();
+  public Boolean getAutoDivision() {
+    return autoDivision;
   }
+
+  public void setAutoDivision(Boolean autoDivision) {
+    this.autoDivision = autoDivision;
+  }
+
 }
