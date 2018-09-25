@@ -32,8 +32,7 @@ public class TaskService extends BaseService {
 	 */
 	public PageResponse<TaskDto> list(TaskDto taskDto, Integer pageNum, Integer pageSize, String userId) {
 		//userid值为是管理员身份,不然去查userid是否是主管
-		Long id = Long.parseLong(userId);
-		User user = userRepository.findOne(id);
+		User user = userRepository.findOne(userId);
 		if(user == null){
 			logger.warn("该用户不存在,userID={}",userId);
 			return null;
@@ -45,7 +44,7 @@ public class TaskService extends BaseService {
 		 }
 		//是催收员
 		if(user.getRole() == Role.COLLECTOR){
-			taskDto.setCollectorId(id);
+			taskDto.setCollectorId(userId);
 		}
 		//进行查询
 		PageHelper.startPage(pageNum, pageSize);

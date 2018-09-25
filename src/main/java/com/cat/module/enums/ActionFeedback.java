@@ -1,6 +1,6 @@
 package com.cat.module.enums;
 
-public enum ActionCode {
+public enum ActionFeedback {
 
 	ALPA("声称已还"),
 	BUSY("电话占线"),
@@ -21,7 +21,7 @@ public enum ActionCode {
 
 	private String desc;
 
-	private ActionCode(String desc) {
+	private ActionFeedback(String desc) {
 		this.desc = desc;
 	}
 

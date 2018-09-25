@@ -13,7 +13,6 @@ import com.cat.module.enums.CollectTaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import com.sun.org.apache.regexp.internal.RE;
 
 /**
  * 催收任务Entity
@@ -56,7 +55,7 @@ public class Task  extends BaseEntity {
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
-	private Long collectorId;
+	private String collectorId;
 	private String  collectorName;//催讨人名
 	private Date  taskStartTime;//任务起始时间
 	private Date  taskEndTime;//任务结束时间
@@ -64,6 +63,7 @@ public class Task  extends BaseEntity {
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
 	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
+	private String  actionFeedback;//行动码
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
 	private String  remark;//e
@@ -251,11 +251,11 @@ public class Task  extends BaseEntity {
 		this.lentAmount = lentAmount;
 	}
 
-	public Long getCollectorId() {
+	public String getCollectorId() {
 		return collectorId;
 	}
 
-	public void setCollectorId(Long collectorId) {
+	public void setCollectorId(String collectorId) {
 		this.collectorId = collectorId;
 	}
 
@@ -289,6 +289,14 @@ public class Task  extends BaseEntity {
 	public void setCollectTelRemark(String collectTelRemark) {
 		this.collectTelRemark = collectTelRemark;
 	}
+	public String getActionFeedback() {
+		return actionFeedback;
+	}
+
+	public void setActionFeedback(String actionFeedback) {
+		this.actionFeedback = actionFeedback;
+	}
+
 	public String getCollectCycle() {
 		return collectCycle;
 	}

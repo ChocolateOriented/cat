@@ -23,7 +23,7 @@ public class ContactController extends BaseController {
 	@Autowired
 	private ContactService contactService;
 
-	@GetMapping(value = "/list_calllog")
+	@GetMapping(value = "/list_call_log")
 	public PageResponse<ContactVo> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
 		Page<ContactVo> page = contactService.findCalllog(mobile, pageNum, pageSize);

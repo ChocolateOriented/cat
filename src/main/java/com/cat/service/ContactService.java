@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.cat.annotation.DataSource;
 import com.cat.config.DynamicDataSource;
+import com.cat.mapper.ContactMapper;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.entity.risk.CallLog;
-import com.cat.module.enums.ContactTargetType;
+import com.cat.module.enums.ContactType;
 import com.cat.module.vo.ContactVo;
 import com.cat.repository.CallLogRepository;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +30,7 @@ public class ContactService extends BaseService {
 
 	@Autowired
 	private ContactMapper contactMapper;
+
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
 	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
 		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
@@ -56,7 +58,7 @@ public class ContactService extends BaseService {
 
 	public List<Code> listTargetType() {
 		List<Code> codes = new ArrayList<>();
-		for (ContactTargetType targetType : ContactTargetType.values()) {
+		for (ContactType targetType : ContactType.values()) {
 			Code code = new Code();
 			code.setCode(targetType.name());
 			code.setDesc(targetType.getDesc());
@@ -74,9 +76,7 @@ public class ContactService extends BaseService {
 	 */
 	public PageResponse<ContactVo> findListAddressbook(String customerId, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		List<ContactVo> list = new ArrayList<>();
-		//TODO去查询通讯录
-//		List<ContactVo> list = this.findList(customerId);
+		List<ContactVo> list = contactMapper.findListByCustomerId(customerId);
 		PageInfo<ContactVo> pageInfo = new PageInfo<>(list);
 		return new PageResponse<ContactVo>(list, pageNum, pageSize, pageInfo.getTotal());
 	}

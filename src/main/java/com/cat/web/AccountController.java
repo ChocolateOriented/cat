@@ -21,10 +21,7 @@ public class AccountController extends BaseController {
   AccountService accountService;
 
   @PostMapping("login")
-  public Results Login(String userName, String password){
-    //TODO 密码MD5, 支持原系统密码
-    //userService.login();
-    //生成token, 返回, 并存入redis
+  public Results Login(String email, String password){
     String Key = "user";
     return Results.ok();
   }
@@ -34,6 +31,7 @@ public class AccountController extends BaseController {
     try {
       accountService.registerByEmail(registerDto,request);
     }catch (Exception e){
+      logger.info("注册失败"+registerDto,e);
       return new Results(ResultConstant.INNER_ERROR,"注册失败");
     }
     return Results.ok();
@@ -44,6 +42,7 @@ public class AccountController extends BaseController {
     try {
       accountService.sendValidateCode(email);
     }catch (Exception e){
+      logger.info("发送验证码失败"+email,e);
       return new Results(ResultConstant.INNER_ERROR,"发送验证码失败");
     }
     return Results.ok();

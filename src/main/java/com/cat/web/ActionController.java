@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,7 @@ import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
+import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.entity.Action;
 import com.cat.service.ActionService;
 
@@ -33,13 +36,17 @@ public class ActionController extends BaseController {
 		return pageResp;
 	}
 
-	@PostMapping(value = "/add")
-	public BaseResponse save(@RequestBody Action action) {
+	@PostMapping(value = "/add_action_record")
+	public BaseResponse save(@RequestBody @Validated Action action, BindingResult bindingResul) {
+		if (bindingResul.hasErrors()) {
+			return new BaseResponse((int) ResultConstant.EMPTY_PARAM.code, getFieldErrorsMessages(bindingResul));
+		}
+		
 		actionService.save(action);
 		return BaseResponse.success();
 	}
 
-	@GetMapping(value = "/list_code")
+	@GetMapping(value = "/list_action_feedback_type")
 	public EntitiesResponse<Code> listCode() {
 		List<Code> actionCodes = actionService.listActionCode();
 		return new EntitiesResponse<Code>(actionCodes);

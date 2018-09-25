@@ -1,20 +1,20 @@
 package com.cat.module.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
 
-import com.cat.module.entity.BaseEntity;
-import com.cat.module.enums.ActionCode;
-import com.cat.util.NumberUtil;
-import com.cat.util.excel.annotation.ExcelField;
+import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @Entity
-public class TaskDto extends BaseEntity{
+public class TaskDto implements Serializable{
   
+	private static final long serialVersionUID = 1L;
+	
 	private String  orderId;//订单ID - 业务流水号
 	private String  name;//客户姓名
 	private String  mobile;//用户手机号
@@ -27,8 +27,8 @@ public class TaskDto extends BaseEntity{
 	private String collectorName;//催收人
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
-	private Long collectorId;//催收员id
-	private ActionCode actionFeedbackType;//行动码
+	private String collectorId;//催收员id
+	private ActionFeedback actionFeedback;//行动码
 	
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
@@ -107,17 +107,20 @@ public class TaskDto extends BaseEntity{
 	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
 	}
-	public Long getCollectorId() {
+
+	public String getCollectorId() {
 		return collectorId;
 	}
-	public void setCollectorId(Long collectorId) {
+
+	public void setCollectorId(String collectorId) {
 		this.collectorId = collectorId;
 	}
-	public ActionCode getActionFeedbackType() {
-		return actionFeedbackType;
+
+	public ActionFeedback getActionFeedback() {
+		return actionFeedback;
 	}
-	public void setActionFeedbackType(ActionCode actionFeedbackType) {
-		this.actionFeedbackType = actionFeedbackType;
+	public void setActionFeedback(ActionFeedback actionFeedback) {
+		this.actionFeedback = actionFeedback;
 	}
 	public Integer getOverdueDaysStart() {
 		return overdueDaysStart;

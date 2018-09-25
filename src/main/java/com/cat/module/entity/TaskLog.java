@@ -21,7 +21,7 @@ public class TaskLog extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 	private String orderId;		// 订单号
-	private Long collectorId;		// 催收人id
+	private String collectorId;		// 催收人id
 	private String collectorName;		// 催收人姓名
 	private String collectCycle;		// 催收周期(队列)
 		
@@ -58,7 +58,7 @@ public class TaskLog extends BaseEntity {
 	}
 
 	
-	public TaskLog(String orderId, Long collectorId, String collectorName, String collectCycle,
+	public TaskLog(String orderId, String collectorId, String collectorName, String collectCycle,
 			BehaviorStatus behaviorStatus) {
 		super();
 		this.orderId = orderId;
@@ -253,12 +253,12 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public Long getCollectorId() {
+	public String getCollectorId() {
 		return collectorId;
 	}
 
 
-	public void setCollectorId(Long collectorId) {
+	public void setCollectorId(String collectorId) {
 		this.collectorId = collectorId;
 	}
 

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "t_user")
 public class User extends AuditingEntity {
   @Id
-  private Long Id;
+  private String Id;
 
   private Long organizationId;
 
@@ -57,11 +57,11 @@ public class User extends AuditingEntity {
     this.organizationId = organizationId;
   }
 
-  public Long getId() {
+  public String getId() {
     return Id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     Id = id;
   }
 
