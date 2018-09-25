@@ -13,7 +13,6 @@ import com.cat.module.enums.CollectTaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import com.sun.org.apache.regexp.internal.RE;
 
 /**
  * 催收任务Entity

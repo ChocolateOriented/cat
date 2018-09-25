@@ -6,8 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
-import com.cat.module.enums.ActionCode;
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -17,10 +21,13 @@ public class Action extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@NotBlank(message = "订单号不能为空")
 	private String orderId;
 
+	@Transient
 	private String orderStatus;
 
+	@Transient
 	private Date repaymentTime;
 
     private String customerId;
@@ -29,14 +36,19 @@ public class Action extends BaseEntity {
 
     private String collectorName;
 
+	@NotNull(message = "联系人电话不能为空")
     private String contactTel;
 
     private String contactName;
 
+    @NotNull(message = "联系人类型不能为空")
     private Integer contactType;
 
     @Enumerated(EnumType.STRING)
-    private ActionCode actionFeedback;
+    @NotNull(message = "行动码不能为空")
+    private ActionFeedback actionFeedback;
+
+    private String remark;
 
 	public String getOrderId() {
 		return orderId;
@@ -110,19 +122,27 @@ public class Action extends BaseEntity {
 		this.contactType = contactType;
 	}
 
-	public ActionCode getActionFeedback() {
+	public ActionFeedback getActionFeedback() {
 		return actionFeedback;
 	}
 
-	public void setActionFeedback(ActionCode actionFeedback) {
+	public void setActionFeedback(ActionFeedback actionFeedback) {
 		this.actionFeedback = actionFeedback;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public String getOperatorName() {
 		return super.getUpdateBy();
 	}
 
-	public Long getOperatorTime() {
+	public Long getOperateTime() {
 		return super.getUpdateTime() == null ? null : super.getUpdateTime().getTime();
 	}
 }

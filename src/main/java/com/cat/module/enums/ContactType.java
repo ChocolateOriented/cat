@@ -1,6 +1,6 @@
 package com.cat.module.enums;
 
-public enum ContactTargetType {
+public enum ContactType {
 	SELF("本人"),
 	ADDRESS_LIST("通讯录"),
 	CALL_LOG("通话记录");
@@ -8,7 +8,7 @@ public enum ContactTargetType {
 
 	private String desc;
 
-	private ContactTargetType(String desc) {
+	private ContactType(String desc) {
 		this.desc = desc;
 	}
 

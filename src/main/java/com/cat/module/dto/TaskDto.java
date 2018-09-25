@@ -6,9 +6,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.cat.module.entity.BaseEntity;
-import com.cat.module.enums.ActionCode;
-import com.cat.util.NumberUtil;
-import com.cat.util.excel.annotation.ExcelField;
+import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
@@ -28,7 +26,7 @@ public class TaskDto extends BaseEntity{
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
 	private String collectorId;//催收员id
-	private ActionCode actionFeedbackType;//行动码
+	private ActionFeedback actionFeedback;//行动码
 	
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
@@ -116,11 +114,11 @@ public class TaskDto extends BaseEntity{
 		this.collectorId = collectorId;
 	}
 
-	public ActionCode getActionFeedbackType() {
-		return actionFeedbackType;
+	public ActionFeedback getActionFeedback() {
+		return actionFeedback;
 	}
-	public void setActionFeedbackType(ActionCode actionFeedbackType) {
-		this.actionFeedbackType = actionFeedbackType;
+	public void setActionFeedback(ActionFeedback actionFeedback) {
+		this.actionFeedback = actionFeedback;
 	}
 	public Integer getOverdueDaysStart() {
 		return overdueDaysStart;

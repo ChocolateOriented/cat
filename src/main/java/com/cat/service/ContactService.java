@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.cat.mapper.ContactMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cat.annotation.DataSource;
 import com.cat.config.DynamicDataSource;
+import com.cat.mapper.ContactMapper;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse;
-import com.cat.module.dto.TaskDto;
 import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.entity.risk.CallLog;
-import com.cat.module.enums.ContactTargetType;
+import com.cat.module.enums.ContactType;
 import com.cat.module.vo.ContactVo;
 import com.cat.repository.CallLogRepository;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +28,7 @@ public class ContactService extends BaseService {
 
 	@Autowired
 	private ContactMapper contactMapper;
+
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
 	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
 		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
@@ -44,19 +44,19 @@ public class ContactService extends BaseService {
 		
 		int from = (pageNum - 1) * pageSize;
 		int to = Math.min(pageNum * pageSize, cotactVos.size());
-
+		
 		Page<ContactVo> page = new Page<>();
 		page.setEntities(cotactVos.subList(from, to));
 		page.setPageNum(pageNum);
 		page.setPageSize(pageSize);
 		page.setTotal(Long.valueOf(cotactVos.size()));
-
+		
 		return page;
 	}
 
 	public List<Code> listTargetType() {
 		List<Code> codes = new ArrayList<>();
-		for (ContactTargetType targetType : ContactTargetType.values()) {
+		for (ContactType targetType : ContactType.values()) {
 			Code code = new Code();
 			code.setCode(targetType.name());
 			code.setDesc(targetType.getDesc());
@@ -64,7 +64,7 @@ public class ContactService extends BaseService {
 		}
 		return codes;
 	}
-
+	
 	/**
 	 * 通讯录
 	 * @param customerId

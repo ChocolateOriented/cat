@@ -33,13 +33,13 @@ public class ActionController extends BaseController {
 		return pageResp;
 	}
 
-	@PostMapping(value = "/add")
+	@PostMapping(value = "/add_action_record")
 	public BaseResponse save(@RequestBody Action action) {
 		actionService.save(action);
 		return BaseResponse.success();
 	}
 
-	@GetMapping(value = "/list_code")
+	@GetMapping(value = "/list_action_feedback_type")
 	public EntitiesResponse<Code> listCode() {
 		List<Code> actionCodes = actionService.listActionCode();
 		return new EntitiesResponse<Code>(actionCodes);
