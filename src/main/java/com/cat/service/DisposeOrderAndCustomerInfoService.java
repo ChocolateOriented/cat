@@ -4,7 +4,7 @@ import com.cat.module.dto.CustomerAllInfo;
 import com.cat.module.dto.RepaymentMessage;
 import com.cat.module.entity.*;
 import com.cat.module.enums.BehaviorStatus;
-import com.cat.module.enums.DunningTaskStatus;
+import com.cat.module.enums.CollectTaskStatus;
 import com.cat.module.vo.OrderInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 
         //保存任务信息
         Task task = customerAllInfo.getTask();
-        task.setCollectTaskStatus(DunningTaskStatus.UNOPEND_TASK.name());
+        task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
         taskBaseService.insert(task);
 
     }
@@ -106,24 +106,24 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             //到期还款日
 //            dbTask.setRepaymentTime(repaymentMessage.getRepaymentTime());//todo
             //催收任务状态
-            dbTask.setCollectTaskStatus(DunningTaskStatus.TASK_POSTPONE.name());
+            dbTask.setCollectTaskStatus(CollectTaskStatus.TASK_POSTPONE);
             //接待期限增加
             //日志表:
             BeanUtils.copyProperties(dbTask, taskLog);
-            taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE.name());
+            taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE);
 
         } else {
             //还清
             //payoffTime还清时间
 //            dbTask.setPayoffTime(repaymentMessage.getRepaymentTime());//todo
             //催收任务状态
-            dbTask.setCollectTaskStatus(DunningTaskStatus.TASK_POSTPONE.name());
+            dbTask.setCollectTaskStatus(CollectTaskStatus.TASK_POSTPONE);
             dbTask.setIspayoff(true);
             //日志表:
             taskLog = new TaskLog();
             BeanUtils.copyProperties(dbTask, taskLog);
             //催收员行为状态
-            taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE.name());
+            taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE);
         }
         taskBaseService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
