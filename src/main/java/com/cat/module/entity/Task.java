@@ -53,7 +53,7 @@ public class Task  extends BaseEntity {
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
-	private String collectorId;
+	private Long collectorId;
 	private String  collectorName;//催讨人名
 	private Date  taskStartTime;//任务起始时间
 	private Date  taskEndTime;//任务结束时间
@@ -227,11 +227,11 @@ public class Task  extends BaseEntity {
 		this.lentAmount = lentAmount;
 	}
 
-	public String getCollectorId() {
+	public Long getCollectorId() {
 		return collectorId;
 	}
 
-	public void setCollectorId(String collectorId) {
+	public void setCollectorId(Long collectorId) {
 		this.collectorId = collectorId;
 	}
 
