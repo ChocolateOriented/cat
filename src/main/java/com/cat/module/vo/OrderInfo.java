@@ -59,11 +59,11 @@ public class OrderInfo implements Serializable {
     /**
      * 应催金额
      */
-    private BigDecimal repayAmount;
+    private BigDecimal customerTotalAmount;
     /**
      * 本金
      */
-    private BigDecimal loanAmount;
+    private BigDecimal principal;
     /**
      * 还款日
      */
@@ -71,11 +71,11 @@ public class OrderInfo implements Serializable {
     /**
      * 逾期费
      */
-    private BigDecimal overDueAmount;
+    private BigDecimal overdueFee;
     /**
      * 订单金额
      */
-    private BigDecimal orderAmount;
+    private BigDecimal principalAndInterest;
     /**
      * 实际放款金额
      */
@@ -83,7 +83,7 @@ public class OrderInfo implements Serializable {
     /**
      * 利息
      */
-    private BigDecimal interestValue;
+    private BigDecimal interest;
     /**
      * 账期
      */
@@ -185,20 +185,44 @@ public class OrderInfo implements Serializable {
         this.idCardAddress = idCardAddress;
     }
 
-    public BigDecimal getRepayAmount() {
-        return repayAmount;
+    public BigDecimal getCustomerTotalAmount() {
+        return customerTotalAmount;
     }
 
-    public void setRepayAmount(BigDecimal repayAmount) {
-        this.repayAmount = repayAmount;
+    public void setCustomerTotalAmount(BigDecimal customerTotalAmount) {
+        this.customerTotalAmount = customerTotalAmount;
     }
 
-    public BigDecimal getLoanAmount() {
-        return loanAmount;
+    public BigDecimal getPrincipal() {
+        return principal;
     }
 
-    public void setLoanAmount(BigDecimal loanAmount) {
-        this.loanAmount = loanAmount;
+    public void setPrincipal(BigDecimal principal) {
+        this.principal = principal;
+    }
+
+    public BigDecimal getOverdueFee() {
+        return overdueFee;
+    }
+
+    public void setOverdueFee(BigDecimal overdueFee) {
+        this.overdueFee = overdueFee;
+    }
+
+    public BigDecimal getPrincipalAndInterest() {
+        return principalAndInterest;
+    }
+
+    public void setPrincipalAndInterest(BigDecimal principalAndInterest) {
+        this.principalAndInterest = principalAndInterest;
+    }
+
+    public BigDecimal getInterest() {
+        return interest;
+    }
+
+    public void setInterest(BigDecimal interest) {
+        this.interest = interest;
     }
 
     public static long getSerialVersionUID() {
@@ -213,36 +237,12 @@ public class OrderInfo implements Serializable {
         this.repaymentTime = repaymentTime;
     }
 
-    public BigDecimal getOverDueAmount() {
-        return overDueAmount;
-    }
-
-    public void setOverDueAmount(BigDecimal overDueAmount) {
-        this.overDueAmount = overDueAmount;
-    }
-
-    public BigDecimal getOrderAmount() {
-        return orderAmount;
-    }
-
-    public void setOrderAmount(BigDecimal orderAmount) {
-        this.orderAmount = orderAmount;
-    }
-
     public BigDecimal getLentAmount() {
         return lentAmount;
     }
 
     public void setLentAmount(BigDecimal lentAmount) {
         this.lentAmount = lentAmount;
-    }
-
-    public BigDecimal getInterestValue() {
-        return interestValue;
-    }
-
-    public void setInterestValue(BigDecimal interestValue) {
-        this.interestValue = interestValue;
     }
 
     public Integer getLoanTerm() {

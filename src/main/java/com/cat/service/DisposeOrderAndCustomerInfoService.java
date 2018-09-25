@@ -208,13 +208,13 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         orderInfo.setGender(customerBaseInfo.getGender());
         orderInfo.setIdCard(bank.getIdCard());
         orderInfo.setIdCardAddress(customerBaseInfo.getIdCardAddress());
-        orderInfo.setRepayAmount(task.getRepayAmount());
-        orderInfo.setLoanAmount(task.getLoanAmount());
+        orderInfo.setCustomerTotalAmount(task.getRepayAmount());
+        orderInfo.setPrincipal(task.getLoanAmount());
         orderInfo.setRepaymentTime(task.getRepaymentTime());
-        orderInfo.setOverDueAmount(task.getOverDueAmount());
-        orderInfo.setOrderAmount(task.getOrderAmount());
+        orderInfo.setOverdueFee(task.getOverDueAmount());
+        orderInfo.setPrincipalAndInterest(task.getOrderAmount());
         orderInfo.setLentAmount(task.getLentAmount());
-        orderInfo.setInterestValue(task.getInterestValue());
+        orderInfo.setInterest(task.getInterestValue());
         orderInfo.setLoanTerm(task.getLoanTerm());
         orderInfo.setPostponeCount(task.getPostponeCount());
         orderInfo.setPostponeAmount(task.getPostponeTotalAmount());
