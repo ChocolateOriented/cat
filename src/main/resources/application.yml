@@ -70,10 +70,6 @@ rabbit:
     orderRepaymentRoutingKey: REPAY_TAG
     queue: Q.CLONE.DURABLE.RAPTOR.MIS
 
-httpclient:
-  pool:
-    maxTotal: 300
-    defaultMaxPerRoute: 100
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.cat.module
