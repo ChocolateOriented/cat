@@ -100,11 +100,11 @@ public class ContactService extends BaseService {
 		return contactMapper.fetchContactsByCustomerId(customerId);
 	}
 
-	public void insert(com.cat.module.entity.Contact  contact) {
+	public void insert(Contact contact) {
 		contactMapper.insert(contact);
 	}
 
-	public void insertAll(List<Contact> diffContacts) {
-		contactMapper.insertList(diffContacts);
+	public void insertAll(List<Contact> contactList) {
+		contactMapper.insertList(contactList);
 	}
 }

@@ -16,8 +16,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -84,7 +82,6 @@ public class CustomerAndOrderListener {
     }
 
     private RepaymentMessage parseToRepaymentMessage(Message message) throws Exception {
-        System.out.println(new String(message.getBody(), "utf-8"));
         JSONObject repayInfo = JSON.parseObject(new String(message.getBody(), "utf-8")).getJSONObject("repayInfo");
         return JSON.parseObject(repayInfo.toJSONString(), RepaymentMessage.class);
     }
