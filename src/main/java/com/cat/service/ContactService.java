@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import com.cat.mapper.ContactMapper;
 import com.cat.module.entity.Contact;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,7 @@ public class ContactService extends BaseService {
 				cv.setTel(callLog.getCallTel());
 				return cv;
 			})
-			.sorted((ContactVo c1, ContactVo c2) -> c1.getTel().compareTo(c2.getTel()))
+			.sorted((ContactVo c1, ContactVo c2) -> StringUtils.compare(c1.getTel(), c2.getTel(), false))
 			.collect(Collectors.toList());
 		
 		int from = (pageNum - 1) * pageSize;

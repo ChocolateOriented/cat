@@ -6,8 +6,6 @@ package com.cat.module.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;

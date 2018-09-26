@@ -3,7 +3,6 @@ package com.cat.module.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import javax.persistence.Entity;
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 /**

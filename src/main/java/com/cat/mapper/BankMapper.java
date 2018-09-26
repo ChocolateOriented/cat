@@ -1,7 +1,6 @@
 package com.cat.mapper;
 
 import com.cat.module.entity.Bank;
-import com.cat.module.enums.BankType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

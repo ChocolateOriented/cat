@@ -1,15 +1,10 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.cat.module.entity;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.cat.module.enums.CollectTaskStatus;
-/*import com.cat.service.ScheduledTaskService;*/
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -358,13 +353,4 @@ public class Task  extends BaseEntity {
 		return loanAmount.add(interestValue);
 	}
 
-	private Date toDate(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.HOUR, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		return calendar.getTime();
-	}
 }
