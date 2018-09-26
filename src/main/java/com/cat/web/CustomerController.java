@@ -1,6 +1,5 @@
 package com.cat.web;
 
-import com.cat.module.dto.CustomerAllInfo;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
 import com.cat.module.vo.OrderInfo;
