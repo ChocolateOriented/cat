@@ -113,10 +113,6 @@ public class TaskService extends BaseService {
 		return false;
 	}
 
-	public Task findTaskByOrderId(String orderId) {
-		return taskMapper.findTaskByOrderId(orderId);
-	}
-
 	public void insert(Task task) {
 		taskMapper.insert(task);
 	}
