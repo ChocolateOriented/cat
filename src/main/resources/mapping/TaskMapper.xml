@@ -152,13 +152,13 @@
         u.name AS "name",
         t.mobile AS "mobile",
         CASE
-        WHEN t.order_status = 'payoff' THEN 0
-        WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
+        WHEN t.order_status = 'PAYOFF' THEN 0
+        WHEN t.order_status = 'PAYMENT' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
         THEN DATEDIFF(CURDATE(), t.repayment_time)*t.penalty_value + IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
         WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ <= ]]>0
         THEN IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
-        END  AS "repayAmount",
-        IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0) AS "loanAmount",
+        END  AS "customerTotalAmount",
+        IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0) AS "principalAndInterest",
         t.repayment_time AS "repaymentTime",
         t.order_status AS "orderStatus",
         t.collect_tel_remark AS "remark",
@@ -166,8 +166,8 @@
         t.collector_name AS "collectorName",
         t.payoff_time AS "payoffTime",
         CASE
-        WHEN t.order_status = 'payoff' THEN DATEDIFF(t.payoff_time,t.repayment_time)
-        WHEN t.order_status = 'payment' THEN DATEDIFF(CURDATE(), t.repayment_time)
+        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
+        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
         END  AS "overdueDays"
         FROM
         `t_task` t
