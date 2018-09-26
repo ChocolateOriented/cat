@@ -75,7 +75,7 @@
     from t_customer_info
 </select>
 
-<select id="fetchCustomerByCustomerId" resultType="com.cat.module.entity.CustomerBaseInfo">
+<select id="fetchCustomerByCustomerId" resultMap="BaseResultMap">
     SELECT <include refid="baseSql"/>
     FROM `t_customer_info`
     WHERE `customer_id` = #{customerId}

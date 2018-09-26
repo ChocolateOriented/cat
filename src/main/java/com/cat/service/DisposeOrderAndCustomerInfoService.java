@@ -46,7 +46,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      * @return
      */
     public OrderInfo getCustomerAllInfo(String orderId) {
-        Task task = taskService.findTaskByOrderId(orderId);
+        Task task = taskService.findByOrderId(orderId);
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
@@ -83,6 +83,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         List<Contact> contactList = customerAllInfo.getContactList();
         List<Contact> dbContactList = contactService.fetchContactsByCustomerId(customerBaseInfo.getCustomerId());
         if (dbContactList == null || dbContactList.isEmpty()) {
+            contactList.forEach(x->x.setId(this.generateId()));
             contactService.insertAll(contactList);
         } else {
             List<Contact> diffContacts = new ArrayList<>();
@@ -115,7 +116,10 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (dbTask == null) {
             throw new RuntimeException("任务不存在,延期或还款失败");
         }
-        TaskLog taskLog = new TaskLog();
+        if (dbTask.isIspayoff()) {
+            throw new RuntimeException("订单已还清");
+        }
+        TaskLog taskLog = null;
         if (REPAY_POSTPONE.equals(repaymentMessage.getPayType())) {
             //如果是延期还款
             dbTask = coverToTask(dbTask, repaymentMessage, REPAY_POSTPONE);
@@ -227,11 +231,15 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         orderInfo.setLentAmount(task.getLentAmount());
         orderInfo.setInterest(task.getInterestValue());
         orderInfo.setLoanTerm(task.getLoanTerm());
-        orderInfo.setPostponeCount(task.getPostponeCount());
-        orderInfo.setPostponeAmount(task.getPostponeTotalAmount());
+        orderInfo.setPostponeCount(task.getPostponeCount() );
+        orderInfo.setPostponeAmount(task.getPostponeTotalAmount() == null ? BigDecimal.ZERO : task.getPostponeTotalAmount());
         orderInfo.setBankName(bank.getBankName());
-        orderInfo.setCollectionTime(task.getCollectTime().getTime());
+        if (task.getCollectTime() != null) {
+            orderInfo.setCollectionTime(task.getCollectTime().getTime());
+        }
         orderInfo.setBankNo(bank.getBankCard());
+        orderInfo.setCustomerId(bank.getCustomerId());
+//        orderInfo.setMobileLocation();todo 手机号归属地
         return orderInfo;
     }
 }
