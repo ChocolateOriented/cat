@@ -47,7 +47,9 @@ public class Results {
     public static Results ok () {
         return new Results(ResultConstant.SUCCESS );
     }
-
+    public static Results ok (String message) {
+        return new Results(ResultConstant.SUCCESS, message );
+    }
     /**
      * @Description 添加响应结果
      * @param key
