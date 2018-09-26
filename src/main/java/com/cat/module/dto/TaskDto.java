@@ -68,8 +68,8 @@ public class TaskDto implements Serializable{
 	public void setCustomerTotalAmount(Integer customerTotalAmount) {
 		this.customerTotalAmount = customerTotalAmount;
 	}
-	public Date getRepaymentTime() {
-		return repaymentTime;
+	public Long getRepaymentTime() {
+		return repaymentTime == null ? null : repaymentTime.getTime();
 	}
 	public void setRepaymentTime(Date repaymentTime) {
 		this.repaymentTime = repaymentTime;
@@ -92,8 +92,8 @@ public class TaskDto implements Serializable{
 	public void setCollectorName(String collectorName) {
 		this.collectorName = collectorName;
 	}
-	public Date getPayoffTime() {
-		return payoffTime;
+	public Long getPayoffTime() {
+		return  payoffTime == null ? null : payoffTime.getTime();
 	}
 	public void setPayoffTime(Date payoffTime) {
 		this.payoffTime = payoffTime;
