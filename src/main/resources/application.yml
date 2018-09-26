@@ -5,9 +5,9 @@ spring:
   datasource:
     default:
       name: datasource
-      url: jdbc:mysql://localhost:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      url: jdbc:mysql://192.168.3.17:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
       username: root
-      password: root
+      password: rootroot
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     risk:
