@@ -111,5 +111,10 @@ public class ContactService extends BaseService {
 				.sorted((ContactVo c1, ContactVo c2) -> c1.getTel().compareTo(c2.getTel()))
 				.collect(Collectors.toList());
 		System.out.println(cotactVos.size());
+
+	}
+
+	public void insertAll(List<Contact> contactList) {
+		contactMapper.insertList(contactList);
 	}
 }

@@ -42,8 +42,9 @@ public class CustomerAndOrderListener {
 
     @RabbitListener(queues = "${rabbit.customerAndOrder.queue}")
     public void recieveRegisterInfo(Message message) {
+        String messageId = null;
         try {
-            String messageId = message.getMessageProperties().getMessageId();
+            messageId = message.getMessageProperties().getMessageId();
             logger.info("接收消息,messageId: {}", messageId);
             String receivedRoutingKey = message.getMessageProperties().getReceivedRoutingKey();
             if(receivedAllRoutingKey.equals(receivedRoutingKey)) {
@@ -54,7 +55,7 @@ public class CustomerAndOrderListener {
                 disposeRepaymentMessage(message);
             }
         } catch (Exception e) {
-            logger.info("接收消息异常", e);
+            logger.info("接收消息异常,messageId:"+messageId+",message:"+new String(message.getBody()), e);
         }
     }
 

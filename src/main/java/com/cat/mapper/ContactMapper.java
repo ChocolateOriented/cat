@@ -24,4 +24,6 @@ public interface ContactMapper {
     int updateByPrimaryKey(Contact record);
     
     List<ContactVo> findListByCustomerId(String customerId);
+
+    void insertList(List<Contact> contactList);
 }

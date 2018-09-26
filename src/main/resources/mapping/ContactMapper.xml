@@ -50,5 +50,17 @@
     contact_mobile AS tel
     FROM `t_contact` WHERE `customer_id` = #{customerId}
 </select>
-
+<insert id="insertList" parameterType="java.util.List">
+    insert into t_contact (id, customer_id, mobile,
+    contact_name, contact_mobile)
+    values
+     <foreach collection="list" item="item" separator="," index="index" >
+         (#{item.id},
+         #{item.customerId},
+         #{item.mobile},
+         #{item.contactName},
+         #{item.contactMobile}
+         )
+     </foreach>
+</insert>
 </mapper>

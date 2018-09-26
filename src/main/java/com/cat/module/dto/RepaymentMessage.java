@@ -2,6 +2,7 @@ package com.cat.module.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by cyuan on 2018/9/21.
@@ -32,6 +33,10 @@ public class RepaymentMessage implements Serializable {
      * 还款申请金额
      */
     private BigDecimal repayAmount;
+    /**
+     * 还款日期
+     */
+    private Date repaymentDate;
     /**
      * 渠道返回的还款数目
      */
@@ -76,6 +81,14 @@ public class RepaymentMessage implements Serializable {
      * 是否入账完成
      */
     private Boolean isEntryDone;
+
+    public Date getRepaymentDate() {
+        return repaymentDate;
+    }
+
+    public void setRepaymentDate(Date repaymentDate) {
+        this.repaymentDate = repaymentDate;
+    }
 
     public String getOrderId() {
         return orderId;

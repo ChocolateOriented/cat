@@ -38,10 +38,10 @@ spring:
         virtual-host: /
         publisher-confirms: true
         mq-exchange: E.CLONE.TOPIC.RAPTOR.ALL
-        listener:
-          concurrency: 5
-          max-concurrency: 10
-          #acknowledge-mode: manual
+#        listener:
+#          concurrency: 5
+#          max-concurrency: 10
+#          #acknowledge-mode: manual
 
 redis:
   default:
