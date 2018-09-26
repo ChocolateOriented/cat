@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
+import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -65,6 +66,16 @@ public class TaskLog extends BaseEntity {
 		this.collectCycle = collectCycle;
 		this.behaviorStatus = behaviorStatus;
 	}
+
+	/**
+	 *  获取当前逾期天数,计算逾期天数，不满一天按一天计算
+	 * @return
+	 */
+	public int calculateOverdueDays()
+	{
+		return ScheduledTaskService.getOverdueDay(repaymentTime);
+	}
+
 
 	public String getRemark() {
 		return remark;

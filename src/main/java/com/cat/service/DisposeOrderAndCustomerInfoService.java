@@ -182,8 +182,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE);
             //延期后,应催金额:本金+利息
             taskLog.setCreditamount(dbTask.getLoanAmount().add(dbTask.getInterestValue()));
-            //到期时间
-            taskLog.setOverdueDays(calculateOverdueDays(dbTask.getRepaymentTime()));
+            //逾期天数
+            taskLog.setOverdueDays(taskLog.calculateOverdueDays());
         } else {
             //催收员行为状态
             taskLog.setBehaviorStatus(BehaviorStatus.FINISHED);
@@ -201,13 +201,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         return taskLog;
     }
 
-    private Integer calculateOverdueDays(Date date) {
-        int betweenDays = (int)(System.currentTimeMillis() - date.getTime())/(1000*60*60*24);
-        if (betweenDays <= 0) {
-            betweenDays = 0;
-        }
-        return betweenDays;
-    }
+
     /**
      * 转换成OrderInfo
      * @param task
