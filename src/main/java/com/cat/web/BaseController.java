@@ -1,9 +1,12 @@
 package com.cat.web;
 
+import com.cat.interceptor.CommonRequestContext;
 import com.cat.module.entity.User;
+import com.cat.repository.UserRepository;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -11,15 +14,17 @@ import org.springframework.validation.FieldError;
  * Created by jxli on 2018/3/8.
  */
 public abstract class BaseController {
+	@Autowired
+	UserRepository userRepository;
+
 	public static final String DEFAULT_PAGE_SIZE = "10" ;
 	public static final String DEFAULT_PAGE_NUM = "1";
-
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected User getCurrentUser(){
-
-		return null;
+		String userId = CommonRequestContext.getInstance().getCurrentUserId();
+		return userRepository.findOne(userId);
 	}
 
 	/**
