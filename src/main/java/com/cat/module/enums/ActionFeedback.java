@@ -4,22 +4,22 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum ActionFeedback {
 
+	PTP("承诺还款(本人)"),
+	PTPX("承诺还款(第三方)"),
 	ALPA("声称已还"),
-	BUSY("电话占线"),
-	CUT("一接就挂"),
+	KNOW("愿意还款"),
 	FEE("费用减免"),
 	INSY("无还款诚意"),
-	KNOW("愿意还款"),
+	BUSY("电话占线"),
+	CUT("一接就挂"),
+	NOAS("无人接听"),
+	OFF("关机"),
+	STOP("停机"),
 	LOOO("空号"),
 	MESF("传真"),
 	MESS("转告"),
-	NOAS("无人接听"),
-	NOSE("查无此人"),
 	NOTK("无法转告"),
-	OFF("关机"),
-	PTP("承诺还款(本人)"),
-	PTPX("承诺还款(第三方)"),
-	STOP("停机");
+	NOSE("查无此人");
 
 	private String desc;
 

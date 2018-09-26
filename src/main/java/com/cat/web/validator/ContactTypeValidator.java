@@ -6,6 +6,9 @@ import javax.validation.ConstraintValidatorContext;
 import com.cat.annotation.ContactTypeConstraint;
 import com.cat.module.enums.ContactType;
 
+/**
+ * 校验联系人类型参数
+ */
 public class ContactTypeValidator implements ConstraintValidator<ContactTypeConstraint, Integer> {
 
 	@Override

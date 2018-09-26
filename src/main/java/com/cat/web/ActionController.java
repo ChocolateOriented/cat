@@ -33,6 +33,13 @@ public class ActionController extends BaseController {
 	@Autowired
 	private TaskService taskService;
 
+	/**
+	 * 查询催收记录列表
+	 * @param ownerId
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
 	@GetMapping(value = "/list_action_record")
 	public PageResponse<Action> list(String ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
@@ -41,6 +48,12 @@ public class ActionController extends BaseController {
 		return pageResp;
 	}
 
+	/**
+	 * 添加催收记录
+	 * @param action
+	 * @param bindingResul
+	 * @return
+	 */
 	@PostMapping(value = "/add_action_record")
 	public BaseResponse save(@RequestBody @Validated Action action, BindingResult bindingResul) {
 		if (bindingResul.hasErrors()) {
@@ -61,6 +74,10 @@ public class ActionController extends BaseController {
 		return BaseResponse.success();
 	}
 
+	/**
+	 * 查询催收记录行动代码列表
+	 * @return
+	 */
 	@GetMapping(value = "/list_action_feedback")
 	public EntitiesResponse<Code> listCode() {
 		List<Code> actionCodes = actionService.listActionFeedback();

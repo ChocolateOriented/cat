@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cat.module.dto.Code;
 import com.cat.module.entity.Action;
-import com.cat.module.entity.Task;
 import com.cat.module.enums.ActionFeedback;
 import com.cat.repository.ActionRepository;
 
@@ -24,11 +23,22 @@ public class ActionService extends BaseService {
 	@Autowired
 	private TaskService taskService;
 
-	public Page<Action> findPage(String ownerId, int pageNum, int pageSize) {
-		Page<Action> actions = actionRepository.findByOwnerIdOrderByCreateTimeDesc(ownerId, new PageRequest(pageNum, pageSize));
+	/**
+	 * 根据借款人Id查询催收历史记录分页
+	 * @param customerId
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public Page<Action> findPage(String customerId, int pageNum, int pageSize) {
+		Page<Action> actions = actionRepository.findByCustomerIdOrderByCreateTimeDesc(customerId, new PageRequest(pageNum, pageSize));
 		return actions;
 	}
 
+	/**
+	 * 保存催收记录
+	 * @param action
+	 */
 	@Transactional
 	public void save(Action action) {
 		action.setId(generateId());
@@ -38,6 +48,10 @@ public class ActionService extends BaseService {
 		taskService.updateTaskActionFeedback(action.getOrderId(), actionFeedback, action.getRemark(), action.getCreateTime());
 	}
 
+	/**
+	 * 获取所有行动码列表
+	 * @return
+	 */
 	public List<Code> listActionFeedback() {
 		List<Code> codes = new ArrayList<>();
 		for (ActionFeedback actionFeedback : ActionFeedback.values()) {
