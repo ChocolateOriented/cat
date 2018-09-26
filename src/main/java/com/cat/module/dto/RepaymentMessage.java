@@ -1,12 +1,13 @@
 package com.cat.module.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by cyuan on 2018/9/21.
  */
-public class RepaymentMessage {
-
+public class RepaymentMessage implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 借款订单号id
      */

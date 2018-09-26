@@ -83,7 +83,9 @@ public class CustomerAndOrderListener {
     }
 
     private RepaymentMessage parseToRepaymentMessage(Message message) throws Exception {
-        return JSON.parseObject(new String(message.getBody(), "utf-8"), RepaymentMessage.class);
+        System.out.println(new String(message.getBody(), "utf-8"));
+        JSONObject repayInfo = JSON.parseObject(new String(message.getBody(), "utf-8")).getJSONObject("repayInfo");
+        return JSON.parseObject(repayInfo.toJSONString(), RepaymentMessage.class);
     }
 
     private CustomerAllInfo parseToCustomerAllInfo(JSONObject message) throws Exception {
@@ -101,7 +103,7 @@ public class CustomerAndOrderListener {
     }
 
     private List<Contact> parseToContactInfo(JSONObject message) {
-        String string = message.getJSONArray("contact").toString();
+        String string = message.getJSONArray("contactsList").toString();
         List<Contact> contactList = JSON.parseArray(string, Contact.class);
         for (Contact contact : contactList) {
             contact.setMobile(message.getString("mobile"));

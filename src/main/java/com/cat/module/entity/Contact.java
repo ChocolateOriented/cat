@@ -1,5 +1,7 @@
 package com.cat.module.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -55,6 +57,7 @@ public class Contact {
         return contactName;
     }
 
+    @JSONField(name = "contact_name")
     public void setContactName(String contactName) {
         this.contactName = contactName;
     }
@@ -62,7 +65,7 @@ public class Contact {
     public String getContactMobile() {
         return contactMobile;
     }
-
+    @JSONField(name = "contact_mobile")
     public void setContactMobile(String contactMobile) {
         this.contactMobile = contactMobile;
     }
@@ -74,11 +77,16 @@ public class Contact {
 
         Contact contact = (Contact) o;
 
+        if (customerId != null ? !customerId.equals(contact.customerId) : contact.customerId != null) return false;
+        if (mobile != null ? !mobile.equals(contact.mobile) : contact.mobile != null) return false;
         return contactMobile != null ? contactMobile.equals(contact.contactMobile) : contact.contactMobile == null;
     }
 
     @Override
     public int hashCode() {
-        return contactMobile != null ? contactMobile.hashCode() : 0;
+        int result = customerId != null ? customerId.hashCode() : 0;
+        result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = 31 * result + (contactMobile != null ? contactMobile.hashCode() : 0);
+        return result;
     }
 }

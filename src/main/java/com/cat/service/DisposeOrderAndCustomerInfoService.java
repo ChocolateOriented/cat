@@ -30,7 +30,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     private BankService bankService;
 
     @Autowired
-    private TaskBaseService taskBaseService;
+    private TaskService taskBaseService;
 
     @Autowired
     private ContactService contactService;
@@ -74,13 +74,14 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         bank.setType(BankType.LEND.name());
         Bank dbBank = bankService.findBankByBankNoAndType(bank.getBankCard(), BankType.LEND);
         if (dbBank == null) {
+            bank.setId(this.generateId());
             bankService.insertBank(bank);
         }
 
         //保存用户联系人信息
         List<Contact> contactList = customerAllInfo.getContactList();
         List<Contact> dbContactList = contactService.fetchContactsByCustomerId(customerBaseInfo.getCustomerId());
-        if (dbContactList == null) {
+        if (dbContactList == null || dbContactList.isEmpty()) {
             for (Contact contact : contactList) {
                 contact.setId(this.generateId());
                 contactService.insert(contact);
@@ -88,6 +89,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         } else {
             for (Contact contact : contactList) {
                 if (!dbContactList.contains(contact)) {
+                    contact.setId(this.generateId());
                     contactService.insert(contact);
                 }
             }
@@ -95,6 +97,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 
         //保存任务信息
         Task task = customerAllInfo.getTask();
+        task.setId(this.generateId());
         task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
         taskBaseService.insert(task);
 
@@ -108,7 +111,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     public void disposeRepayment(RepaymentMessage repaymentMessage) {
         Task dbTask = taskBaseService.findByOrderId(repaymentMessage.getOrderId());
         TaskLog taskLog = new TaskLog();
-        if ("REPAY_POSTPONE" == repaymentMessage.getPayType()) {
+        if ("REPAY_POSTPONE".equals(repaymentMessage.getPayType())) {
             //todo
             //如果是延期还款
             //延期次数
@@ -121,7 +124,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             BigDecimal oldAmount = dbTask.getPostponeTotalAmount();
             dbTask.setPostponeTotalAmount((oldAmount == null ? BigDecimal.ZERO : oldAmount).add(repaymentMessage.getRepayAmount()));
             //借贷期限增加
-            dbTask.setLoanTerm(dbTask.getLoanTerm() + repaymentMessage.getPostponeCount());
+//            dbTask.setLoanTerm(dbTask.getLoanTerm() ==null? + repaymentMessage.getPostponeCount());
             //任务结束时间
             dbTask.setTaskEndTime(new Date());//todo 是否需要记录任务结束时间
             //转换成日志表,对象
@@ -177,6 +180,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     private TaskLog covertToTaskLog(Task dbTask, RepaymentMessage repaymentMessage) {
         TaskLog taskLog = new TaskLog();
         BeanUtils.copyProperties(dbTask, taskLog, "id");
+        taskLog.setId(this.generateId());
         taskLog.setTaskId(dbTask.getId());
         taskLog.setOverdueDays(calculateOverdueDays(dbTask.getRepaymentTime()));
         taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE);

@@ -116,7 +116,11 @@ public class Task  extends BaseEntity {
 		return orderStatus;
 	}
 	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
+		if ("LENT".equals(orderStatus)) {
+			this.orderStatus = "PAYMENT";
+		} else {
+			this.orderStatus = orderStatus;
+		}
 	}
 	public Integer getLoanTerm() {
 		return loanTerm;

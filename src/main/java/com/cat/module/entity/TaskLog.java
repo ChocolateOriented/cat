@@ -51,7 +51,7 @@ public class TaskLog extends BaseEntity {
 	
 	private String platformext; // 渠道
 	private BigDecimal creditamount;		// 实际应还金额 (当前应催金额)
-
+	private String remark;
 
 	public TaskLog() {
 		super();
@@ -68,6 +68,13 @@ public class TaskLog extends BaseEntity {
 		this.behaviorStatus = behaviorStatus;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	public String getMobile() {
 		return mobile;

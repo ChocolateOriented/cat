@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.cat.module.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,5 +88,20 @@ public class TaskService extends BaseService {
 		return false;
 	}
 
+	public Task findTaskByOrderId(String orderId) {
+		return taskMapper.findTaskByOrderId(orderId);
+	}
+
+	public void insert(Task task) {
+		taskMapper.insert(task);
+	}
+
+	public Task findByOrderId(String orderId) {
+		return taskMapper.findTaskByOrderId(orderId);
+	}
+
+	public void updateTaskStatus(Task dbTask) {
+		taskMapper.updateByPrimaryKey(dbTask);
+	}
 
 }

@@ -29,12 +29,10 @@
     <insert id="insert" parameterType="com.cat.module.entity.Bank">
         insert into t_bank (id, mobile, customer_id,
         bank_card, bank_name, id_card,
-        user_name, channel, type,
-        create_time, update_time)
+        user_name, channel, `type`)
         values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
         #{bankCard,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR},
-        #{userName,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
-        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+        #{userName,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Bank">
         update t_bank
@@ -45,9 +43,7 @@
         id_card = #{idCard,jdbcType=VARCHAR},
         user_name = #{userName,jdbcType=VARCHAR},
         channel = #{channel,jdbcType=VARCHAR},
-        type = #{type,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        `type` = #{type,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

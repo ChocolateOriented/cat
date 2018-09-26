@@ -93,4 +93,9 @@ public class ContactService extends BaseService {
 	public void insert(com.cat.module.entity.Contact  contact) {
 		contactMapper.insert(contact);
 	}
+
+	public void update(Contact contact) {
+
+		contactMapper.updateByPrimaryKey(contact);
+	}
 }
