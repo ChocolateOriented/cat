@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -42,8 +41,9 @@ public class CustomerAndOrderListener {
 
     @RabbitListener(queues = "${rabbit.customerAndOrder.queue}")
     public void recieveRegisterInfo(Message message) {
+        String messageId = null;
         try {
-            String messageId = message.getMessageProperties().getMessageId();
+            messageId = message.getMessageProperties().getMessageId();
             logger.info("接收消息,messageId: {}", messageId);
             String receivedRoutingKey = message.getMessageProperties().getReceivedRoutingKey();
             if(receivedAllRoutingKey.equals(receivedRoutingKey)) {
@@ -54,7 +54,7 @@ public class CustomerAndOrderListener {
                 disposeRepaymentMessage(message);
             }
         } catch (Exception e) {
-            logger.info("接收消息异常", e);
+            logger.info("接收消息异常,messageId:"+messageId+",message:"+new String(message.getBody()), e);
         }
     }
 
@@ -83,7 +83,9 @@ public class CustomerAndOrderListener {
     }
 
     private RepaymentMessage parseToRepaymentMessage(Message message) throws Exception {
-        return JSON.parseObject(new String(message.getBody(), "utf-8"), RepaymentMessage.class);
+        System.out.println(new String(message.getBody(), "utf-8"));
+        JSONObject repayInfo = JSON.parseObject(new String(message.getBody(), "utf-8")).getJSONObject("repayInfo");
+        return JSON.parseObject(repayInfo.toJSONString(), RepaymentMessage.class);
     }
 
     private CustomerAllInfo parseToCustomerAllInfo(JSONObject message) throws Exception {
@@ -101,7 +103,7 @@ public class CustomerAndOrderListener {
     }
 
     private List<Contact> parseToContactInfo(JSONObject message) {
-        String string = message.getJSONArray("contact").toString();
+        String string = message.getJSONArray("contactsList").toString();
         List<Contact> contactList = JSON.parseArray(string, Contact.class);
         for (Contact contact : contactList) {
             contact.setMobile(message.getString("mobile"));

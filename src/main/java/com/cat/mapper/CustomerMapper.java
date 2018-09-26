@@ -1,7 +1,6 @@
 package com.cat.mapper;
 
 import com.cat.module.entity.CustomerBaseInfo;
-import com.cat.module.entity.CustomerBaseInfo;
 import com.cat.module.vo.OrderInfo;
 
 import java.util.List;

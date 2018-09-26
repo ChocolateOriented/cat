@@ -6,8 +6,6 @@ package com.cat.module.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,7 +19,7 @@ public class TaskLog extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 	private String orderId;		// 订单号
-	private Long collectorId;		// 催收人id
+	private String collectorId;		// 催收人id
 	private String collectorName;		// 催收人姓名
 	private String collectCycle;		// 催收周期(队列)
 		
@@ -41,7 +39,7 @@ public class TaskLog extends BaseEntity {
 	private BigDecimal  penaltyValue;//罚息值
 	private BigDecimal  reliefAmount;//减免金额
 	private BigDecimal  chargeValue;//服务费值
-	private BigDecimal  postponeUnitCharge;//延期单位服务费
+	private BigDecimal  repaymentAmount;//本次还款金额
 	private Integer  postponeCount;//延期次数
 	
 		private BehaviorStatus behaviorStatus;		// 催收员行为状态（in,out,finished,partial,postpone）
@@ -50,15 +48,15 @@ public class TaskLog extends BaseEntity {
 		private Integer overdueDays;		// 逾期天数========需要计算
 	
 	private String platformext; // 渠道
-	private Integer creditamount;		// 实际应还金额 (当前应催金额)
-
+	private BigDecimal creditamount;		// 实际应还金额 (当前应催金额)
+	private String remark;
 
 	public TaskLog() {
 		super();
 	}
 
 	
-	public TaskLog(String orderId, Long collectorId, String collectorName, String collectCycle,
+	public TaskLog(String orderId, String collectorId, String collectorName, String collectCycle,
 			BehaviorStatus behaviorStatus) {
 		super();
 		this.orderId = orderId;
@@ -68,6 +66,13 @@ public class TaskLog extends BaseEntity {
 		this.behaviorStatus = behaviorStatus;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	public String getMobile() {
 		return mobile;
@@ -76,16 +81,23 @@ public class TaskLog extends BaseEntity {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	
 
-	public Integer getCreditamount() {
+
+	public BigDecimal getCreditamount() {
 		return creditamount;
 	}
 
-	public void setCreditamount(Integer creditamount) {
+	public void setCreditamount(BigDecimal creditamount) {
 		this.creditamount = creditamount;
 	}
 
+	public BigDecimal getRepaymentAmount() {
+		return repaymentAmount;
+	}
+
+	public void setRepaymentAmount(BigDecimal repaymentAmount) {
+		this.repaymentAmount = repaymentAmount;
+	}
 
 	public String getPlatformext() {
 		return platformext;
@@ -212,14 +224,6 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public BigDecimal getPostponeUnitCharge() {
-		return postponeUnitCharge;
-	}
-
-
-	public void setPostponeUnitCharge(BigDecimal postponeUnitCharge) {
-		this.postponeUnitCharge = postponeUnitCharge;
-	}
 
 
 	public Integer getPostponeCount() {
@@ -254,12 +258,12 @@ public class TaskLog extends BaseEntity {
 	}
 
 
-	public Long getCollectorId() {
+	public String getCollectorId() {
 		return collectorId;
 	}
 
 
-	public void setCollectorId(Long collectorId) {
+	public void setCollectorId(String collectorId) {
 		this.collectorId = collectorId;
 	}
 

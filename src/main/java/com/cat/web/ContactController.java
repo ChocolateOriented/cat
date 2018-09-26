@@ -23,7 +23,14 @@ public class ContactController extends BaseController {
 	@Autowired
 	private ContactService contactService;
 
-	@GetMapping(value = "/list_calllog")
+	/**
+	 * 查询通话记录列表
+	 * @param mobile
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	@GetMapping(value = "/list_call_log")
 	public PageResponse<ContactVo> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
 		Page<ContactVo> page = contactService.findCalllog(mobile, pageNum, pageSize);
@@ -32,7 +39,11 @@ public class ContactController extends BaseController {
 		return pageResp;
 	}
 
-	@GetMapping(value = "/list_target_type")
+	/**
+	 * 查询联系人类型列表
+	 * @return
+	 */
+	@GetMapping(value = "/list_contact_type")
 	public EntitiesResponse<Code> listTargetType() {
 		List<Code> targetTypes = contactService.listTargetType();
 		return new EntitiesResponse<Code>(targetTypes);

@@ -7,13 +7,13 @@
 	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
 				UPDATE t_task 
 				<set>
-				    updateDate = now(),
-				    updateBy = #{item.updateBy},
-					collectorId = #{item.collectorId},
-					collectorName = #{item.collectorName},
-					collectPeriodBegin = #{item.collectPeriodBegin},
-					collectPeriodEnd = #{item.collectPeriodEnd},
-					collectCycle = #{item.collectCycle}
+				    update_time = now(),
+				    update_by = #{item.updateBy},
+					collector_id = #{item.collectorId},
+					collector_name = #{item.collectorName},
+					collect_period_begin = #{item.collectPeriodBegin},
+					collect_period_end = #{item.collectPeriodEnd},
+					collect_cycle = #{item.collectCycle}
 <!-- 					nextfollowdate = null -->
 				</set>
 				WHERE id = #{item.id}
@@ -24,14 +24,14 @@
 	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
 				UPDATE t_task 
 				<set>
-				    updateDate = now(),
-				    updateBy = #{item.updateBy},
-					collectorId = #{item.collectorId},
-					collectorName = #{item.collectorName},
-					collectPeriodBegin = #{item.collectPeriodBegin},
-					collectPeriodEnd = #{item.collectPeriodEnd},
-					collectCycle = #{item.collectCycle},
-					collectTaskStatus = #{item.collectTaskStatus}
+				    update_time = now(),
+				    update_by = #{item.updateBy},
+					collector_id = #{item.collectorId},
+					collector_name = #{item.collectorName},
+					collect_period_begin = #{item.collectPeriodBegin},
+					collect_period_end = #{item.collectPeriodEnd},
+					collect_cycle = #{item.collectCycle},
+					collect_task_status = #{item.collectTaskStatus}
 				</set>
 				WHERE id = #{item.id}
 		 </foreach>
@@ -41,94 +41,94 @@
     <select id="newfindDelayTaskByDunningcycle" resultType="com.cat.module.entity.TaskLog"> 
 		   	 SELECT 
 					CASE 
-						WHEN o.status = 'payment' THEN DATEDIFF(curdate(), o.repayment_time) 
+						WHEN t.order_status = 'payment' THEN DATEDIFF(curdate(), t.repayment_time) 
 						ELSE 0
 					END as "overduedays",
-					private String  customerId;#用户code
-					private String customerName;		//客户姓名
-					private String mobile;		// 手机号
-					private String  orderType;//订单类型
-					private String  productType;//产品类型
-					private String  orderStatus;//订单状态
-					private BigDecimal  loanAmount;//借贷金额
-					private Integer  loanTerm;//借贷期限
-					private BigDecimal  lentAmountr;//放款金额
-					private String  interestMode;//利息模式
-					private BigDecimal  interestValue;//利息值
-					private String  penaltyMode;//罚息模式
-					private BigDecimal  penaltyValue;//罚息值
-					private BigDecimal  reliefAmount;//减免金额
-					private BigDecimal  chargeValue;//服务费值
-					private BigDecimal  postponeUnitCharge;//延期单位服务费
-					private Integer  postponeCount;//延期次数
-					private Date  lendTime;//放款时间
-					private Date  payoffTime;//还清时间
-					private Date  repaymentTime;//到期还款日期
-					private String  collectorId;//催讨人id
-					private String  collectorName;//催讨人名
-					private Date  taskStartTime;//任务起始时间
-					private Date  taskEndTime;//任务结束时间
-					private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
-					private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
-					private String  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
-					private String  collectTelRemark;//催收备注
-					private Date  collectTime;//操作时间
-					private String  collectCycle;//催收队列
-					private String  remark;//备注
-					private boolean ispayoff;		// 任务所对应的订单是否还清
+					t.customer_id  AS  customerId;#用户code
+					t.customer_name  AS  customerName;		//客户姓名
+					t.mobile  AS  mobile;		// 手机号
+					t.order_type  AS  orderType;//订单类型
+					t.product_type  AS  productType;//产品类型
+					t.order_status  AS  orderStatus;//订单状态
+					t.loan_amount  AS  loanAmount;//借贷金额
+					t.loan_term  AS  loanTerm;//借贷期限
+					t.lent_amount  AS  lentAmountr;//放款金额
+					t.interest_mode  AS  interestMode;//利息模式
+					t.interest_value  AS  interestValue;//利息值
+					t.penalty_mode  AS  penaltyMode;//罚息模式
+					t.penalty_value  AS  penaltyValue;//罚息值
+					t.relief_amount  AS  reliefAmount;//减免金额
+					t.charge_value  AS  chargeValue;//服务费值
+					t.postpone_unit_charge  AS  postponeUnitCharge;//延期单位服务费
+					t.postpone_count  AS  postponeCount;//延期次数
+					t.lend_time  AS  lendTime;//放款时间
+					t.payoff_time  AS  payoffTime;//还清时间
+					t.repayment_time  AS  repaymentTime;//到期还款日期
+					t.collector_id  AS  collectorId;//催讨人id
+					t.collector_name  AS  collectorName;//催讨人名
+					t.task_start_time  AS  taskStartTime;//任务起始时间
+					t.task_end_time  AS  taskEndTime;//任务结束时间
+					t.collect_period_begin  AS  collectPeriodBegin;//催讨周期-逾期周期起始
+					t.collect_period_end  AS  collectPeriodEnd;//催讨周期-逾期周期截至
+					t.collect_task_status  AS  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
+					t.collect_tel_remark  AS  collectTelRemark;//催收备注
+					t.collect_time  AS  collectTime;//操作时间
+					t.collect_cycle  AS  collectCycle;//催收队列
+					t.remark  AS  remark;//备注
+					t.ispayoff AS ispayoff;		// 任务所对应的订单是否还清
 			FROM t_task t 
 			 <where>
-					t.DunningCycle =  #{collectCycle} 
-					AND  t.collectTaskStatus = #{collectTaskStatus}
-					AND DATEDIFF(curdate(), o.repayment_time) NOT BETWEEN #{begin} AND  #{end}
+					t.collect_cycle =  #{collectCycle} 
+					AND  t.collect_task_status = #{collectTaskStatus}
+					AND DATEDIFF(curdate(), t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
 			 </where>
-			ORDER BY corpusAmount DESC
+			ORDER BY loan_amount DESC
 	</select>
 	
 	
 	<select id="newfingDelayOrderByNotTask" resultType="com.cat.module.entity.TaskLog"> 
 		SELECT
-				CASE 
-					WHEN o.`status` = 'payment' THEN DATEDIFF(curdate(), o.repayment_time) 
-					ELSE 0
-				END as "overduedays",		
-				private String  customerId;#用户code
-				private String customerName;		//客户姓名
-				private String mobile;		// 手机号
-				private String  orderType;//订单类型
-				private String  productType;//产品类型
-				private String  orderStatus;//订单状态
-				private BigDecimal  loanAmount;//借贷金额
-				private Integer  loanTerm;//借贷期限
-				private BigDecimal  lentAmountr;//放款金额
-				private String  interestMode;//利息模式
-				private BigDecimal  interestValue;//利息值
-				private String  penaltyMode;//罚息模式
-				private BigDecimal  penaltyValue;//罚息值
-				private BigDecimal  reliefAmount;//减免金额
-				private BigDecimal  chargeValue;//服务费值
-				private BigDecimal  postponeUnitCharge;//延期单位服务费
-				private Integer  postponeCount;//延期次数
-				private Date  lendTime;//放款时间
-				private Date  payoffTime;//还清时间
-				private Date  repaymentTime;//到期还款日期
-				private String  collectorId;//催讨人id
-				private String  collectorName;//催讨人名
-				private Date  taskStartTime;//任务起始时间
-				private Date  taskEndTime;//任务结束时间
-				private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
-				private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
-				private String  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
-				private String  collectTelRemark;//催收备注
-				private Date  collectTime;//操作时间
-				private String  collectCycle;//催收队列
-				private String  remark;//备注
-				private boolean ispayoff;		// 任务所对应的订单是否还清	
+			CASE 
+				WHEN t.order_status = 'payment' THEN DATEDIFF(curdate(), t.repayment_time) 
+				ELSE 0
+			END as "overduedays",
+			t.customer_id  AS  customerId;#用户code
+			t.customer_name  AS  customerName;		//客户姓名
+			t.mobile  AS  mobile;		// 手机号
+			t.order_type  AS  orderType;//订单类型
+			t.product_type  AS  productType;//产品类型
+			t.order_status  AS  orderStatus;//订单状态
+			t.loan_amount  AS  loanAmount;//借贷金额
+			t.loan_term  AS  loanTerm;//借贷期限
+			t.lent_amount  AS  lentAmountr;//放款金额
+			t.interest_mode  AS  interestMode;//利息模式
+			t.interest_value  AS  interestValue;//利息值
+			t.penalty_mode  AS  penaltyMode;//罚息模式
+			t.penalty_value  AS  penaltyValue;//罚息值
+			t.relief_amount  AS  reliefAmount;//减免金额
+			t.charge_value  AS  chargeValue;//服务费值
+			t.postpone_unit_charge  AS  postponeUnitCharge;//延期单位服务费
+			t.postpone_count  AS  postponeCount;//延期次数
+			t.lend_time  AS  lendTime;//放款时间
+			t.payoff_time  AS  payoffTime;//还清时间
+			t.repayment_time  AS  repaymentTime;//到期还款日期
+			t.collector_id  AS  collectorId;//催讨人id
+			t.collector_name  AS  collectorName;//催讨人名
+			t.task_start_time  AS  taskStartTime;//任务起始时间
+			t.task_end_time  AS  taskEndTime;//任务结束时间
+			t.collect_period_begin  AS  collectPeriodBegin;//催讨周期-逾期周期起始
+			t.collect_period_end  AS  collectPeriodEnd;//催讨周期-逾期周期截至
+			t.collect_task_status  AS  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
+			t.collect_tel_remark  AS  collectTelRemark;//催收备注
+			t.collect_time  AS  collectTime;//操作时间
+			t.collect_cycle  AS  collectCycle;//催收队列
+			t.remark  AS  remark;//备注
+			t.ispayoff AS ispayoff;		// 任务所对应的订单是否还清	
 		FROM t_task AS t
 		where
-			t.collectTaskStatus = 'UNOPEND_TASK' or t.collectTaskStatus = 'TASK_POSTPONE'
+			t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE'
 			AND DATEDIFF(curdate(), t.repayment_time) >= #{day}
-		ORDER BY corpusAmount DESC
+		ORDER BY loan_amount DESC
 	</select>
 	
 <!-- 	<insert id="batchinsertTask"> -->

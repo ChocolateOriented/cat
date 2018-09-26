@@ -1,68 +1,184 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mo9.risk.modules.dunning.dao.TMisDunningTaskLogDao">
-    
-	<insert id="batchInsertTaskLog">
+<mapper namespace="com.cat.mapper.TaskLogMapper">
+    <resultMap id="BaseResultMap" type="com.cat.module.entity.TaskLog">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+        <result column="collector_id" jdbcType="VARCHAR" property="collectorId" />
+        <result column="collector_name" jdbcType="VARCHAR" property="collectorName" />
+        <result column="collect_cycle" jdbcType="VARCHAR" property="collectCycle" />
+        <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+        <result column="payoff_time" jdbcType="TIMESTAMP" property="payoffTime" />
+        <result column="loan_term" jdbcType="INTEGER" property="loanTerm" />
+        <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
+        <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount" />
+        <result column="lent_amount" jdbcType="DECIMAL" property="lentAmount" />
+        <result column="interest_mode" jdbcType="VARCHAR" property="interestMode" />
+        <result column="interest_value" jdbcType="DECIMAL" property="interestValue" />
+        <result column="penalty_mode" jdbcType="VARCHAR" property="penaltyMode" />
+        <result column="penalty_value" jdbcType="DECIMAL" property="penaltyValue" />
+        <result column="relief_amount" jdbcType="DECIMAL" property="reliefAmount" />
+        <result column="charge_value" jdbcType="DECIMAL" property="chargeValue" />
+        <result column="repayment_amount" jdbcType="DECIMAL" property="repaymentAmount" />
+        <result column="postpone_count" jdbcType="INTEGER" property="postponeCount" />
+        <result column="behavior_status" jdbcType="VARCHAR" property="behaviorStatus" />
+        <result column="collect_task_status" jdbcType="VARCHAR" property="collectTaskStatus" />
+        <result column="task_id" jdbcType="BIGINT" property="taskId" />
+        <result column="overdue_days" jdbcType="INTEGER" property="overdueDays" />
+        <result column="platformext" jdbcType="VARCHAR" property="platformext" />
+        <result column="creditamount" jdbcType="INTEGER" property="creditamount" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_task_log
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="batchInsertTaskLog">
         INSERT INTO t_mis_dunning_task_log(
-			orderId,
-            collectorId,
-            collectorName,
-            collectCycle,
-            orderStatus,
-            payoffTime,
-            loanTerm,
-            customerId,
-            customerName,
-            mobile,
-            repaymentTime,
-            loanAmount,
-            lentAmount,
-            interestMode,
-            interestValue,
-            penaltyMode,
-            penaltyValue,
-            reliefAmount,
-            chargeValue,
-            postponeUnitCharge,
-            postponeCount,
-            behaviorStatus,
-            collectTaskStatus,
-            taskId,
-            overdueDays,
-            platformext,
-            creditamount
+        order_id,
+        collector_id,
+        collector_name,
+        collect_cycle,
+        order_status,
+        payoff_time,
+        loan_term,
+        customer_id,
+        customer_name,
+        mobile,
+        repayment_time,
+        loan_amount,
+        lent_amount,
+        interest_mode,
+        interest_value,
+        penalty_mode,
+        penalty_value,
+        relief_amount,
+        charge_value,
+        repayment_amount,
+        postpone_count,
+        behavior_status,
+        collect_task_status,
+        task_id,
+        overdue_days,
+        platformext,
+        creditamount
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
-              #{item.orderId}
+            #{item.orderId}
             , #{,ectorId}
             , #{item.collectorName}
-            , #{item.collectCycle} 
-            , #{item.orderStatus} 
-            , #{item.payoffTime} 
-            , #{item.loanTerm} 
-            , #{item.customerId} 
-            , #{item.customerName} 
-            , #{item.mobile} 
-            , #{item.repaymentTime} 
-            , #{item.loanAmount} 
-            , #{item.lentAmount} 
-            , #{item.interestMode} 
-            , #{item.interestValue} 
-            , #{item.penaltyMode} 
-            , #{item.penaltyValue} 
-            , #{item.reliefAmount} 
-            , #{item.chargeValue} 
-            , #{item.postponeUnitCharge} 
-            , #{item.postponeCount} 
-            , #{item.behaviorStatus} 
-            , #{item.collectTaskStatus} 
-            , #{item.taskId} 
-            , #{item.overdueDays} 
-            , #{item.platformext} 
-            , #{item.creditamount} 
+            , #{item.collectCycle}
+            , #{item.orderStatus}
+            , #{item.payoffTime}
+            , #{item.loanTerm}
+            , #{item.customerId}
+            , #{item.customerName}
+            , #{item.mobile}
+            , #{item.repaymentTime}
+            , #{item.loanAmount}
+            , #{item.lentAmount}
+            , #{item.interestMode}
+            , #{item.interestValue}
+            , #{item.penaltyMode}
+            , #{item.penaltyValue}
+            , #{item.reliefAmount}
+            , #{item.chargeValue}
+            , #{item.repaymentAmount}
+            , #{item.postponeCount}
+            , #{item.behaviorStatus}
+            , #{item.collectTaskStatus}
+            , #{item.taskId}
+            , #{item.overdueDays}
+            , #{item.platformext}
+            , #{item.creditamount}
             )
         </foreach>
     </insert>
-	
+    <insert id="insert" parameterType="com.cat.module.entity.TaskLog">
+        insert into t_task_log (id, order_id, collector_id,
+        collector_name, collect_cycle, order_status,
+        payoff_time, loan_term, customer_id,
+        customer_name, mobile, repayment_time,
+        loan_amount, lent_amount, interest_mode,
+        interest_value, penalty_mode, penalty_value,
+        relief_amount, charge_value, repayment_amount,
+        postpone_count, behavior_status, collect_task_status,
+        task_id, overdue_days, platformext,
+        creditamount, create_by,
+        update_by, remark
+        )
+        values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{collectorId,jdbcType=VARCHAR},
+        #{collectorName,jdbcType=VARCHAR}, #{collectCycle,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR},
+        #{payoffTime,jdbcType=TIMESTAMP}, #{loanTerm,jdbcType=INTEGER}, #{customerId,jdbcType=VARCHAR},
+        #{customerName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{repaymentTime,jdbcType=TIMESTAMP},
+        #{loanAmount,jdbcType=DECIMAL}, #{lentAmount,jdbcType=DECIMAL}, #{interestMode,jdbcType=VARCHAR},
+        #{interestValue,jdbcType=DECIMAL}, #{penaltyMode,jdbcType=VARCHAR}, #{penaltyValue,jdbcType=DECIMAL},
+        #{reliefAmount,jdbcType=DECIMAL}, #{chargeValue,jdbcType=DECIMAL}, #{repaymentAmount,jdbcType=DECIMAL},
+        #{postponeCount,jdbcType=INTEGER}, #{behaviorStatus,jdbcType=VARCHAR}, #{collectTaskStatus,jdbcType=VARCHAR},
+        #{taskId,jdbcType=BIGINT}, #{overdueDays,jdbcType=INTEGER}, #{platformext,jdbcType=VARCHAR},
+        #{creditamount,jdbcType=INTEGER},  #{createBy,jdbcType=VARCHAR},
+        #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.TaskLog">
+        update t_task_log
+        set order_id = #{orderId,jdbcType=VARCHAR},
+        collector_id = #{collectorId,jdbcType=VARCHAR},
+        collector_name = #{collectorName,jdbcType=VARCHAR},
+        collect_cycle = #{collectCycle,jdbcType=VARCHAR},
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+        payoff_time = #{payoffTime,jdbcType=TIMESTAMP},
+        loan_term = #{loanTerm,jdbcType=INTEGER},
+        customer_id = #{customerId,jdbcType=VARCHAR},
+        customer_name = #{customerName,jdbcType=VARCHAR},
+        mobile = #{mobile,jdbcType=VARCHAR},
+        repayment_time = #{repaymentTime,jdbcType=TIMESTAMP},
+        loan_amount = #{loanAmount,jdbcType=DECIMAL},
+        lent_amount = #{lentAmount,jdbcType=DECIMAL},
+        interest_mode = #{interestMode,jdbcType=VARCHAR},
+        interest_value = #{interestValue,jdbcType=DECIMAL},
+        penalty_mode = #{penaltyMode,jdbcType=VARCHAR},
+        penalty_value = #{penaltyValue,jdbcType=DECIMAL},
+        relief_amount = #{reliefAmount,jdbcType=DECIMAL},
+        charge_value = #{chargeValue,jdbcType=DECIMAL},
+        repayment_amount = #{repaymentAmount,jdbcType=DECIMAL},
+        postpone_count = #{postponeCount,jdbcType=INTEGER},
+        behavior_status = #{behaviorStatus,jdbcType=VARCHAR},
+        collect_task_status = #{collectTaskStatus,jdbcType=VARCHAR},
+        task_id = #{taskId,jdbcType=BIGINT},
+        overdue_days = #{overdueDays,jdbcType=INTEGER},
+        platformext = #{platformext,jdbcType=VARCHAR},
+        creditamount = #{creditamount,jdbcType=INTEGER},       
+        create_by = #{createBy,jdbcType=VARCHAR},
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, order_id, collector_id, collector_name, collect_cycle, order_status, payoff_time,
+        loan_term, customer_id, customer_name, mobile, repayment_time, loan_amount, lent_amount,
+        interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
+        repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
+        overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
+        remark
+        from t_task_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, order_id, collector_id, collector_name, collect_cycle, order_status, payoff_time,
+        loan_term, customer_id, customer_name, mobile, repayment_time, loan_amount, lent_amount,
+        interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
+        repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
+        overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
+        remark
+        from t_task_log
+    </select>
 </mapper>

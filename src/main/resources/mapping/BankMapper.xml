@@ -1,64 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.mapper.BankMapper">
-<resultMap id="BaseResultMap" type="com.cat.mapper.BankMapper">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
-    <result column="bank_no" jdbcType="VARCHAR" property="bankNo" />
-    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
-    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="channel" jdbcType="VARCHAR" property="channel" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-</resultMap>
-<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_bank
-    where id = #{id,jdbcType=BIGINT}
-</delete>
-<select id="findBankByBankNo" resultType="com.cat.module.entity.Bank">
-    SELECT id, mobile, customer_id, bank_no, bank_name, id_card, user_name, channel,
-    `type`, create_time, update_time
-    FROM  `t_bank` WHERE  `bank_no` = #{bankNo}
-</select>
-<insert id="insertBank" parameterType="com.cat.module.entity.Bank">
+    <resultMap id="BaseResultMap" type="com.cat.mapper.BankMapper">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+        <result column="bank_card" jdbcType="VARCHAR" property="bankCard" />
+        <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+        <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="channel" jdbcType="VARCHAR" property="channel" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_bank
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <select id="findBankByBankNoAndType" resultType="com.cat.module.entity.Bank">
+        SELECT id, mobile, customer_id, bank_card, bank_name, id_card, user_name, channel,
+        `type`, create_time, update_time
+        FROM  `t_bank` WHERE  `bank_card` = #{bankCard} AND `type` = #{bankType}
+    </select>
+    <insert id="insertBank" parameterType="com.cat.module.entity.Bank">
 
-</insert>
-<insert id="insert" parameterType="com.cat.module.entity.Bank">
-    insert into t_bank (id, mobile, customer_id,
-    bank_no, bank_name, id_card,
-    user_name, channel, type,
-    create_time, update_time)
-    values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
-    #{bankNo,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR},
-    #{userName,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
-    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
-</insert>
-<update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Bank">
-    update t_bank
-    set mobile = #{mobile,jdbcType=VARCHAR},
-    customer_id = #{customerId,jdbcType=VARCHAR},
-    bank_no = #{bankNo,jdbcType=VARCHAR},
-    bank_name = #{bankName,jdbcType=VARCHAR},
-    id_card = #{idCard,jdbcType=VARCHAR},
-    user_name = #{userName,jdbcType=VARCHAR},
-    channel = #{channel,jdbcType=VARCHAR},
-    type = #{type,jdbcType=VARCHAR},
-    create_time = #{createTime,jdbcType=TIMESTAMP},
-    update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-</update>
-<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select id, mobile, customer_id, bank_no, bank_name, id_card, user_name, channel,
-    type, create_time, update_time
-    from t_bank
-    where id = #{id,jdbcType=BIGINT}
-</select>
-<select id="selectAll" resultMap="BaseResultMap">
-    select id, mobile, customer_id, bank_no, bank_name, id_card, user_name, channel,
-    type, create_time, update_time
-    from t_bank
-</select>
+    </insert>
+    <insert id="insert" parameterType="com.cat.module.entity.Bank">
+        insert into t_bank (id, mobile, customer_id,
+        bank_card, bank_name, id_card,
+        user_name, channel, `type`)
+        values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
+        #{bankCard,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Bank">
+        update t_bank
+        set mobile = #{mobile,jdbcType=VARCHAR},
+        customer_id = #{customerId,jdbcType=VARCHAR},
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+        bank_name = #{bankName,jdbcType=VARCHAR},
+        id_card = #{idCard,jdbcType=VARCHAR},
+        user_name = #{userName,jdbcType=VARCHAR},
+        channel = #{channel,jdbcType=VARCHAR},
+        `type` = #{type,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, mobile, customer_id, bank_card, bank_name, id_card, user_name, channel,
+        type, create_time, update_time
+        from t_bank
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, mobile, customer_id, bank_card, bank_name, id_card, user_name, channel,
+        type, create_time, update_time
+        from t_bank
+    </select>
 </mapper>

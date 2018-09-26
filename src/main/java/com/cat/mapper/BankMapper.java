@@ -1,6 +1,7 @@
 package com.cat.mapper;
 
 import com.cat.module.entity.Bank;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by cyuan on 2018/9/21.
  */
 public interface BankMapper {
-    Bank findBankByBankNo(String bankNo);
+    Bank findBankByBankNoAndType(@Param("bankCard") String bankCard, @Param("bankType") String bankType);
 
     void insert(Bank bank);
 

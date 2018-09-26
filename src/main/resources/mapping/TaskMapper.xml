@@ -58,7 +58,7 @@
         where id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.cat.module.entity.Task">
-        insert into t_task (id, order_id, customer_id,
+        insert ignore into t_task (id, order_id, customer_id,
         customer_name, mobile, order_type,
         product_type, bank_no, order_status,
         loan_amount, loan_term, lent_amount,
@@ -69,8 +69,8 @@
         collector_id, collector_name, task_start_time,
         task_end_time, collect_period_begin, collect_period_end,
         collect_task_status, collect_tel_remark, action_feedback,
-        collect_time, collect_cycle, create_time,
-        create_by, update_time, update_by,
+        collect_time, collect_cycle,
+        create_by,  update_by,
         remark)
         values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
         #{customerName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR},
@@ -83,8 +83,8 @@
         #{collectorId,jdbcType=VARCHAR}, #{collectorName,jdbcType=VARCHAR}, #{taskStartTime,jdbcType=TIMESTAMP},
         #{taskEndTime,jdbcType=TIMESTAMP}, #{collectPeriodBegin,jdbcType=INTEGER}, #{collectPeriodEnd,jdbcType=INTEGER},
         #{collectTaskStatus,jdbcType=VARCHAR}, #{collectTelRemark,jdbcType=VARCHAR}, #{actionFeedback,jdbcType=VARCHAR},
-        #{collectTime,jdbcType=TIMESTAMP}, #{collectCycle,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+        #{collectTime,jdbcType=TIMESTAMP}, #{collectCycle,jdbcType=VARCHAR},
+        #{createBy,jdbcType=VARCHAR},  #{updateBy,jdbcType=VARCHAR},
         #{remark,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Task">
@@ -124,9 +124,7 @@
         action_feedback = #{actionFeedback,jdbcType=VARCHAR},
         collect_time = #{collectTime,jdbcType=TIMESTAMP},
         collect_cycle = #{collectCycle,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
         create_by = #{createBy,jdbcType=VARCHAR},
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
         update_by = #{updateBy,jdbcType=VARCHAR},
         remark = #{remark,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
@@ -141,21 +139,24 @@
         from t_task
     </select>
 
-    <select id="findTaskByOrderId" resultType="com.cat.module.entity.Task">
+    <select id="findTaskByOrderId" resultMap="BaseResultMap">
         SELECT <include refid="baseSql"/>
         FROM `t_task` WHERE `order_id` = #{orderId}
     </select>
 
     <select id="findTaskList" resultType="com.cat.module.dto.TaskDto">
+    
         SELECT
         u.name AS "name",
         t.mobile AS "mobile",
         CASE
-        WHEN t.order_status = 'payoff' THEN 0
-        WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time)>0
+        WHEN t.order_status = 'PAYOFF' THEN 0
+        WHEN t.order_status = 'PAYMENT' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
         THEN DATEDIFF(CURDATE(), t.repayment_time)*t.penalty_value + IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
-        END  AS "repayAmount",
-        IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0) AS "loanAmount",
+        WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ <= ]]>0
+        THEN IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
+        END  AS "customerTotalAmount",
+        IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0) AS "principalAndInterest",
         t.repayment_time AS "repaymentTime",
         t.order_status AS "orderStatus",
         t.collect_tel_remark AS "remark",
@@ -163,8 +164,8 @@
         t.collector_name AS "collectorName",
         t.payoff_time AS "payoffTime",
         CASE
-        WHEN t.order_status = 'payoff' THEN DATEDIFF(t.payoff_time,t.repayment_time)
-        WHEN t.order_status = 'payment' THEN DATEDIFF(CURDATE(), t.repayment_time)
+        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
+        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
         END  AS "overdueDays"
         FROM
         `t_task` t
@@ -182,8 +183,8 @@
             <if test="collectorId != null and collectorId != ''">
                 AND t.collector_id = #{collectorId}
             </if>
-            <if test="actionFeedbackType != null and actionFeedbackType != ''">
-                AND t.action_feedback = #{actionFeedbackType}
+            <if test="actionFeedback != null and actionFeedback != ''">
+                AND t.action_feedback = #{actionFeedback}
             </if>
             <if test="orderStatus != null and orderStatus != ''">
                 AND t.order_status = #{orderStatus}
@@ -200,10 +201,9 @@
                 <!--   主管 -->
                 AND u.organization_id = #{organizationId}
             </if>
-            and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_POSTPONE")
+            and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
 
         </where>
 
     </select>
-
 </mapper>

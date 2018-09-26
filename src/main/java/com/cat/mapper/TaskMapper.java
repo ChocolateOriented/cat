@@ -66,4 +66,8 @@ public interface TaskMapper  {
 	Task findTaskByOrderId(String orderId);
 
     void insert(Task task);
+
+    void updateTaskStatus(Task dbTask);
+
+	void updateByPrimaryKey(Task dbTask);
 }

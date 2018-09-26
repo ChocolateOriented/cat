@@ -1,26 +1,23 @@
 package com.cat.module.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Entity;
-
-import com.cat.module.entity.BaseEntity;
-import com.cat.module.enums.ActionCode;
-import com.cat.util.NumberUtil;
-import com.cat.util.excel.annotation.ExcelField;
+import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
-@Entity
-public class TaskDto extends BaseEntity{
+public class TaskDto implements Serializable{
   
+	private static final long serialVersionUID = 1L;
+	
 	private String  orderId;//订单ID - 业务流水号
 	private String  name;//客户姓名
 	private String  mobile;//用户手机号
 	private String  orderStatus;//订单状态
-	private BigDecimal  loanAmount;//欠款金额
-	private Integer  repayAmount;//应催金额
+	private BigDecimal  principalAndInterest;//欠款金额
+	private Integer  customerTotalAmount;//应催金额
 	private Date repaymentTime; //到期还款日
 	private Integer overdueDays;//逾期天数
 	private String remark;//催收备注
@@ -28,7 +25,7 @@ public class TaskDto extends BaseEntity{
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
 	private String collectorId;//催收员id
-	private ActionCode actionFeedbackType;//行动码
+	private ActionFeedback actionFeedback;//行动码
 	
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
@@ -59,20 +56,20 @@ public class TaskDto extends BaseEntity{
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	public BigDecimal getLoanAmount() {
-		return loanAmount;
+	public BigDecimal getPrincipalAndInterest() {
+		return principalAndInterest;
 	}
-	public void setLoanAmount(BigDecimal loanAmount) {
-		this.loanAmount = loanAmount;
+	public void setPrincipalAndInterest(BigDecimal principalAndInterest) {
+		this.principalAndInterest = principalAndInterest;
 	}
-	public Integer getRepayAmount() {
-		return repayAmount;
+	public Integer getCustomerTotalAmount() {
+		return customerTotalAmount;
 	}
-	public void setRepayAmount(Integer repayAmount) {
-		this.repayAmount = repayAmount;
+	public void setCustomerTotalAmount(Integer customerTotalAmount) {
+		this.customerTotalAmount = customerTotalAmount;
 	}
-	public Date getRepaymentTime() {
-		return repaymentTime;
+	public Long getRepaymentTime() {
+		return repaymentTime == null ? null : repaymentTime.getTime();
 	}
 	public void setRepaymentTime(Date repaymentTime) {
 		this.repaymentTime = repaymentTime;
@@ -95,8 +92,8 @@ public class TaskDto extends BaseEntity{
 	public void setCollectorName(String collectorName) {
 		this.collectorName = collectorName;
 	}
-	public Date getPayoffTime() {
-		return payoffTime;
+	public Long getPayoffTime() {
+		return  payoffTime == null ? null : payoffTime.getTime();
 	}
 	public void setPayoffTime(Date payoffTime) {
 		this.payoffTime = payoffTime;
@@ -116,11 +113,11 @@ public class TaskDto extends BaseEntity{
 		this.collectorId = collectorId;
 	}
 
-	public ActionCode getActionFeedbackType() {
-		return actionFeedbackType;
+	public ActionFeedback getActionFeedback() {
+		return actionFeedback;
 	}
-	public void setActionFeedbackType(ActionCode actionFeedbackType) {
-		this.actionFeedbackType = actionFeedbackType;
+	public void setActionFeedback(ActionFeedback actionFeedback) {
+		this.actionFeedback = actionFeedback;
 	}
 	public Integer getOverdueDaysStart() {
 		return overdueDaysStart;

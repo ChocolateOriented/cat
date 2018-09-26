@@ -21,14 +21,12 @@ public class Bank extends BaseEntity {
     /**
      * 银行账号
      */
-    @JSONField(name = "bankCard")
-    private String bankNo;
+    private String bankCard;
     /**
      * 银行名字
      */
     private String bankName;
 
-    @JSONField(name = "idCard")
     private String idCard;
 
     private String userName;
@@ -46,21 +44,20 @@ public class Bank extends BaseEntity {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-
     public String getCustomerId() {
         return customerId;
     }
-
+    @JSONField(name = "userCode")
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
-    public String getBankNo() {
-        return bankNo;
+    public String getBankCard() {
+        return bankCard;
     }
 
-    public void setBankNo(String bankNo) {
-        this.bankNo = bankNo;
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard;
     }
 
     public String getBankName() {
@@ -82,7 +79,7 @@ public class Bank extends BaseEntity {
     public String getUserName() {
         return userName;
     }
-
+    @JSONField(name = "realName")
     public void setUserName(String userName) {
         this.userName = userName;
     }

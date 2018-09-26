@@ -12,27 +12,98 @@ import java.util.Date;
 public class OrderInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 订单号
+     */
+    private String orderId;
+    /**
+     * 收款时间
+     */
     private Long collectionTime;
+    /**
+     * 银行名
+     */
     private String bankName;
+    /**
+     * 银行卡号
+     */
     private String bankNo;
+    /**
+     * 用户id
+     */
     private String customerId;
+    /**
+     * 用户名
+     */
     private String name;
+    /**
+     * 用户手机号
+     */
     private String mobile;
+    /**
+     * 用户手机归属地
+     */
     private String mobileLocation;
+    /**
+     * 用户性别
+     */
     private String gender;
+    /**
+     * 身份证号
+     */
     private String idCard;
+    /**
+     * 身份证地址
+     */
     private String idCardAddress;
-    private BigDecimal repayAmount;
-    private BigDecimal loanAmount;
+    /**
+     * 应催金额
+     */
+    private BigDecimal customerTotalAmount;
+    /**
+     * 本金
+     */
+    private BigDecimal principal;
+    /**
+     * 还款日
+     */
     private Date repaymentTime;
-    private BigDecimal overDueAmount;
-    private BigDecimal orderAmount;
+    /**
+     * 逾期费
+     */
+    private BigDecimal overdueFee;
+    /**
+     * 订单金额
+     */
+    private BigDecimal principalAndInterest;
+    /**
+     * 实际放款金额
+     */
     private BigDecimal lentAmount;
-    private BigDecimal interestValue;
+    /**
+     * 利息
+     */
+    private BigDecimal interest;
+    /**
+     * 账期
+     */
     private Integer loanTerm;
+    /**
+     * 续期次数
+     */
     private Integer postponeCount;
+    /**
+     * 续期总额
+     */
     private BigDecimal postponeAmount;
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public Long getCollectionTime() {
         return collectionTime;
@@ -114,20 +185,44 @@ public class OrderInfo implements Serializable {
         this.idCardAddress = idCardAddress;
     }
 
-    public BigDecimal getRepayAmount() {
-        return repayAmount;
+    public BigDecimal getCustomerTotalAmount() {
+        return customerTotalAmount;
     }
 
-    public void setRepayAmount(BigDecimal repayAmount) {
-        this.repayAmount = repayAmount;
+    public void setCustomerTotalAmount(BigDecimal customerTotalAmount) {
+        this.customerTotalAmount = customerTotalAmount;
     }
 
-    public BigDecimal getLoanAmount() {
-        return loanAmount;
+    public BigDecimal getPrincipal() {
+        return principal;
     }
 
-    public void setLoanAmount(BigDecimal loanAmount) {
-        this.loanAmount = loanAmount;
+    public void setPrincipal(BigDecimal principal) {
+        this.principal = principal;
+    }
+
+    public BigDecimal getOverdueFee() {
+        return overdueFee;
+    }
+
+    public void setOverdueFee(BigDecimal overdueFee) {
+        this.overdueFee = overdueFee;
+    }
+
+    public BigDecimal getPrincipalAndInterest() {
+        return principalAndInterest;
+    }
+
+    public void setPrincipalAndInterest(BigDecimal principalAndInterest) {
+        this.principalAndInterest = principalAndInterest;
+    }
+
+    public BigDecimal getInterest() {
+        return interest;
+    }
+
+    public void setInterest(BigDecimal interest) {
+        this.interest = interest;
     }
 
     public static long getSerialVersionUID() {
@@ -142,36 +237,12 @@ public class OrderInfo implements Serializable {
         this.repaymentTime = repaymentTime;
     }
 
-    public BigDecimal getOverDueAmount() {
-        return overDueAmount;
-    }
-
-    public void setOverDueAmount(BigDecimal overDueAmount) {
-        this.overDueAmount = overDueAmount;
-    }
-
-    public BigDecimal getOrderAmount() {
-        return orderAmount;
-    }
-
-    public void setOrderAmount(BigDecimal orderAmount) {
-        this.orderAmount = orderAmount;
-    }
-
     public BigDecimal getLentAmount() {
         return lentAmount;
     }
 
     public void setLentAmount(BigDecimal lentAmount) {
         this.lentAmount = lentAmount;
-    }
-
-    public BigDecimal getInterestValue() {
-        return interestValue;
-    }
-
-    public void setInterestValue(BigDecimal interestValue) {
-        this.interestValue = interestValue;
     }
 
     public Integer getLoanTerm() {

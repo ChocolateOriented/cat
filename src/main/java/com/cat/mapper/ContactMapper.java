@@ -1,7 +1,7 @@
 package com.cat.mapper;
 
 import com.cat.module.entity.Contact;
-import com.cat.module.entity.Contact;
+import com.cat.module.vo.ContactVo;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by cyuan on 2018/9/21.
  */
 public interface ContactMapper {
-    Integer countByCustomerId(String customerId);
+    List<Contact> fetchContactsByCustomerId(String customerId);
 
     void deleteContact(String customerId);
 
@@ -22,4 +22,8 @@ public interface ContactMapper {
     List<Contact> selectAll();
 
     int updateByPrimaryKey(Contact record);
+    
+    List<ContactVo> findListByCustomerId(String customerId);
+
+    void insertList(List<Contact> contactList);
 }

@@ -21,6 +21,14 @@ public interface TaskLogMapper  {
 	 * @return
 	 */
 	public int batchInsertTaskLog(@Param("list")List<TaskLog> list);
-	
-	public void insert(TaskLog taskLog);
+
+	int deleteByPrimaryKey(Long id);
+
+	int insert(TaskLog record);
+
+	TaskLog selectByPrimaryKey(Long id);
+
+	List<TaskLog> selectAll();
+
+	int updateByPrimaryKey(TaskLog record);
 }

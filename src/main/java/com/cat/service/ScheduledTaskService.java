@@ -356,7 +356,7 @@ public class ScheduledTaskService extends BaseService{
 							
 							
 							/**  任务催收人员添加    */
-							dunningTask.setCollectorId(dunningPeoples.get(j).getId());
+							dunningTask.setCollectorId(dunningPeoples.get(j).getId().toString());
 							dunningTask.setCollectorName(dunningPeoples.get(j).getName());
 			//				dunningTask.setDunningtaskstatus(dunningtaskstatus);
 							/**  任务log 催收人员添加    */
@@ -538,7 +538,7 @@ public class ScheduledTaskService extends BaseService{
 							System.out.println("姓名"+dunningPeoples.get(j).getName()+ "-周期总金额" + dunningPeoples.get(j).getSumCorpusAmount()+"-分配金额"+dunningTask.getLoanAmount());
 							
 							/**  任务催收人员添加    */
-							dunningTask.setCollectorId(dunningPeoples.get(j).getId());
+							dunningTask.setCollectorId(dunningPeoples.get(j).getId().toString());
 							dunningTask.setCollectorName(dunningPeoples.get(j).getName());
 							/**  任务log 催收人员添加    */
 							if(inDunningTaskLogsMap.containsKey(dunningTask.getId())){

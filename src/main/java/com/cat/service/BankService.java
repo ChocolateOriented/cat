@@ -2,6 +2,7 @@ package com.cat.service;
 
 import com.cat.mapper.BankMapper;
 import com.cat.module.entity.Bank;
+import com.cat.module.enums.BankType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ public class BankService extends BaseService{
     @Autowired
     private BankMapper bankMapper;
 
-    public Bank findBankByBankNo(String bankNo) {
-        return bankMapper.findBankByBankNo(bankNo);
+    public Bank findBankByBankNoAndType(String bankNo, BankType bankType) {
+        return bankMapper.findBankByBankNoAndType(bankNo, bankType.name());
     }
 
     public void insertBank(Bank bank) {

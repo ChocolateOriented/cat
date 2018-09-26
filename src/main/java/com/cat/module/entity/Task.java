@@ -1,19 +1,13 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.cat.module.entity;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.cat.module.enums.CollectTaskStatus;
-/*import com.cat.service.ScheduledTaskService;*/
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import com.sun.org.apache.regexp.internal.RE;
 
 /**
  * 催收任务Entity
@@ -35,7 +29,6 @@ public class Task  extends BaseEntity {
 
 	private String  orderId;//订单ID - 业务流水号
 	private String  customerId;//用户code
-	@JSONField(name = "userName")
 	private String customerName;		//客户姓名
 	private String mobile;		// 手机号
 	private String bankNo;
@@ -53,12 +46,11 @@ public class Task  extends BaseEntity {
 	private BigDecimal  chargeValue;//服务费值
 	private BigDecimal  postponeUnitCharge;//延期单位服务费
 	private Integer  postponeCount;//延期次数
-	private BigDecimal postponeTotalAmount;//续期总金额
-	@JSONField(name = "applyTime")
+	private BigDecimal postponeTotalAmount;//延期总金额
 	private Date  lendTime;//放款时间
 	private Date  payoffTime;//还清时间
 	private Date  repaymentTime;//到期还款日期
-	private Long collectorId;
+	private String collectorId;
 	private String  collectorName;//催讨人名
 	private Date  taskStartTime;//任务起始时间
 	private Date  taskEndTime;//任务结束时间
@@ -66,16 +58,17 @@ public class Task  extends BaseEntity {
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
 	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
+	private String  actionFeedback;//行动码
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
-	private String  remark;//备注
+	private String  remark;//e
 	
 	private boolean ispayoff;		// 任务所对应的订单是否还清
 
 	public String getBankNo() {
 		return bankNo;
 	}
-
+	@JSONField(name = "bankCard")
 	public void setBankNo(String bankNo) {
 		this.bankNo = bankNo;
 	}
@@ -91,12 +84,14 @@ public class Task  extends BaseEntity {
 	public String getOrderId() {
 		return orderId;
 	}
+	@JSONField(name = "loanOrderId")
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 	public String getCustomerId() {
 		return customerId;
 	}
+	@JSONField(name = "userCode")
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
@@ -116,7 +111,11 @@ public class Task  extends BaseEntity {
 		return orderStatus;
 	}
 	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
+		if ("LENT".equals(orderStatus)) {
+			this.orderStatus = "PAYMENT";
+		} else {
+			this.orderStatus = orderStatus;
+		}
 	}
 	public Integer getLoanTerm() {
 		return loanTerm;
@@ -176,6 +175,7 @@ public class Task  extends BaseEntity {
 	public Date getLendTime() {
 		return lendTime;
 	}
+	@JSONField(name = "applyTime")
 	public void setLendTime(Date lendTime) {
 		this.lendTime = lendTime;
 	}
@@ -231,27 +231,30 @@ public class Task  extends BaseEntity {
 	public String getCustomerName() {
 		return customerName;
 	}
+	@JSONField(name = "realName")
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
 	public BigDecimal getLoanAmount() {
 		return loanAmount;
 	}
+	@JSONField(name = "loanNumber")
 	public void setLoanAmount(BigDecimal loanAmount) {
 		this.loanAmount = loanAmount;
 	}
 	public BigDecimal getLentAmount() {
 		return lentAmount;
 	}
+	@JSONField(name = "lentNumber")
 	public void setLentAmount(BigDecimal lentAmount) {
 		this.lentAmount = lentAmount;
 	}
 
-	public Long getCollectorId() {
+	public String getCollectorId() {
 		return collectorId;
 	}
 
-	public void setCollectorId(Long collectorId) {
+	public void setCollectorId(String collectorId) {
 		this.collectorId = collectorId;
 	}
 
@@ -285,6 +288,14 @@ public class Task  extends BaseEntity {
 	public void setCollectTelRemark(String collectTelRemark) {
 		this.collectTelRemark = collectTelRemark;
 	}
+	public String getActionFeedback() {
+		return actionFeedback;
+	}
+
+	public void setActionFeedback(String actionFeedback) {
+		this.actionFeedback = actionFeedback;
+	}
+
 	public String getCollectCycle() {
 		return collectCycle;
 	}
@@ -342,13 +353,4 @@ public class Task  extends BaseEntity {
 		return loanAmount.add(interestValue);
 	}
 
-	private Date toDate(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.HOUR, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		return calendar.getTime();
-	}
 }
