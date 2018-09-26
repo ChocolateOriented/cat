@@ -182,8 +182,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE);
             //延期后,应催金额:本金+利息
             taskLog.setCreditamount(dbTask.getLoanAmount().add(dbTask.getInterestValue()));
-            //到期时间
-            taskLog.setOverdueDays(calculateOverdueDays(dbTask.getRepaymentTime()));
+            //逾期天数
+            taskLog.setOverdueDays(taskLog.calculateOverdueDays());
         } else {
             //催收员行为状态
             taskLog.setBehaviorStatus(BehaviorStatus.FINISHED);
@@ -201,44 +201,47 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         return taskLog;
     }
 
-    private Integer calculateOverdueDays(Date date) {
-        int betweenDays = (int)(System.currentTimeMillis() - date.getTime())/(1000*60*60*24);
-        if (betweenDays <= 0) {
-            betweenDays = 0;
-        }
-        return betweenDays;
-    }
+
     /**
      * 转换成OrderInfo
      * @param task
      * @param bank
      * @param customerBaseInfo
-     * @return
+     * @return0
      */
     private OrderInfo convertToOrderInfo(Task task, Bank bank, CustomerBaseInfo customerBaseInfo) {
         OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setOrderId(task.getOrderId());
-        orderInfo.setName(task.getCustomerName());
-        orderInfo.setMobile(customerBaseInfo.getMobile());
-        orderInfo.setGender(customerBaseInfo.getGender());
-        orderInfo.setIdCard(bank.getIdCard());
-        orderInfo.setIdCardAddress(customerBaseInfo.getIdCardAddress());
-        orderInfo.setCustomerTotalAmount(task.getRepayAmount());
-        orderInfo.setPrincipal(task.getLoanAmount());
-        orderInfo.setRepaymentTime(task.getRepaymentTime());
-        orderInfo.setOverdueFee(task.getOverDueAmount());
-        orderInfo.setPrincipalAndInterest(task.getOrderAmount());
-        orderInfo.setLentAmount(task.getLentAmount());
-        orderInfo.setInterest(task.getInterestValue());
-        orderInfo.setLoanTerm(task.getLoanTerm());
-        orderInfo.setPostponeCount(task.getPostponeCount() );
-        orderInfo.setPostponeAmount(task.getPostponeTotalAmount() == null ? BigDecimal.ZERO : task.getPostponeTotalAmount());
-        orderInfo.setBankName(bank.getBankName());
-        if (task.getCollectTime() != null) {
-            orderInfo.setCollectionTime(task.getCollectTime().getTime());
+        if (bank != null) {
+            orderInfo.setIdCard(bank.getIdCard());
+            orderInfo.setBankName(bank.getBankName());
+            orderInfo.setBankNo(bank.getBankCard());
+            orderInfo.setCustomerId(bank.getCustomerId());
         }
-        orderInfo.setBankNo(bank.getBankCard());
-        orderInfo.setCustomerId(bank.getCustomerId());
+
+        if (customerBaseInfo != null) {
+            orderInfo.setMobile(customerBaseInfo.getMobile());
+            orderInfo.setGender(customerBaseInfo.getGender());
+            orderInfo.setIdCardAddress(customerBaseInfo.getIdCardAddress());
+        }
+
+        if (task != null) {
+            orderInfo.setOrderId(task.getOrderId());
+            orderInfo.setName(task.getCustomerName());
+            orderInfo.setCustomerTotalAmount(task.getRepayAmount());
+            orderInfo.setPrincipal(task.getLoanAmount());
+            orderInfo.setRepaymentTime(task.getRepaymentTime());
+            orderInfo.setOverdueFee(task.getOverDueAmount());
+            orderInfo.setPrincipalAndInterest(task.getOrderAmount());
+            orderInfo.setLentAmount(task.getLentAmount());
+            orderInfo.setInterest(task.getInterestValue());
+            orderInfo.setLoanTerm(task.getLoanTerm());
+            orderInfo.setPostponeCount(task.getPostponeCount() );
+            orderInfo.setPostponeAmount(task.getPostponeTotalAmount() == null ? BigDecimal.ZERO : task.getPostponeTotalAmount());
+            if (task.getCollectTime() != null) {
+                orderInfo.setCollectionTime(task.getCollectTime().getTime());
+            }
+        }
+
 //        orderInfo.setMobileLocation();todo 手机号归属地
         return orderInfo;
     }

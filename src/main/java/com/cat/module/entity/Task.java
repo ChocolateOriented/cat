@@ -315,7 +315,7 @@ public class Task  extends BaseEntity {
 /*	public int getCurrentOverdueDays()
 	{
 //		Date now  = new Date();
-		return ScheduledTaskService.GetOverdueDay(repaymentTime);
+		return ScheduledTaskService.getOverdueDay(repaymentTime);
 //		return (int)((toDate(now).getTime() - toDate(repaymentTime).getTime()) / (24 * 60 * 60 * 1000));
 	}*/
 
