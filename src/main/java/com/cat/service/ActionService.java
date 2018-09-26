@@ -14,7 +14,6 @@ import com.cat.module.entity.Action;
 import com.cat.module.entity.Task;
 import com.cat.module.enums.ActionFeedback;
 import com.cat.repository.ActionRepository;
-import com.cat.repository.TaskRepository;
 
 @Service
 public class ActionService extends BaseService {
@@ -23,7 +22,7 @@ public class ActionService extends BaseService {
 	private ActionRepository actionRepository;
 
 	@Autowired
-	private TaskRepository taskRepository;
+	private TaskService taskService;
 
 	public Page<Action> findPage(String ownerId, int pageNum, int pageSize) {
 		Page<Action> actions = actionRepository.findByOwnerIdOrderByCreateTimeDesc(ownerId, new PageRequest(pageNum, pageSize));
@@ -33,15 +32,10 @@ public class ActionService extends BaseService {
 	@Transactional
 	public void save(Action action) {
 		action.setId(generateId());
-		
-		Task task = taskRepository.findTopByOrderId(action.getOrderId());
-		action.setCustomerId(task.getCustomerId());
-		action.setCollectorId(String.valueOf(task.getCollectorId()));
-		action.setCollectorName(task.getCollectorName());
 		action = actionRepository.save(action);
 		
 		String actionFeedback = action.getActionFeedback() == null ? null : action.getActionFeedback().name();
-		taskRepository.updateTaskActionByOrderId(action.getOrderId(), actionFeedback, action.getRemark(), action.getCreateTime());
+		taskService.updateTaskActionFeedback(action.getOrderId(), actionFeedback, action.getRemark(), action.getCreateTime());
 	}
 
 	public List<Code> listActionFeedback() {

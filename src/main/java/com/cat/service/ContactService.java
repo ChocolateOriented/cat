@@ -60,7 +60,7 @@ public class ContactService extends BaseService {
 		List<Code> codes = new ArrayList<>();
 		for (ContactType targetType : ContactType.values()) {
 			Code code = new Code();
-			code.setCode(targetType.name());
+			code.setCode(String.valueOf(targetType.getValue()));
 			code.setDesc(targetType.getDesc());
 			codes.add(code);
 		}
@@ -92,5 +92,19 @@ public class ContactService extends BaseService {
 
 	public void insert(com.cat.module.entity.Contact  contact) {
 		contactMapper.insert(contact);
+	}
+	
+	public static void main(String[] args) {
+		List<ContactVo> cotactVos = new ArrayList<>();
+		ContactVo v1 = new ContactVo();
+		v1.setTel("1234");
+		ContactVo v2 = new ContactVo();
+		v2.setTel("1234");
+		cotactVos.add(v1);
+		cotactVos.add(v2);
+		cotactVos = cotactVos.stream().distinct()
+				.sorted((ContactVo c1, ContactVo c2) -> c1.getTel().compareTo(c2.getTel()))
+				.collect(Collectors.toList());
+		System.out.println(cotactVos.size());
 	}
 }

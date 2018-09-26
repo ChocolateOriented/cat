@@ -19,7 +19,9 @@ import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.entity.Action;
+import com.cat.module.entity.Task;
 import com.cat.service.ActionService;
+import com.cat.service.TaskService;
 
 @RestController
 @RequestMapping(value = "/cat/action")
@@ -27,6 +29,9 @@ public class ActionController extends BaseController {
 
 	@Autowired
 	private ActionService actionService;
+
+	@Autowired
+	private TaskService taskService;
 
 	@GetMapping(value = "/list_action_record")
 	public PageResponse<Action> list(String ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
@@ -41,6 +46,16 @@ public class ActionController extends BaseController {
 		if (bindingResul.hasErrors()) {
 			return new BaseResponse((int) ResultConstant.EMPTY_PARAM.code, getFieldErrorsMessages(bindingResul));
 		}
+		
+		Task task = taskService.findTaskByOrderId(action.getOrderId());
+		if (task == null) {
+			BaseResponse response = new BaseResponse((int) ResultConstant.EMPTY_ENTITY.code, "此订单不存在");
+			return response;
+		}
+		
+		action.setCustomerId(task.getCustomerId());
+		action.setCollectorId(task.getCollectorId());
+		action.setCollectorName(task.getCollectorName());
 		
 		actionService.save(action);
 		return BaseResponse.success();
