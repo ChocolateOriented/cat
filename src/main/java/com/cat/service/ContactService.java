@@ -104,4 +104,7 @@ public class ContactService extends BaseService {
 		contactMapper.insert(contact);
 	}
 
+	public void insertAll(List<Contact> diffContacts) {
+		contactMapper.insertList(diffContacts);
+	}
 }
