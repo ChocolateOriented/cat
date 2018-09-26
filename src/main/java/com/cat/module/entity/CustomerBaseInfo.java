@@ -126,7 +126,11 @@ public class CustomerBaseInfo extends BaseEntity {
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        if ("1".equals(gender)) {
+            this.gender = "男";
+        } else {
+            this.gender = "女";
+        }
     }
 
     public String getIdCardAddress() {

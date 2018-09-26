@@ -31,7 +31,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     private BankService bankService;
 
     @Autowired
-    private TaskService taskBaseService;
+    private TaskService taskService;
 
     @Autowired
     private ContactService contactService;
@@ -46,7 +46,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      * @return
      */
     public OrderInfo getCustomerAllInfo(String orderId) {
-        Task task = taskBaseService.findTaskByOrderId(orderId);
+        Task task = taskService.findTaskByOrderId(orderId);
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
@@ -101,7 +101,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         Task task = customerAllInfo.getTask();
         task.setId(this.generateId());
         task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
-        taskBaseService.insert(task);
+        taskService.insert(task);
 
     }
 
@@ -111,7 +111,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void disposeRepayment(RepaymentMessage repaymentMessage) {
-        Task dbTask = taskBaseService.findByOrderId(repaymentMessage.getOrderId());
+        Task dbTask = taskService.findByOrderId(repaymentMessage.getOrderId());
         if (dbTask == null) {
             throw new RuntimeException("任务不存在,延期或还款失败");
         }
@@ -129,7 +129,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             //日志表:
             taskLog = covertToTaskLog(dbTask, repaymentMessage, repaymentMessage.getPayType());
         }
-        taskBaseService.updateTaskStatus(dbTask);
+        taskService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
     }
 
