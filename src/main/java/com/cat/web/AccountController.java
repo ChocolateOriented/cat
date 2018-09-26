@@ -59,7 +59,7 @@ public class AccountController extends BaseController {
   }
 
   @PostMapping("send_validate_code")
-  public Results sendValidateCode(HttpServletRequest request, @Validated @RequestBody EmailDto
+  public Results sendValidateCode(@Validated @RequestBody EmailDto
       emailDto, BindingResult bindingResult){
     if (bindingResult.hasErrors()) {
       return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
