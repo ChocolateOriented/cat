@@ -16,8 +16,8 @@ public class TaskDto implements Serializable{
 	private String  name;//客户姓名
 	private String  mobile;//用户手机号
 	private String  orderStatus;//订单状态
-	private BigDecimal  loanAmount;//欠款金额
-	private Integer  repayAmount;//应催金额
+	private BigDecimal  principalAndInterest;//欠款金额
+	private Integer  customerTotalAmount;//应催金额
 	private Date repaymentTime; //到期还款日
 	private Integer overdueDays;//逾期天数
 	private String remark;//催收备注
@@ -56,20 +56,20 @@ public class TaskDto implements Serializable{
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	public BigDecimal getLoanAmount() {
-		return loanAmount;
+	public BigDecimal getPrincipalAndInterest() {
+		return principalAndInterest;
 	}
-	public void setLoanAmount(BigDecimal loanAmount) {
-		this.loanAmount = loanAmount;
+	public void setPrincipalAndInterest(BigDecimal principalAndInterest) {
+		this.principalAndInterest = principalAndInterest;
 	}
-	public Integer getRepayAmount() {
-		return repayAmount;
+	public Integer getCustomerTotalAmount() {
+		return customerTotalAmount;
 	}
-	public void setRepayAmount(Integer repayAmount) {
-		this.repayAmount = repayAmount;
+	public void setCustomerTotalAmount(Integer customerTotalAmount) {
+		this.customerTotalAmount = customerTotalAmount;
 	}
-	public Date getRepaymentTime() {
-		return repaymentTime;
+	public Long getRepaymentTime() {
+		return repaymentTime == null ? null : repaymentTime.getTime();
 	}
 	public void setRepaymentTime(Date repaymentTime) {
 		this.repaymentTime = repaymentTime;
@@ -92,8 +92,8 @@ public class TaskDto implements Serializable{
 	public void setCollectorName(String collectorName) {
 		this.collectorName = collectorName;
 	}
-	public Date getPayoffTime() {
-		return payoffTime;
+	public Long getPayoffTime() {
+		return  payoffTime == null ? null : payoffTime.getTime();
 	}
 	public void setPayoffTime(Date payoffTime) {
 		this.payoffTime = payoffTime;
