@@ -41,7 +41,8 @@
         where id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="batchInsertTaskLog">
-        INSERT INTO t_mis_dunning_task_log(
+        INSERT INTO t_task_log(
+        id,
         order_id,
         collector_id,
         collector_name,
@@ -72,8 +73,9 @@
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
-            #{item.orderId}
-            , #{,ectorId}
+            #{item.id}
+            , #{item.orderId}
+            , #{item.collectorId}
             , #{item.collectorName}
             , #{item.collectCycle}
             , #{item.orderStatus}

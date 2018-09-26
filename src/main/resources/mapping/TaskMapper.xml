@@ -204,7 +204,6 @@
             and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
 
         </where>
-
     </select>
     
     
@@ -231,6 +230,7 @@
 				<set>
 				    update_time = now(),
 				    update_by = #{item.updateBy},
+				    task_start_time = now(),
 					collector_id = #{item.collectorId},
 					collector_name = #{item.collectorName},
 					collect_period_begin = #{item.collectPeriodBegin},
@@ -280,7 +280,8 @@
 					t.collect_time  AS  collectTime,
 					t.collect_cycle  AS  collectCycle,
 					t.remark  AS  remark,
-					t.ispayoff AS ispayoff
+					t.ispayoff AS ispayoff,
+					t.id AS taskId
 			FROM t_task t 
 			 <where>
 					t.collect_cycle =  #{collectCycle} 
@@ -328,7 +329,8 @@
 			t.collect_time  AS  collectTime,
 			t.collect_cycle  AS  collectCycle,
 			t.remark  AS  remark,
-			t.ispayoff AS ispayoff
+			t.ispayoff AS ispayoff,
+			t.id AS taskId
 		FROM t_task AS t
 		where
 			t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE'

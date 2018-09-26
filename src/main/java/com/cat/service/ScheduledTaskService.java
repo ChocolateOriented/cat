@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cat.exception.ServiceException;
@@ -26,7 +27,7 @@ import com.cat.repository.TaskRepository;
 import com.cat.util.DateUtils;
 import com.cat.util.DictUtils;
 import com.cat.util.ListSortUtil;
-
+@Service
 public class ScheduledTaskService extends BaseService{
 	
 	public static final String  AUTOQ0_ID_1 = "autoQ0_id_1";
@@ -72,7 +73,7 @@ public class ScheduledTaskService extends BaseService{
 	 * @param repaymentDate 还款日
 	 * @return
 	 */
-	public static int getOverdueDay(Date repaymentDate)
+	public static int GetOverdueDay(Date repaymentDate)
 	{
 		Date now = new Date();
 		long timeSub = toDate(now).getTime()-toDate(repaymentDate).getTime();
@@ -274,6 +275,7 @@ public class ScheduledTaskService extends BaseService{
 						/**
 						 * log 催收周期过期移出记录
 						 */
+						dunningTaskLog.setId(this.generateId());
 						dunningTaskLog.setBehaviorStatus(BehaviorStatus.OUT);
 						dunningTaskLog.setCreateTime(new Date());
 						dunningTaskLog.setCreateBy(AUTO_ADMIN);
@@ -361,6 +363,7 @@ public class ScheduledTaskService extends BaseService{
 			//				dunningTask.setDunningtaskstatus(dunningtaskstatus);
 							/**  任务log 催收人员添加    */
 							if(inDunningTaskLogsMap.containsKey(dunningTask.getId())){
+								inDunningTaskLogsMap.get(dunningTask.getId()).setId(this.generateId());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setBehaviorStatus(BehaviorStatus.IN);
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorId(dunningTask.getCollectorId());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorName(dunningTask.getCollectorName());
@@ -418,7 +421,8 @@ public class ScheduledTaskService extends BaseService{
 				/**
 				 * 根据逾期天数查询未生成任务task的订单
 				 */
-				String begin_Q0 = this.getCycleDict_Q0().get("begin");
+//				String begin_Q0 = this.getCycleDict_Q0().get("begin");
+				String begin_Q0 = "-1";
 				logger.info("newfingDelayOrderByNotTask_day-begin_Q0"+ begin_Q0  + new Date());
 				List<TaskLog>  newDunningTaskLogs = tMisDunningTaskDao.newfingDelayOrderByNotTask(begin_Q0);
 				
@@ -542,6 +546,7 @@ public class ScheduledTaskService extends BaseService{
 							dunningTask.setCollectorName(dunningPeoples.get(j).getName());
 							/**  任务log 催收人员添加    */
 							if(inDunningTaskLogsMap.containsKey(dunningTask.getId())){
+								inDunningTaskLogsMap.get(dunningTask.getId()).setId(this.generateId());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setTaskId(dunningTask.getId());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setBehaviorStatus(BehaviorStatus.IN);
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorId(dunningTask.getCollectorId());
@@ -574,8 +579,8 @@ public class ScheduledTaskService extends BaseService{
 					logger.info("newfingDelayOrderByNotTask-没有新的逾期周期订单任务" + new Date());
 				}
 			} catch (Exception e) {
-				logger.error("新增未生成催收任务(task)的订单失败,全部事务回滚");
-				logger.error("错误信息"+e.getMessage());
+				logger.error("新增未生成催收任务(task)的订单失败,全部事务回滚",e);
+				logger.error("错误信息"+e);
 //				throw new ServiceException(e);
 			} finally {
 				logger.info("新增未生成催收任务(task)的订单任务结束" + new Date());
@@ -782,6 +787,7 @@ public class ScheduledTaskService extends BaseService{
 		task.setCollectPeriodBegin(min);
 		task.setCollectPeriodEnd(max);
 		task.setCollectTaskStatus(CollectTaskStatus.TASK_IN_PROGRESS);
+		task.setUpdateBy(AUTO_ADMIN);
 //		task.setRepaymentTime(new java.sql.Date(taskLog.getRepaymentTime().getTime()));
 		
 //		task.setBegin(toDate(now));

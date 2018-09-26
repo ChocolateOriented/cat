@@ -26,6 +26,8 @@ public class TaskTester {
 	private UserRepository userRepository;
 	@Autowired
 	private TaskRepository taskRepository;
+	@Autowired
+	private ScheduledTaskService service;
 	
 	@Test
 	public void testSearch() {
@@ -44,9 +46,8 @@ public class TaskTester {
 
 	@Test
 	public void testInsert() {
-		ScheduledTaskService scheduledTaskService  = new ScheduledTaskService();
 //		scheduledTaskService.autoAssign();
-		scheduledTaskService.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0, "-1", "0");
-		scheduledTaskService.autoAssignNewOrder();
+		service.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0, "-1", "0");
+		service.autoAssignNewOrder();
 	}
 }
