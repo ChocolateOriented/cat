@@ -3,5 +3,6 @@
 
 	<!-- 默认缓存配置. jvm中允许缓存200个对象, 有效时间10分钟-->
 	<defaultCache maxEntriesLocalHeap="200" eternal="false" timeToLiveSeconds="600" overflowToDisk="false"/>
-
+	<!--数据字典缓存-->
+	<cache name="DictCache" maxEntriesLocalHeap="200" eternal="false" timeToLiveSeconds="600" overflowToDisk="false"/>
 </ehcache>

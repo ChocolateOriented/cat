@@ -20,6 +20,7 @@ public class Dict  {
 	private String description;// 描述
 	private Integer sort;	// 排序
 	private String parentId;//父Id
+	private String delFlag = "0";
 
 	public Dict() {
 		super();
@@ -92,4 +93,15 @@ public class Dict  {
 	public String toString() {
 		return label;
 	}
+
+
+	public String getDelFlag() {
+		return delFlag;
+	}
+
+
+	public void setDelFlag(String delFlag) {
+		this.delFlag = delFlag;
+	}
+	
 }

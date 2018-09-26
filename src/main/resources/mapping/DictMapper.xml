@@ -30,7 +30,7 @@
 		SELECT 
 			* 
 		FROM sys_dict 
-		WHERE del_flag = #{DEL_FLAG_NORMAL} 
+		WHERE del_flag = '0'
 		ORDER BY type, sort, update_date DESC
 	</select>
 	

@@ -9,6 +9,6 @@ public interface DictMapper {
 	
 	public List<String> findTypeList(Dict dict);
 	
-	public List<Dict> findAllList(Dict dict);
+	public List<Dict> findAllList();
 	
 }
