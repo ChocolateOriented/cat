@@ -1,21 +1,20 @@
 package com.cat.config;
 
+import com.cat.interceptor.RequestInfoFetcher;
 import com.mo9.nest.auth.AuthInterceptor;
 import com.mo9.nest.client.AuthClient;
-import com.mo9.nest.client.info.DefaultRequestInfoFetcher;
 import com.mo9.nest.client.redis.RedisHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 public class UserCenterConfig {
 
     @Autowired
     private RedisHolder nestRedisHolder;
-    private DefaultRequestInfoFetcher requestInfoFetcher = new DefaultRequestInfoFetcher();
+    private RequestInfoFetcher requestInfoFetcher = new RequestInfoFetcher();
 
     /**
      * 认证客户端, 封装了用户中心常规认证请求, 同时也是AuthInterceptor的依赖
@@ -55,4 +54,5 @@ public class UserCenterConfig {
         }
         return authInterceptor;
     }
+
 }

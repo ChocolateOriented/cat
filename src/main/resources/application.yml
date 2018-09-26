@@ -5,9 +5,9 @@ spring:
   datasource:
     default:
       name: datasource
-      url: jdbc:mysql://localhost:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      url: jdbc:mysql://192.168.3.17:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true
       username: root
-      password: root
+      password: rootroot
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     risk:
@@ -45,9 +45,9 @@ spring:
 
 redis:
   default:
-    database: 0
-    host: 127.0.0.1
-    password: 123456
+    database: 20
+    host: 192.168.3.31
+    password: dev@Mo9.com
     port: 6379
   nest:
     database: 6
@@ -79,7 +79,7 @@ mybatis:
   type-aliases-package: com.cat.module
 
 nest:
-  url: http://nest.alpha.mo9.com/nestApi/
+  url: https://libra.alpha.mo9.com/nestApi/
   key: 43113fd8d67c4e0aa1eb3e857358ab3c
   secret: b49bdfc7fab246968806007696fe65dc
   code: Cat
@@ -87,3 +87,16 @@ nest:
   mode: ALONE
   exclude:
     urls: /cat/account/login, /cat/account/register
+
+feign:
+  httpclient:
+    enabled: true
+feignClient:
+  suona:
+    url:  https://suona.alpha.mo9.com/suonaApi
+
+logging:
+  level:
+    root: debug
+    org.springframework.amqp: info
+    com.cat.manager.MessageSender: debug
