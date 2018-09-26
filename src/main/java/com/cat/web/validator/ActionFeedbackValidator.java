@@ -6,6 +6,9 @@ import javax.validation.ConstraintValidatorContext;
 import com.cat.annotation.ActionFeedbackConstraint;
 import com.cat.module.enums.ActionFeedback;
 
+/**
+ * 校验行动码参数
+ */
 public class ActionFeedbackValidator implements ConstraintValidator<ActionFeedbackConstraint, Enum<ActionFeedback>> {
 
 	@Override

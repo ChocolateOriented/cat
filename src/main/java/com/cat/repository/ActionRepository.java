@@ -16,5 +16,5 @@ public interface ActionRepository extends JpaRepository<Action, Long> {
 			+ " order by a.create_time desc /*#pageable*/",
 			countQuery = "select count(*) from t_action a where a.customer_id = ?1 /*#pageable*/",
 			nativeQuery = true)
-	Page<Action> findByOwnerIdOrderByCreateTimeDesc(String customerId, Pageable pageable);
+	Page<Action> findByCustomerIdOrderByCreateTimeDesc(String customerId, Pageable pageable);
 }
