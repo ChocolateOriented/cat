@@ -73,7 +73,7 @@ public class TaskLog extends BaseEntity {
 	 */
 	public int calculateOverdueDays()
 	{
-		return ScheduledTaskService.getOverdueDay(repaymentTime);
+		return ScheduledTaskService.GetOverdueDay(repaymentTime);
 	}
 
 

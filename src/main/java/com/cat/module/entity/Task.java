@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.cat.module.enums.CollectTaskStatus;
+import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -315,7 +316,7 @@ public class Task  extends BaseEntity {
 /*	public int getCurrentOverdueDays()
 	{
 //		Date now  = new Date();
-		return ScheduledTaskService.getOverdueDay(repaymentTime);
+		return ScheduledTaskService.GetOverdueDay(repaymentTime);
 //		return (int)((toDate(now).getTime() - toDate(repaymentTime).getTime()) / (24 * 60 * 60 * 1000));
 	}*/
 
@@ -336,11 +337,7 @@ public class Task  extends BaseEntity {
 	 * @return
 	 */
 	public BigDecimal getOverDueAmount() {
-		long betweenDays = (long)(System.currentTimeMillis() - repaymentTime.getTime())/(1000*60*60*24);
-		if (betweenDays <= 0) {
-			betweenDays = 0;
-		}
-
+		int betweenDays = ScheduledTaskService.GetOverdueDay(repaymentTime);
 		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays)).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
 		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
 	}

@@ -73,7 +73,7 @@ public class ScheduledTaskService extends BaseService{
 	 * @param repaymentDate 还款日
 	 * @return
 	 */
-	public static int getOverdueDay(Date repaymentDate)
+	public static int GetOverdueDay(Date repaymentDate)
 	{
 		Date now = new Date();
 		long timeSub = toDate(now).getTime()-toDate(repaymentDate).getTime();
