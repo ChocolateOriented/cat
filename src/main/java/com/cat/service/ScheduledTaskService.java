@@ -1,5 +1,6 @@
 package com.cat.service;
 
+import com.cat.annotation.ClustersSchedule;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,7 +86,8 @@ public class ScheduledTaskService extends BaseService{
 	 *  新自动分案
 	 */
 	@Transactional(readOnly = false)
-	@Scheduled(cron = "0 18 2 * * ?") 
+	@Scheduled(cron = "0 10 0 * * ?")
+	@ClustersSchedule
 	public void autoAssign() {
 		switch (getDaysOfMonth(new Date())) {
 			/**
@@ -409,7 +411,8 @@ public class ScheduledTaskService extends BaseService{
 	 *  新增未生成催收任务(task)的订单
 	 */
 	@Transactional(readOnly = false)
-	@Scheduled(cron = "0 22 2 * * ?") 
+	@Scheduled(cron = "0 15 0 * * ?")
+	@ClustersSchedule
 	public void autoAssignNewOrder() {
 //		List<Dict> debtBizTypes = DictUtils.getDictList(DEBTBIZ_TYPE);
 //		logger.info("产品-" + debtBizTypes + "个,新增案件"+ new Date());

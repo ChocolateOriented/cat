@@ -147,6 +147,7 @@
     <select id="findTaskList" resultType="com.cat.module.dto.TaskDto">
     
         SELECT
+        t.customer_id AS "customerId",
         u.name AS "name",
         t.mobile AS "mobile",
         CASE
@@ -204,6 +205,7 @@
             and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
 
         </where>
+        ORDER BY t.repayment_time DESC
     </select>
     
     

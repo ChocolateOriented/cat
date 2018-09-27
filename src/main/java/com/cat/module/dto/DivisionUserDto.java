@@ -5,22 +5,14 @@ import javax.management.relation.Role;
 
 public interface DivisionUserDto {
 
-  public Long getId();
 
-  public Long getOrganizationId();
-
-  public String getEmail();
-
-  public String getName();
-
-  public UserStatus getStatus();
-
-  public String getCollectCycle();
-
-  public Role getRole();
-
-  public Boolean getAutoDivision();
-
-  public String getSumCorpusAmount();
+  Long getId();
+  Long getOrganizationId();
+  UserStatus getStatus();
+  String getName();
+  String getCollectCycle();
+  Role getRole();
+  Boolean getAutoDivision();
+  String getSumCorpusAmount();
 
 }
