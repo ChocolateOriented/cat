@@ -30,6 +30,14 @@ public class JedisConfig {
 
 	private int minIdle;
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
 	public boolean isSsl() {
 		return ssl;
 	}
