@@ -8,10 +8,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cat.mapper.DictMapper;
 import com.cat.module.bean.Dict;
+import com.cat.service.DictService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * 字典工具类
@@ -20,7 +19,7 @@ import com.google.common.collect.Maps;
  */
 public class DictUtils {
 	
-	private static DictMapper dictDao = ApplicationContextHolder.getBean(DictMapper.class);
+	private static DictService dictService = ApplicationContextHolder.getBean(DictService.class);
 
 	public static final String CACHE_DICT_MAP = "dictMap";
 	
@@ -124,15 +123,7 @@ public class DictUtils {
 	 */
 	public static List<Dict> getDictList(String type){
 		@SuppressWarnings("unchecked")
-			Map<String, List<Dict>>	dictMap = Maps.newHashMap();
-			for (Dict dict : dictDao.findAllList(new Dict())){
-				List<Dict> dictList = dictMap.get(dict.getType());
-				if (dictList != null){
-					dictList.add(dict);
-				}else{
-					dictMap.put(dict.getType(), Lists.newArrayList(dict));
-				}
-			}
+		Map<String, List<Dict>>	dictMap = dictService.findAllList();
 		List<Dict> dictList = dictMap.get(type);
 		if (dictList == null){
 			dictList = Lists.newArrayList();

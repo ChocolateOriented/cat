@@ -25,16 +25,22 @@ public interface TaskRepository extends PagingAndSortingRepository<Task,Long> {
       + " ORDER BY sumCorpusAmount")
 */
 
-  @Query(value = "SELECT a.id, a.status, a.organization_id, a.email,a.name,a.collect_cycle,"
-      + " a.role,a.auto_division, "
-      + "  SUM(t.loan_amount) AS sum_corpus_amount"
-      + " FROM  t_user a "
-      + "   left join t_task t on t.collector_id = a.id"
-      + " WHERE a.collect_cycle LIKE concat('%',?1,'%') "
-      + "   AND t.collect_cycle = ?1 "
-      + "   AND a.status = 0 AND a.auto_division = 1"
-      + " GROUP BY a.id "
-      + " ORDER BY sum_corpus_amount", nativeQuery = true)
+//  @Query(value = "SELECT a.id, a.status, a.organization_id, a.email,a.name,a.collect_cycle,"
+//      + " a.role,a.auto_division, "
+//      + "  SUM(t.loan_amount) AS sum_corpus_amount"
+//      + " FROM  t_user a "
+//      + "   left join t_task t on t.collector_id = a.id"
+//      + " WHERE a.collect_cycle LIKE concat('%',?1,'%') "
+//      + "   AND t.collect_cycle = ?1 "
+//      + "   AND a.status = 'NORMAL' AND a.auto_division = 1"
+//      + " GROUP BY a.id "
+//      + " ORDER BY sum_corpus_amount", nativeQuery = true)
+	@Query(value = "SELECT a.id, a.status, a.organization_id, a.email,a.name,a.collect_cycle,"
+		      + " a.role,a.auto_division "
+		      + " FROM  t_user a "
+		      + " WHERE a.collect_cycle LIKE concat('%',?1,'%') "
+		      + "   AND a.status = 'NORMAL' AND a.auto_division = 1"
+		      + " GROUP BY a.id " , nativeQuery = true)
   List<DivisionUserDto> findPeopleSumcorpusamountByDunningcycle(String dunningcycle);
 
     @Modifying

@@ -204,6 +204,231 @@
             and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
 
         </where>
-
     </select>
+    
+    
+    <update id="batchUpdateExpiredTask"  >
+	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				UPDATE t_task 
+				<set>
+				    update_time = now(),
+				    update_by = #{item.updateBy},
+					collector_id = #{item.collectorId},
+					collector_name = #{item.collectorName},
+					collect_period_begin = #{item.collectPeriodBegin},
+					collect_period_end = #{item.collectPeriodEnd},
+					collect_cycle = #{item.collectCycle}
+<!-- 					nextfollowdate = null -->
+				</set>
+				WHERE id = #{item.id}
+		 </foreach>
+    </update>
+    
+    <update id="batchinsertTask"  >
+	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				UPDATE t_task 
+				<set>
+				    update_time = now(),
+				    update_by = #{item.updateBy},
+				    task_start_time = now(),
+					collector_id = #{item.collectorId},
+					collector_name = #{item.collectorName},
+					collect_period_begin = #{item.collectPeriodBegin},
+					collect_period_end = #{item.collectPeriodEnd},
+					collect_cycle = #{item.collectCycle},
+					collect_task_status = #{item.collectTaskStatus}
+				</set>
+				WHERE id = #{item.id}
+		 </foreach>
+    </update>
+    
+    
+    <select id="newfindDelayTaskByDunningcycle" resultType="com.cat.module.entity.TaskLog"> 
+		   	 SELECT 
+					CASE
+			        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
+			        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
+			        END  AS "overdueDays",
+					t.customer_id  AS  customerId,
+					t.customer_name  AS  customerName,
+					t.mobile  AS  mobile,
+					t.order_type  AS  orderType,
+					t.product_type  AS  productType,
+					t.order_status  AS  orderStatus,
+					t.loan_amount  AS  loanAmount,
+					t.loan_term  AS  loanTerm,
+					t.lent_amount  AS  lentAmountr,
+					t.interest_mode  AS  interestMode,
+					t.interest_value  AS  interestValue,
+					t.penalty_mode  AS  penaltyMode,
+					t.penalty_value  AS  penaltyValue,
+					t.relief_amount  AS  reliefAmount,
+					t.charge_value  AS  chargeValue,
+					t.postpone_unit_charge  AS  postponeUnitCharge,
+					t.postpone_count  AS  postponeCount,
+					t.lend_time  AS  lendTime,
+					t.payoff_time  AS  payoffTime,
+					t.repayment_time  AS  repaymentTime,
+					t.collector_id  AS  collectorId,
+					t.collector_name  AS  collectorName,
+					t.task_start_time  AS  taskStartTime,
+					t.task_end_time  AS  taskEndTime,
+					t.collect_period_begin  AS  collectPeriodBegin,
+					t.collect_period_end  AS  collectPeriodEnd,
+					t.collect_task_status  AS  collectTaskStatus,
+					t.collect_tel_remark  AS  collectTelRemark,
+					t.collect_time  AS  collectTime,
+					t.collect_cycle  AS  collectCycle,
+					t.remark  AS  remark,
+					t.ispayoff AS ispayoff,
+					t.id AS taskId
+			FROM t_task t 
+			 <where>
+					t.collect_cycle =  #{collectCycle} 
+					AND  t.collect_task_status = #{collectTaskStatus}
+					AND DATEDIFF(curdate(), t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
+			 </where>
+			ORDER BY loan_amount DESC
+	</select>
+	
+	
+	<select id="newfingDelayOrderByNotTask" resultType="com.cat.module.entity.TaskLog"> 
+		SELECT
+			CASE
+	        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
+	        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
+	        END  AS "overdueDays",
+			t.customer_id  AS  customerId,
+			t.customer_name  AS  customerName,
+			t.mobile  AS  mobile,
+			t.order_type  AS  orderType,
+			t.product_type  AS  productType,
+			t.order_status  AS  orderStatus,
+			t.loan_amount  AS  loanAmount,
+			t.loan_term  AS  loanTerm,
+			t.lent_amount  AS  lentAmountr,
+			t.interest_mode  AS  interestMode,
+			t.interest_value  AS  interestValue,
+			t.penalty_mode  AS  penaltyMode,
+			t.penalty_value  AS  penaltyValue,
+			t.relief_amount  AS  reliefAmount,
+			t.charge_value  AS  chargeValue,
+			t.postpone_unit_charge  AS  postponeUnitCharge,
+			t.postpone_count  AS  postponeCount,
+			t.lend_time  AS  lendTime,
+			t.payoff_time  AS  payoffTime,
+			t.repayment_time  AS  repaymentTime,
+			t.collector_id  AS  collectorId,
+			t.collector_name  AS  collectorName,
+			t.task_start_time  AS  taskStartTime,
+			t.task_end_time  AS  taskEndTime,
+			t.collect_period_begin  AS  collectPeriodBegin,
+			t.collect_period_end  AS  collectPeriodEnd,
+			t.collect_task_status  AS  collectTaskStatus,
+			t.collect_tel_remark  AS  collectTelRemark,
+			t.collect_time  AS  collectTime,
+			t.collect_cycle  AS  collectCycle,
+			t.remark  AS  remark,
+			t.ispayoff AS ispayoff,
+			t.id AS taskId
+		FROM t_task AS t
+		where
+			t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE'
+			AND DATEDIFF(curdate(), t.repayment_time) >= #{day}
+		ORDER BY loan_amount DESC
+	</select>
+	
+<!-- 	<insert id="batchinsertTask"> -->
+<!-- 		INSERT INTO t_mis_dunning_task( -->
+<!-- 			id, -->
+<!-- 			dunningpeopleid, -->
+<!-- 			dunningpeoplename, -->
+<!-- 			dealcode, -->
+<!-- 			capitalamount, -->
+<!-- 			begin, -->
+<!-- 			deadline, -->
+<!-- 			end, -->
+<!-- 			dunningperiodbegin, -->
+<!-- 			dunningperiodend, -->
+<!-- 			dunnedamount, -->
+<!-- 			ispayoff, -->
+<!-- 			reliefamount, -->
+<!-- 			dunningtaskstatus, -->
+<!-- 			amountonend, -->
+<!-- 			field1, -->
+<!-- 			repaymenttime, -->
+<!-- 			createby, -->
+<!-- 			createdate, -->
+<!-- 			updateby, -->
+<!-- 			updatedate, -->
+<!-- 			dunningcycle, -->
+<!-- 			quality, -->
+<!-- 			platformext, -->
+<!-- 			debtbiztype -->
+<!-- 		) VALUES -->
+<!-- 		<foreach collection="list" item="item" index="index" separator=","> -->
+<!-- 		 ( -->
+<!-- 			#{item.id}, -->
+<!-- 			#{item.dunningpeopleid}, -->
+<!-- 			#{item.dunningpeoplename}, -->
+<!-- 			#{item.dealcode}, -->
+<!-- 			#{item.capitalamount}, -->
+<!-- 			#{item.begin}, -->
+<!-- 			#{item.deadline}, -->
+<!-- 			#{item.end}, -->
+<!-- 			#{item.dunningperiodbegin}, -->
+<!-- 			#{item.dunningperiodend}, -->
+<!-- 			#{item.dunnedamount}, -->
+<!-- 			#{item.ispayoff}, -->
+<!-- 			#{item.reliefamount}, -->
+<!-- 			#{item.dunningtaskstatus}, -->
+<!-- 			#{item.dunningAmounOnEnd}, -->
+<!-- 			#{item.field1}, -->
+<!-- 			#{item.repaymentTime}, -->
+<!-- 			#{item.createBy}, -->
+<!-- 			#{item.createDate}, -->
+<!-- 			#{item.updateBy}, -->
+<!-- 			#{item.updateDate}, -->
+<!-- 			#{item.dunningcycle}, -->
+<!-- 			#{item.quality}, -->
+<!-- 			#{item.platformext}, -->
+<!-- 			#{item.debtbiztype} -->
+<!-- 		) -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
+	
+<!-- 	<select id="findAtuoQ0Dealcode" resultType="string"> -->
+<!--  	 SELECT -->
+<!-- 		o.dealcode -->
+<!-- 		FROM t_risk_order AS o -->
+<!-- 		WHERE o.type = 'loan' -->
+<!-- 			AND o.merchant_id = 7 -->
+<!-- 			AND o.`status` = 'payment' -->
+<!-- 			AND DATEDIFF(curdate(), o.repayment_time) = #{day} -->
+<!-- 			AND NOT EXISTS  ( -->
+<!-- 			SELECT -->
+<!-- 					DISTINCT buyer_id -->
+<!-- 				FROM t_risk_order AS o1 -->
+<!-- 				WHERE o1.type = 'loan' -->
+<!-- 					AND o1.merchant_id = 7 -->
+<!-- 					AND o1.`status` = 'payoff' -->
+<!-- 					AND o.buyer_id = o1.buyer_id -->
+<!-- 					AND DATEDIFF(DATE(o1.payoff_time), DATE(o1.repayment_time)) > #{payoffday} -->
+<!-- 			) -->
+<!-- 			AND EXISTS ( -->
+<!-- 				SELECT -->
+<!-- 					1 -->
+<!-- 				FROM t_risk_order AS o2 -->
+<!-- 				WHERE o2.type = 'loan' -->
+<!-- 					and o2.merchant_id = 7 -->
+<!-- 					and o2.`status` in ('payment', 'payoff') -->
+<!-- 					and o2.buyer_id = o.buyer_id -->
+<!-- 				group by o2.buyer_id -->
+<!-- 				HAVING count(1) > 1 -->
+<!-- 			); -->
+<!-- 	</select> -->
+    
+    
+    
+    
 </mapper>

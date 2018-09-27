@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.mapper.BankMapper">
-    <resultMap id="BaseResultMap" type="com.cat.mapper.BankMapper">
+    <resultMap id="BaseResultMap" type="com.cat.module.entity.Bank">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="mobile" jdbcType="VARCHAR" property="mobile" />
         <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
@@ -18,7 +18,7 @@
         delete from t_bank
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <select id="findBankByBankNoAndType" resultType="com.cat.module.entity.Bank">
+    <select id="findBankByBankNoAndType" resultMap="BaseResultMap">
         SELECT id, mobile, customer_id, bank_card, bank_name, id_card, user_name, channel,
         `type`, create_time, update_time
         FROM  `t_bank` WHERE  `bank_card` = #{bankCard} AND `type` = #{bankType}
@@ -48,13 +48,13 @@
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select id, mobile, customer_id, bank_card, bank_name, id_card, user_name, channel,
-        type, create_time, update_time
+        `type`, create_time, update_time
         from t_bank
         where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
         select id, mobile, customer_id, bank_card, bank_name, id_card, user_name, channel,
-        type, create_time, update_time
+        `type`, create_time, update_time
         from t_bank
     </select>
 </mapper>
