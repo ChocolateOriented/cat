@@ -16,6 +16,12 @@ public class BankService extends BaseService{
     @Autowired
     private BankMapper bankMapper;
 
+    /**
+     * 获取银行卡信息
+     * @param bankNo
+     * @param bankType
+     * @return
+     */
     public Bank findBankByBankNoAndType(String bankNo, BankType bankType) {
         return bankMapper.findBankByBankNoAndType(bankNo, bankType.name());
     }

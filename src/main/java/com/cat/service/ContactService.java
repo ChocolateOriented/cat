@@ -106,6 +106,10 @@ public class ContactService extends BaseService {
 		contactMapper.insert(contact);
 	}
 
+	/**
+	 * 批量插入联系人
+	 * @param contactList
+	 */
 	public void insertAll(List<Contact> contactList) {
 		contactMapper.insertList(contactList);
 	}

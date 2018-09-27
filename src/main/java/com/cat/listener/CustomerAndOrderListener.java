@@ -82,12 +82,24 @@ public class CustomerAndOrderListener {
         disposeOrderAndCustomerInfoService.disposeRepayment(repaymentMessage);
     }
 
+    /**
+     * 解析还款信息
+     * @param message
+     * @return
+     * @throws Exception
+     */
     private RepaymentMessage parseToRepaymentMessage(Message message) throws Exception {
         System.out.println(new String(message.getBody(), "utf-8"));
         JSONObject repayInfo = JSON.parseObject(new String(message.getBody(), "utf-8")).getJSONObject("repayInfo");
         return JSON.parseObject(repayInfo.toJSONString(), RepaymentMessage.class);
     }
 
+    /**
+     * 解析接收到的订单信息和用户信息
+     * @param message
+     * @return
+     * @throws Exception
+     */
     private CustomerAllInfo parseToCustomerAllInfo(JSONObject message) throws Exception {
         CustomerBaseInfo customerBaseInfo = parseToCustomerInfo(message);
         Task task = parseToTask(message);
@@ -102,6 +114,11 @@ public class CustomerAndOrderListener {
         return customerAllInfo;
     }
 
+    /**
+     * 解析成联系人对象
+     * @param message
+     * @return
+     */
     private List<Contact> parseToContactInfo(JSONObject message) {
         String string = message.getJSONArray("contactsList").toString();
         List<Contact> contactList = JSON.parseArray(string, Contact.class);
@@ -112,14 +129,30 @@ public class CustomerAndOrderListener {
         return contactList;
     }
 
+    /**
+     * 解析成银行信息
+     * @param message
+     * @return
+     */
     private Bank parseToBank(JSONObject message) {
         return JSON.parseObject(message.toJSONString(), Bank.class);
     }
 
+    /**
+     * 解析成任务
+     * @param message
+     * @return
+     */
     private Task parseToTask(JSONObject message) {
         return JSON.parseObject(message.toJSONString(), Task.class);
     }
 
+    /**
+     * 解析人用户信息
+     * @param message
+     * @return
+     * @throws Exception
+     */
     private CustomerBaseInfo parseToCustomerInfo(JSONObject message) throws Exception {
         CustomerBaseInfo customerBaseInfo = JSON.parseObject(message.toJSONString(), CustomerBaseInfo.class);
         return customerBaseInfo;

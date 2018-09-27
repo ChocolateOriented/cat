@@ -15,6 +15,11 @@ public class CustomerService {
     @Autowired
     private CustomerMapper customerMapper;
 
+    /**
+     * 获取客户信息
+     * @param customerId
+     * @return
+     */
     public CustomerBaseInfo fetchCustomerByCustomerId(String customerId) {
         return customerMapper.fetchCustomerByCustomerId(customerId);
     }

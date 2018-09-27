@@ -137,6 +137,13 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         taskLogService.insert(taskLog);
     }
 
+    /**
+     * 转换成任务对象
+     * @param dbTask
+     * @param repaymentMessage
+     * @param repayPostpone
+     * @return
+     */
     private Task coverToTask(Task dbTask, RepaymentMessage repaymentMessage, String repayPostpone) {
         if (REPAY_POSTPONE.equals(repayPostpone)) {
             //延期次数
@@ -160,6 +167,11 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         return dbTask;
     }
 
+    /**
+     * 清空催收人信息
+     * @param dbTask
+     * @return
+     */
     private Task emptyCollectionInfo(Task dbTask) {
         //清空催收人信息
         dbTask.setCollectorId(null);
@@ -174,6 +186,13 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         return dbTask;
     }
 
+    /**
+     * 转换成任务日志对象
+     * @param dbTask
+     * @param repaymentMessage
+     * @param type
+     * @return
+     */
     private TaskLog covertToTaskLog(Task dbTask, RepaymentMessage repaymentMessage, String type) {
         TaskLog taskLog = new TaskLog();
         BeanUtils.copyProperties(dbTask, taskLog, "id");
