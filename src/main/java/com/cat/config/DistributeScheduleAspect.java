@@ -5,13 +5,12 @@ import com.cat.util.RedisUtil;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +25,8 @@ public class DistributeScheduleAspect implements Ordered {
   @Value("server.prot")
   private String port;
 
-  @Before(value = "@annotation(com.cat.annotation.DistributeSchedule)")
-  public void changeDataSource(JoinPoint point) throws Throwable {
+  @Around(value = "@annotation(com.cat.annotation.DistributeSchedule)")
+  public void changeDataSource(ProceedingJoinPoint point) throws Throwable {
     String currentMinute = DateUtils.getDate("yyyy-MM-dd,HH:mm");
     String functionName = point.getSignature().getDeclaringTypeName()+ point.getSignature()
         .getName();
@@ -38,9 +37,14 @@ public class DistributeScheduleAspect implements Ordered {
     } catch (UnknownHostException e) {
       logger.error(e.getMessage(),e);
     }
-
-    boolean lockSuccess = RedisUtil.tryLock(functionName+currentMinute,ip ,5*1000,24*60*60*1000);
-    //TODO
+    String taskKey = functionName+currentMinute;
+    boolean lockSuccess = RedisUtil.tryLock(taskKey ,ip ,5*1000,24*60*60*1000);
+    if (lockSuccess){
+      logger.debug(ip+"成功执行任务"+taskKey);
+      point.proceed();
+    }
+    logger.debug(ip+"未能执行任务"+taskKey);
+    return;
   }
 
 
