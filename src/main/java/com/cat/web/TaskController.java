@@ -23,7 +23,7 @@ import com.cat.util.DateUtils;
 import com.cat.util.excel.ExportExcel;
 
 @RestController
-@RequestMapping(value = "/cat/task")
+@RequestMapping(value = "/cat/v1/task")
 public class TaskController extends BaseController {
 
 	@Autowired

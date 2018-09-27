@@ -24,7 +24,7 @@ import com.cat.service.ActionService;
 import com.cat.service.TaskService;
 
 @RestController
-@RequestMapping(value = "/cat/action")
+@RequestMapping(value = "/cat/v1/action")
 public class ActionController extends BaseController {
 
 	@Autowired

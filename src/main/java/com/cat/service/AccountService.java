@@ -21,6 +21,7 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,13 +31,19 @@ import org.springframework.stereotype.Service;
 public class AccountService extends BaseService {
 
   @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
   @Autowired
-  AuthClient authClient;
+  private AuthClient authClient;
   @Autowired
-  MessageSender messageSender;
+  private MessageSender messageSender;
   @Autowired
-  OrganizationRepository organizationRepository;
+  private OrganizationRepository organizationRepository;
+  @Value("${feignClient.suona.systemCode}")
+  private String systemCode;
+  @Value("${feignClient.suona.captchaTemplateCode}")
+  private String captchaTemplateCode;
+
+
 
   private static final String CACHE_VALIDATE_CODE_PREFIX = "validateCode";
 
@@ -108,9 +115,9 @@ public class AccountService extends BaseService {
     RedisUtil.set(CACHE_VALIDATE_CODE_PREFIX + email, validateCode, 90);
 
     SuonaMessageDto messageDto = new SuonaMessageDto();
-    messageDto.setMessageId(System.currentTimeMillis() + "");
-    messageDto.setSystemCode("BOURSE");
-    messageDto.setTemplateCode("GENERAL_CAPTCHA");
+    messageDto.setMessageId(super.generateId()+"");
+    messageDto.setSystemCode(systemCode);
+    messageDto.setTemplateCode(captchaTemplateCode);
     messageDto.getReceivers().add(email);
     Map<String, String> values = messageDto.getVariableValues();
     values.put("pinCode", validateCode);
