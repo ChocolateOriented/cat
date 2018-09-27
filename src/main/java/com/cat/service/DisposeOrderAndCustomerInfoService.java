@@ -120,14 +120,15 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             throw new RuntimeException("订单已还清");
         }
         TaskLog taskLog = null;
-        if (REPAY_POSTPONE.equals(repaymentMessage.getPayType())) {
+        //还款类型是延期还款,并且没有还清时间
+        if (REPAY_POSTPONE.equals(repaymentMessage.getPayType()) && repaymentMessage.getPayoffTime() == null) {
             //如果是延期还款
             dbTask = coverToTask(dbTask, repaymentMessage, REPAY_POSTPONE);
             //转换成日志表,对象
             taskLog = covertToTaskLog(dbTask, repaymentMessage, REPAY_POSTPONE);
             //清空联系人信息
             dbTask = emptyCollectionInfo(dbTask);
-        } else {
+        } else if (repaymentMessage.getPayoffTime() != null){ //还清时间不为null说明已还清
             //还清
             dbTask = coverToTask(dbTask, repaymentMessage, repaymentMessage.getPayType());
             //日志表:
@@ -145,7 +146,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      * @return
      */
     private Task coverToTask(Task dbTask, RepaymentMessage repaymentMessage, String repayPostpone) {
-        if (REPAY_POSTPONE.equals(repayPostpone)) {
+        if (REPAY_POSTPONE.equals(repayPostpone) && repaymentMessage.getPayoffTime() == null) {
             //延期次数
             dbTask.setPostponeCount(repaymentMessage.getPostponeCount());
             //到期还款日
@@ -155,9 +156,9 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             //添加延期金额
             BigDecimal oldAmount = dbTask.getPostponeTotalAmount();
             dbTask.setPostponeTotalAmount((oldAmount == null ? BigDecimal.ZERO : oldAmount).add(repaymentMessage.getRepayAmount()));
-        } else {
+        } else if (repaymentMessage.getPayoffTime() != null){
             //payoffTime还清时间
-            dbTask.setPayoffTime(repaymentMessage.getRepaymentDate());
+            dbTask.setPayoffTime(repaymentMessage.getPayoffTime());
             //任务结束时间
             dbTask.setTaskEndTime(new Date());
             //催收任务状态
@@ -196,14 +197,14 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     private TaskLog covertToTaskLog(Task dbTask, RepaymentMessage repaymentMessage, String type) {
         TaskLog taskLog = new TaskLog();
         BeanUtils.copyProperties(dbTask, taskLog, "id");
-        if (REPAY_POSTPONE.equals(type)) {
+        if (REPAY_POSTPONE.equals(type) && repaymentMessage.getPayoffTime() == null) {
             //行为状态
             taskLog.setBehaviorStatus(BehaviorStatus.POSTPONE);
             //延期后,应催金额:本金+利息
             taskLog.setCreditamount(dbTask.getLoanAmount().add(dbTask.getInterestValue()));
             //逾期天数
             taskLog.setOverdueDays(taskLog.calculateOverdueDays());
-        } else {
+        } else if (repaymentMessage.getPayoffTime() != null) {
             //催收员行为状态
             taskLog.setBehaviorStatus(BehaviorStatus.FINISHED);
             //还清后应催金额:0
