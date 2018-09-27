@@ -17,6 +17,7 @@ import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
+import com.cat.service.ScheduledTaskService;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
 import com.cat.util.excel.ExportExcel;
@@ -27,6 +28,8 @@ public class TaskController extends BaseController {
 
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private ScheduledTaskService scheduledTaskService;
 	/**
 	 * 查询列表
 	 * @param taskDto
@@ -85,5 +88,17 @@ public class TaskController extends BaseController {
 		} catch (Exception e) {
 			logger.warn("导出失败！失败信息：" + e.getMessage());
 		}
+	}
+	@RequestMapping(value="auto_assign")
+	public void autoAssign(){
+		logger.info("开始自动分案");
+		scheduledTaskService.autoAssign();
+		logger.info("自动分案结束");
+	}
+	@RequestMapping(value="auto_assign_new_order")
+	public void autoAssignNewOrder(){
+		logger.info("开始新增未生成催收任务(task)的订单");
+		scheduledTaskService.autoAssignNewOrder();
+		logger.info("新增未生成催收任务(task)的订单结束");
 	}
 }
