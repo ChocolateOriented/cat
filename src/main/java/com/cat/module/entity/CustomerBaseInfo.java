@@ -218,7 +218,11 @@ public class CustomerBaseInfo extends BaseEntity {
     }
 
     public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
+        if (lastLoginTime.equals(new Date(0))) {
+            this.lastLoginTime = null;
+        } else {
+            this.lastLoginTime = lastLoginTime;
+        }
     }
 
 

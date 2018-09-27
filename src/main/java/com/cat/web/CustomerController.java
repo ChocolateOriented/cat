@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
  * @date 2018/9/20
  */
 @RestController
-@RequestMapping("customer")
+@RequestMapping("/cat/v1/customer")
 public class CustomerController extends BaseController{
     @Autowired
     private DisposeOrderAndCustomerInfoService disposeCustomerInfoService;
-    @GetMapping("get_customer_info")
+    @GetMapping("get_customer_and_order_info")
     public Results getCustomerInfo(@RequestParam("orderId") String orderId) {
         try {
             OrderInfo orderInfo = disposeCustomerInfoService.getCustomerAllInfo(orderId);
