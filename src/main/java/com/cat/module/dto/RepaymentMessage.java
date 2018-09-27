@@ -82,6 +82,20 @@ public class RepaymentMessage implements Serializable {
      */
     private Boolean isEntryDone;
 
+    /**
+     * 还清时间
+     * @return
+     */
+    private Date payoffTime;
+
+    public Date getPayoffTime() {
+        return payoffTime;
+    }
+
+    public void setPayoffTime(Date payoffTime) {
+        this.payoffTime = payoffTime;
+    }
+
     public Date getRepaymentDate() {
         return repaymentDate;
     }
