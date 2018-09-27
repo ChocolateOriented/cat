@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,18 +30,18 @@ public class CustomerAndOrderListener {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${rabbit.customerAndOrder.receivedAllRoutingKey}")
+    @Value("${spring.rabbitmq.loanMq.receivedAllRoutingKey}")
     private String receivedAllRoutingKey;
 
-    @Value("${rabbit.customerAndOrder.orderRepaymentRoutingKey}")
+    @Value("${spring.rabbitmq.repayMq.orderRepaymentRoutingKey}")
     private String orderRepaymentRoutingKey;
 
 
     @Autowired
     private DisposeOrderAndCustomerInfoService disposeOrderAndCustomerInfoService;
 
-    @RabbitListener(queues = "${rabbit.customerAndOrder.queue}")
-    public void recieveRegisterInfo(Message message) {
+    @RabbitListener(queues = {"${spring.rabbitmq.loanMq.queue}","${spring.rabbitmq.repayMq.queue}"})
+    public void recieveLoanInfo(Message message) {
         String messageId = null;
         try {
             messageId = message.getMessageProperties().getMessageId();
@@ -120,13 +121,29 @@ public class CustomerAndOrderListener {
      * @return
      */
     private List<Contact> parseToContactInfo(JSONObject message) {
-        String string = message.getJSONArray("contactsList").toString();
-        List<Contact> contactList = JSON.parseArray(string, Contact.class);
+        String contactsListString = message.getString("contactsList");
+        Boolean flag = contactListIsArray(contactsListString);
+//        JSONObject contactsListJSON = JSON.parseObject(contactsListString);
+        List<Contact> contactList = new ArrayList<>();
+        if (!flag) {
+            contactList = JSON.parseObject(contactsListString).getJSONArray("contact").toJavaList(Contact.class);
+        } else {
+            contactList = JSON.parseArray(contactsListString, Contact.class);
+        }
         for (Contact contact : contactList) {
             contact.setMobile(message.getString("mobile"));
             contact.setCustomerId(message.getString("ownerId"));
         }
         return contactList;
+    }
+
+    private Boolean contactListIsArray(String contactsListString) {
+        String c = contactsListString.trim().charAt(0)+"";
+        if ("[".equals(c)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

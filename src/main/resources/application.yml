@@ -32,12 +32,18 @@ spring:
       ddl-auto: none
     show-sql: true
   rabbitmq:
-        username: user_cln
-        password: mo9.com
-        addresses: 192.168.3.191:5672
-        virtual-host: /
-        publisher-confirms: true
-        mq-exchange: E.CLONE.TOPIC.RAPTOR.ALL
+    username: user_cln
+    password: mo9.com
+    addresses: 192.168.3.191:5672
+    virtual-host: /
+    publisher-confirms: true
+    mq-exchange: E.CLONE.TOPIC.RAPTOR.ALL
+    loanMq:
+      queue: Q.CLONE.DURABLE.RAPTOR.CAT.LOAN
+      receivedAllRoutingKey: LOAN_TAG
+    repayMq:
+      queue: Q.CLONE.DURABLE.RAPTOR.CAT.REPAY
+      orderRepaymentRoutingKey: REPAY_TAG
 #        listener:
 #          concurrency: 5
 #          max-concurrency: 10
@@ -63,12 +69,6 @@ redis:
 
 datacenterId: 1
 machineId: 1
-
-rabbit:
-  customerAndOrder:
-    receivedAllRoutingKey: LOAN_TAG
-    orderRepaymentRoutingKey: REPAY_TAG
-    queue: Q.CLONE.DURABLE.RAPTOR.MIS
 
 mybatis:
   mapper-locations: classpath:mapping/*.xml
