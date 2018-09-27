@@ -147,6 +147,7 @@
     <select id="findTaskList" resultType="com.cat.module.dto.TaskDto">
     
         SELECT
+        t.customer_id AS "customerId",
         u.name AS "name",
         t.mobile AS "mobile",
         CASE

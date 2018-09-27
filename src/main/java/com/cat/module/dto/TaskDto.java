@@ -13,6 +13,7 @@ public class TaskDto implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String  orderId;//订单ID - 业务流水号
+	private String customerId;//客户id
 	private String  name;//客户姓名
 	private String  mobile;//用户手机号
 	private String  orderStatus;//订单状态
@@ -37,6 +38,13 @@ public class TaskDto implements Serializable{
 	}
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+	
+	public String getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	public String getName() {
 		return name;
