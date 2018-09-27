@@ -204,6 +204,7 @@
             and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
 
         </where>
+        ORDER BY t.repayment_time DESC
     </select>
     
     
