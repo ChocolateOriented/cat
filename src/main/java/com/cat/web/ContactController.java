@@ -17,7 +17,7 @@ import com.cat.module.vo.ContactVo;
 import com.cat.service.ContactService;
 
 @RestController
-@RequestMapping(value = "/cat/contact")
+@RequestMapping(value = "/cat/v1/contact")
 public class ContactController extends BaseController {
 
 	@Autowired
