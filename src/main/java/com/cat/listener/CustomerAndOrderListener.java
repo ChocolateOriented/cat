@@ -105,12 +105,12 @@ public class CustomerAndOrderListener {
         CustomerBaseInfo customerBaseInfo = parseToCustomerInfo(message);
         Task task = parseToTask(message);
         Bank bank = parseToBank(message);
-        List<Contact> contactList = parseToContactInfo(message);
+//        List<Contact> contactList = parseToContactInfo(message);
 
         CustomerAllInfo customerAllInfo = new CustomerAllInfo();
         customerAllInfo.setBank(bank);
         customerAllInfo.setTask(task);
-        customerAllInfo.setContactList(contactList);
+//        customerAllInfo.setContactList(contactList);
         customerAllInfo.setCustomerBaseInfo(customerBaseInfo);
         return customerAllInfo;
     }
