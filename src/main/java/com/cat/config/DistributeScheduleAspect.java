@@ -25,7 +25,7 @@ public class DistributeScheduleAspect implements Ordered {
   @Value("server.prot")
   private String port;
 
-  @Around(value = "@annotation(com.cat.annotation.DistributeSchedule)")
+  @Around(value = "@annotation(com.cat.annotation.ClustersSchedule)")
   public void changeDataSource(ProceedingJoinPoint point) throws Throwable {
     String currentMinute = DateUtils.getDate("yyyy-MM-dd,HH:mm");
     String functionName = point.getSignature().getDeclaringTypeName()+ point.getSignature()
@@ -42,6 +42,7 @@ public class DistributeScheduleAspect implements Ordered {
     if (lockSuccess){
       logger.debug(ip+"成功执行任务"+taskKey);
       point.proceed();
+      return;
     }
     logger.debug(ip+"未能执行任务"+taskKey);
     return;
