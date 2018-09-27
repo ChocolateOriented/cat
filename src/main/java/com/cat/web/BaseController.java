@@ -3,6 +3,7 @@ package com.cat.web;
 import com.cat.interceptor.CommonRequestContext;
 import com.cat.module.entity.User;
 import com.cat.repository.UserRepository;
+import com.cat.util.StringUtils;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public abstract class BaseController {
 
 	protected User getCurrentUser(){
 		String userId = CommonRequestContext.getInstance().getCurrentUserId();
+		if (StringUtils.isBlank(userId)){
+			return null;
+		}
 		return userRepository.findOne(userId);
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.cat.module.enums.Role;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CatApplication.class)
@@ -33,12 +34,23 @@ public class UserTester {
 
 	@Test
 	public void testInsert() {
-		User user = new User();
-		user.setId("1111");
-		user.setName("test13");
-		user.setStatus(UserStatus.LEAVE);
-		user.setAutoDivision(false);
-		userRepository.save(user);
-		System.out.println(user);
+		for (int i=0; i<=200; i++){
+			User user = new User();
+			user.setId("102"+i);
+			user.setName("test101"+i);
+			user.setOrganizationId(2L);
+			user.setStatus(UserStatus.NORMAL);
+			user.setAutoDivision(false);
+			user.setRole(Role.COLLECTOR);
+			user.setAutoDivision(false);
+			String collectCycle = "Q0,Q1";
+			if (i>100){
+				user.setOrganizationId(1L);
+				/*collectCycle = "Q3,Q4";*/
+				user.setAutoDivision(true);
+			}
+			user.setCollectCycle(collectCycle);
+			userRepository.save(user);
+		}
 	}
 }
