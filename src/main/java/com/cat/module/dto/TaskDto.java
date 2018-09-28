@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
@@ -26,7 +25,7 @@ public class TaskDto implements Serializable{
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
 	private String collectorId;//催收员id
-	private ActionFeedback actionFeedback;//行动码
+	private String actionFeedback;//行动码
 	
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
@@ -121,10 +120,10 @@ public class TaskDto implements Serializable{
 		this.collectorId = collectorId;
 	}
 
-	public ActionFeedback getActionFeedback() {
+	public String getActionFeedback() {
 		return actionFeedback;
 	}
-	public void setActionFeedback(ActionFeedback actionFeedback) {
+	public void setActionFeedback(String actionFeedback) {
 		this.actionFeedback = actionFeedback;
 	}
 	public Integer getOverdueDaysStart() {
