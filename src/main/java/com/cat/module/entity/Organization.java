@@ -8,7 +8,7 @@ import javax.persistence.Table;
 public class Organization extends BaseEntity {
 
   private String name;
-  private Long leaderId;
+  private String leaderId;
 
   public String getName() {
     return name;
@@ -18,13 +18,11 @@ public class Organization extends BaseEntity {
     this.name = name;
   }
 
-
-  public Long getLeaderId() {
+  public String getLeaderId() {
     return leaderId;
   }
 
-  public void setLeaderId(Long leaderId) {
+  public void setLeaderId(String leaderId) {
     this.leaderId = leaderId;
   }
-
 }
