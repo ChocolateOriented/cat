@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +20,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClustersScheduleAspect implements Ordered {
   protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-  @Value("server.prot")
-  private String port;
 
   @Around(value = "@annotation(com.cat.annotation.ClustersSchedule)")
   public void changeDataSource(ProceedingJoinPoint point) throws Throwable {
@@ -55,7 +51,7 @@ public class ClustersScheduleAspect implements Ordered {
   private String getLocalAddress(){
     try {
       InetAddress localHost = Inet4Address.getLocalHost();
-      return localHost.getHostAddress()+":"+port;
+      return localHost.getHostAddress();
     } catch (UnknownHostException e) {
       logger.error(e.getMessage(),e);
     }
