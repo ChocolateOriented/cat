@@ -52,15 +52,34 @@
 </select>
 <insert id="insertList" parameterType="java.util.List">
     insert into t_contact (id, customer_id, mobile,
-    contact_name, contact_mobile)
+    contact_name, contact_mobile,create_time)
     values
      <foreach collection="list" item="item" separator="," index="index" >
          (#{item.id},
          #{item.customerId},
          #{item.mobile},
          #{item.contactName},
-         #{item.contactMobile}
+         #{item.contactMobile},
+         #{item.createTime}
+         
          )
      </foreach>
 </insert>
+
+<select id="maxCareateTime" resultType="java.lang.Long">
+    SELECT max(create_time) FROM `t_contact` 
+</select>
+
+<select id="findListContact" resultType="com.cat.module.dto.AddressBook">
+    SELECT 
+	r.user_code AS customerId,
+	r.contacts_list AS contactList,
+	r.create_time AS createTime
+	FROM (SELECT * FROM t_raptor_user_contacts ORDER BY create_time desc) r
+	<where>
+      create_time <![CDATA[ > ]]> #{createTime}
+	</where>
+	group by r.user_code
+</select>
+
 </mapper>

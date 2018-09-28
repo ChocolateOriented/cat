@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.cat.annotation.DataSource;
 import com.cat.config.DynamicDataSource;
+import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.PageResponse.Page;
@@ -112,5 +113,24 @@ public class ContactService extends BaseService {
 	 */
 	public void insertAll(List<Contact> contactList) {
 		contactMapper.insertList(contactList);
+	}
+	/**
+	 * 获取通讯录
+	 * @param maxCareateTime
+	 * @return
+	 */
+	@DataSource(DynamicDataSource.RAPTOR_DATASOURCE)
+	public  List<AddressBook>  getAddressBook(Long maxCareateTime){
+		logger.info("获取通讯录");
+		return  contactMapper.findListContact(maxCareateTime);
+		
+	}
+
+	public Long maxCareateTime() {
+		return contactMapper.maxCareateTime();
+	}
+
+	public void deleteBycustomerId(String customerId) {
+		contactMapper.deleteContact(customerId);
 	}
 }

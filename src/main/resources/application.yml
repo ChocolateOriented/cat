@@ -64,7 +64,7 @@ redis:
   timeout: 20000
   maxTotal: 50
   maxWait: 10000
-  maxIdle: 10
+  maxIdle: 10x
   minIdle: 0
 
 datacenterId: 1

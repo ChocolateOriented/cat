@@ -178,7 +178,6 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      * @return
      */
     private Task emptyCollectionInfo(Task dbTask) {
-        //清空催收人信息
         dbTask.setCollectorId(null);
         dbTask.setCollectorName(null);
         dbTask.setTaskStartTime(null);

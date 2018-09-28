@@ -40,14 +40,26 @@ public class DateSourceConfig {
 	public DataSource riskDataSource() {
 		return riskDataSourceProperties().initializeDataSourceBuilder().build();
 	}
+	@Bean
+	@ConfigurationProperties("spring.datasource.raptor")
+	public DataSourceProperties raptorDataSourceProperties() {
+		return new DataSourceProperties();
+	}
+	
+	@Bean
+	@ConfigurationProperties("spring.datasource")
+	public DataSource raptorDataSource() {
+		return raptorDataSourceProperties().initializeDataSourceBuilder().build();
+	}
 
 	@Bean
 	@Primary
-	public DataSource dynamicDataSource(DataSource defaultDataSource, DataSource riskDataSource) {
+	public DataSource dynamicDataSource(DataSource defaultDataSource, DataSource riskDataSource, DataSource raptorDataSource) {
 		DynamicDataSource dynamicDataSource = new DynamicDataSource();
 		Map<Object, Object> targetDataSources = new HashMap<>();
 		targetDataSources.put(DynamicDataSource.DEFAULT_DATASOURCE, defaultDataSource);
 		targetDataSources.put(DynamicDataSource.RISK_DATASOURCE, riskDataSource);
+		targetDataSources.put(DynamicDataSource.RAPTOR_DATASOURCE, raptorDataSource);
 		
 		dynamicDataSource.setDefaultTargetDataSource(defaultDataSource);
 		dynamicDataSource.setTargetDataSources(targetDataSources);

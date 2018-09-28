@@ -7,6 +7,8 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 	public static final String DEFAULT_DATASOURCE = "default";
 
 	public static final String RISK_DATASOURCE = "risk";
+	
+	public static final String RAPTOR_DATASOURCE = "raptor";
 
 	private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();  
 
