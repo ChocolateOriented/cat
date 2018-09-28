@@ -35,8 +35,8 @@ public class TaskService extends BaseService {
 	private	ContactService contactService;
 	@Autowired
 	private TaskRepository taskRepository;
-	@Autowired
-	private ReliefAmountManager reliefAmountManager;
+//	@Autowired
+//	private ReliefAmountManager reliefAmountManager;
 
 	/**
 	 * 获取任务列表
@@ -198,7 +198,7 @@ public class TaskService extends BaseService {
 		}
 		
 		try {
-			reliefAmountManager.send(null);
+//			reliefAmountManager.send(null);
 		} catch (Exception e) {
 			logger.error("减免出现异常,orderId={}", orderId, e);
 			 return new BaseResponse(-1,"服务出现异常,稍后再试");
