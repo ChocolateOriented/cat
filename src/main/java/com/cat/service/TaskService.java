@@ -5,14 +5,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.cat.module.entity.Contact;
 import com.cat.module.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskMapper;
+import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
-import com.cat.module.entity.Task;
 import com.cat.module.entity.User;
 import com.cat.module.enums.Role;
 import com.cat.repository.TaskRepository;
@@ -25,6 +29,8 @@ public class TaskService extends BaseService {
 	UserRepository userRepository;
 	@Autowired
 	TaskMapper taskMapper;
+	@Autowired
+	ContactService contactService;
 	@Autowired
 	private TaskRepository taskRepository;
 
@@ -124,5 +130,49 @@ public class TaskService extends BaseService {
 	public void updateTaskStatus(Task dbTask) {
 		taskMapper.updateByPrimaryKey(dbTask);
 	}
-
+	
+	@Scheduled(cron = "0 30 0 * * ?")
+	@ClustersSchedule
+	public void synAddressBook(){
+		Long maxCareateTime = contactService.maxCareateTime();
+		List<AddressBook> list = contactService.getAddressBook(maxCareateTime == null ? 0 : maxCareateTime);
+		logger.info("获取通讯录完成");
+		if(list == null || list.size() == 0){
+			logger.info("未查到通讯录信息");
+			return;
+		}
+		for (AddressBook addressBook : list) {
+			String contacts = addressBook.getContactList();
+			String customerId = addressBook.getCustomerId();
+			List<Contact> contactList = this.parseToContactInfo(contacts);
+			if(contactList == null || contactList.size() == 0){
+				logger.info("客户id={}未查到通讯录",addressBook.getCustomerId());
+				continue;
+			}
+			contactService.deleteBycustomerId(customerId);
+			for (Contact contact : contactList) {
+				contact.setId(this.generateId());
+				contact.setCustomerId(customerId);
+				contact.setCreateTime(addressBook.getCreateTime());
+			}
+			contactService.insertAll(contactList);
+		}
+	
+	}
+	 /**
+     * 解析成联系人对象
+     * @param message
+     * @return
+     */
+    private List<Contact> parseToContactInfo(String cocString) {
+    	List<Contact> contactList = new ArrayList<>();
+    	int firstIndex = cocString.indexOf("[");
+    	int lastIndex = cocString.indexOf("]");
+    	if(firstIndex < 0 || lastIndex < 0){
+    		return null;
+    	}
+    	String substring = cocString.substring(firstIndex, lastIndex+1);
+        contactList = JSON.parseArray(substring, Contact.class);
+        return contactList;
+    }
 }
