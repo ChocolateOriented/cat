@@ -350,4 +350,45 @@ public class Task  extends BaseEntity {
 		return loanAmount.add(interestValue);
 	}
 
+	@Override
+	public String toString() {
+		return "Task{" +
+				"orderId='" + orderId + '\'' +
+				", customerId='" + customerId + '\'' +
+				", customerName='" + customerName + '\'' +
+				", mobile='" + mobile + '\'' +
+				", bankNo='" + bankNo + '\'' +
+				", orderType='" + orderType + '\'' +
+				", productType='" + productType + '\'' +
+				", orderStatus='" + orderStatus + '\'' +
+				", loanAmount=" + loanAmount +
+				", loanTerm=" + loanTerm +
+				", lentAmount=" + lentAmount +
+				", interestMode='" + interestMode + '\'' +
+				", interestValue=" + interestValue +
+				", penaltyMode='" + penaltyMode + '\'' +
+				", penaltyValue=" + penaltyValue +
+				", reliefAmount=" + reliefAmount +
+				", chargeValue=" + chargeValue +
+				", postponeUnitCharge=" + postponeUnitCharge +
+				", postponeCount=" + postponeCount +
+				", postponeTotalAmount=" + postponeTotalAmount +
+				", lendTime=" + lendTime +
+				", payoffTime=" + payoffTime +
+				", repaymentTime=" + repaymentTime +
+				", collectorId='" + collectorId + '\'' +
+				", collectorName='" + collectorName + '\'' +
+				", taskStartTime=" + taskStartTime +
+				", taskEndTime=" + taskEndTime +
+				", collectPeriodBegin=" + collectPeriodBegin +
+				", collectPeriodEnd=" + collectPeriodEnd +
+				", collectTaskStatus=" + collectTaskStatus +
+				", collectTelRemark='" + collectTelRemark + '\'' +
+				", actionFeedback='" + actionFeedback + '\'' +
+				", collectTime=" + collectTime +
+				", collectCycle='" + collectCycle + '\'' +
+				", remark='" + remark + '\'' +
+				", ispayoff=" + ispayoff +
+				'}';
+	}
 }
