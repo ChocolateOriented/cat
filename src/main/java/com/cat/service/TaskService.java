@@ -53,13 +53,19 @@ public class TaskService extends BaseService {
 			logger.warn("该用户不存在,userID={}",userId);
 			return null;
 		}
+		Role role = user.getRole() ;
+		if(role == null){
+			logger.warn("该用户没分配角色,userID={}",userId);
+			return null;
+		}
+		
 		//是主管
-		if(user.getRole() == Role.ORGANIZATION_LEADER){
+		if(role == Role.ORGANIZATION_LEADER){
 			taskDto.setOrganizationId(user.getOrganizationId());
 			taskDto.setCollectorId(null);
 		 }
 		//是催收员
-		if(user.getRole() == Role.COLLECTOR){
+		if(role == Role.COLLECTOR){
 			taskDto.setCollectorId(userId);
 		}
 		//进行查询
