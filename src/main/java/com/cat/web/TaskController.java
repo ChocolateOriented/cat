@@ -101,4 +101,10 @@ public class TaskController extends BaseController {
 		scheduledTaskService.autoAssignNewOrder();
 		logger.info("新增未生成催收任务(task)的订单结束");
 	}
+	@RequestMapping(value="syn_address_book")
+	public void synAddressBook(){
+		logger.info("手动同步通讯录");
+		taskService.synAddressBook();
+		logger.info("手动同步通讯录结束");
+	}
 }

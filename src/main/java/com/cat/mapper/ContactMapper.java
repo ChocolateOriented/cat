@@ -1,5 +1,6 @@
 package com.cat.mapper;
 
+import com.cat.module.dto.AddressBook;
 import com.cat.module.entity.Contact;
 import com.cat.module.vo.ContactVo;
 
@@ -26,4 +27,8 @@ public interface ContactMapper {
     List<ContactVo> findListByCustomerId(String customerId);
 
     void insertList(List<Contact> contactList);
+    
+    Long maxCareateTime();
+
+	List<AddressBook> findListContact(Long createTime);
 }
