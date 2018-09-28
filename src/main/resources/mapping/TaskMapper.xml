@@ -173,7 +173,7 @@
         LEFT JOIN t_user u ON t.collector_id = u.id
         <where>
             <if test="name != null and name != ''">
-                AND t.customer_name LIKE concat('%',#{realname},'%')
+                AND t.customer_name LIKE concat('%',#{name},'%')
             </if>
             <if test="mobile != null and mobile != ''">
                 AND t.mobile LIKE concat(#{mobile},'%')
