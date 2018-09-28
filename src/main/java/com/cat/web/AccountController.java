@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by jxli on 2018/9/20.
  */
 @RestController
-@RequestMapping(value = "/cat/account")
+@RequestMapping(value = "/cat/v1/account")
 public class AccountController extends BaseController {
   @Autowired
   AccountService accountService;

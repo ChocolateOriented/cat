@@ -80,26 +80,30 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         }
 
         //保存用户联系人信息
-        List<Contact> contactList = customerAllInfo.getContactList();
-        List<Contact> dbContactList = contactService.fetchContactsByCustomerId(customerBaseInfo.getCustomerId());
-        if (dbContactList == null || dbContactList.isEmpty()) {
-            contactList.forEach(x->x.setId(this.generateId()));
-            contactService.insertAll(contactList);
-        } else {
-            List<Contact> diffContacts = new ArrayList<>();
-            for (Contact contact : contactList) {
-                if (!dbContactList.contains(contact)) {
-                    contact.setId(this.generateId());
-                    diffContacts.add(contact);
-                }
-            }
-            if (!diffContacts.isEmpty()) {
-                contactService.insertAll(diffContacts);
-            }
-        }
+//        List<Contact> contactList = customerAllInfo.getContactList();
+//        List<Contact> dbContactList = contactService.fetchContactsByCustomerId(customerBaseInfo.getCustomerId());
+//        if (dbContactList == null || dbContactList.isEmpty()) {
+//            contactList.forEach(x->x.setId(this.generateId()));
+//            contactService.insertAll(contactList);
+//        } else {
+//            List<Contact> diffContacts = new ArrayList<>();
+//            for (Contact contact : contactList) {
+//                if (!dbContactList.contains(contact)) {
+//                    contact.setId(this.generateId());
+//                    diffContacts.add(contact);
+//                }
+//            }
+//            if (!diffContacts.isEmpty()) {
+//                contactService.insertAll(diffContacts);
+//            }
+//        }
 
         //保存任务信息
         Task task = customerAllInfo.getTask();
+        Task dbTask = taskService.findByOrderId(task.getOrderId());
+        if (dbTask != null) {
+            throw new RuntimeException("此订单已存在,task:"+task);
+        }
         task.setId(this.generateId());
         task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
         taskService.insert(task);
