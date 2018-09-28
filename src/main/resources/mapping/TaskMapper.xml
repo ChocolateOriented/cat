@@ -144,7 +144,7 @@
         FROM `t_task` WHERE `order_id` = #{orderId}
     </select>
 
-    <select id="findTaskList" resultType="com.cat.module.dto.TaskDto">
+    <select id="findList" resultType="com.cat.module.dto.TaskDto">
     
         SELECT
         t.customer_id AS "customerId",
@@ -153,7 +153,7 @@
         CASE
         WHEN t.order_status = 'PAYOFF' THEN 0
         WHEN t.order_status = 'PAYMENT' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
-        THEN DATEDIFF(CURDATE(), t.repayment_time)*t.penalty_value + IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
+        THEN DATEDIFF(CURDATE(), t.repayment_time)*t.penalty_value + IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)-IFNULL(t.relief_amount,0)
         WHEN t.order_status = 'payment' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ <= ]]>0
         THEN IFNULL(t.loan_amount,0)+IFNULL(t.interest_value,0)
         END  AS "customerTotalAmount",
@@ -430,7 +430,16 @@
 <!-- 			); -->
 <!-- 	</select> -->
     
-    
+    <update id="updateReliefAmount">
+     update t_task 
+     <set>
+     	update_time = now(),
+	    update_by = #{userId},
+	    relief_amount = #{reliefAmount}
+     </set>
+     where  order_id = #{orderId}
+      
+    </update>
     
     
 </mapper>

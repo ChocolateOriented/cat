@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.annotation.ClustersSchedule;
+import com.cat.manager.ReliefAmountManager;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.dto.AddressBook;
+import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.User;
@@ -26,13 +28,15 @@ import com.github.pagehelper.PageInfo;
 @Service
 public class TaskService extends BaseService {
 	@Autowired 
-	UserRepository userRepository;
+	private	UserRepository userRepository;
 	@Autowired
-	TaskMapper taskMapper;
+	private TaskMapper taskMapper;
 	@Autowired
-	ContactService contactService;
+	private	ContactService contactService;
 	@Autowired
 	private TaskRepository taskRepository;
+	@Autowired
+	private ReliefAmountManager reliefAmountManager;
 
 	/**
 	 * 获取任务列表
@@ -175,4 +179,32 @@ public class TaskService extends BaseService {
         contactList = JSON.parseArray(substring, Contact.class);
         return contactList;
     }
+    
+	/**
+	 * 
+	 * @param orderId
+	 * @param reliefAmount
+	 * @param userId 
+	 * @return
+	 */
+	public BaseResponse reliefAmount(String orderId, Double reliefAmount, String userId) {
+		if(reliefAmount == null || reliefAmount == 0){
+			return  new BaseResponse(-1,"金额不能为空");
+		}
+		User user = userRepository.findOne(userId);
+		//催收员没有减免权限
+		if(user.getRole() == Role.COLLECTOR){
+			return  new BaseResponse(-1,"您没有权限,请联系管理员");
+		}
+		
+		try {
+			reliefAmountManager.send(null);
+		} catch (Exception e) {
+			logger.error("减免出现异常,orderId={}", orderId, e);
+			 return new BaseResponse(-1,"服务出现异常,稍后再试");
+		}
+		taskMapper.updateReliefAmount(orderId,reliefAmount,userId);
+		logger.info("减免成功订单号={},减免金额={}",orderId,reliefAmount);
+		return BaseResponse.success();
+	}
 }
