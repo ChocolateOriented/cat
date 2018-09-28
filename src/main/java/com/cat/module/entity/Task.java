@@ -321,7 +321,7 @@ public class Task  extends BaseEntity {
 	}*/
 
 	/**
-	 * 应催金额:本金+利息+逾期费   利息:interestValue固定的值
+	 * 应催金额:本金+利息+逾期费-减免金额   利息:interestValue固定的值
 	 * @return
 	 */
 	public BigDecimal getRepayAmount() {
@@ -329,7 +329,7 @@ public class Task  extends BaseEntity {
 		BigDecimal overDueAmount = getOverDueAmount();
 		//订单金额
 		BigDecimal orderAmount = getOrderAmount();
-		return orderAmount.add(overDueAmount);
+		return orderAmount.add(overDueAmount).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
 	}
 
 	/**
@@ -338,7 +338,7 @@ public class Task  extends BaseEntity {
 	 */
 	public BigDecimal getOverDueAmount() {
 		int betweenDays = ScheduledTaskService.GetOverdueDay(repaymentTime);
-		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays)).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
+		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays));
 		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
 	}
 
