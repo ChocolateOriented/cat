@@ -133,7 +133,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask = coverToTask(dbTask, repaymentMessage, REPAY_POSTPONE);
             //转换成日志表,对象
             taskLog = covertToTaskLog(dbTask, repaymentMessage, REPAY_POSTPONE);
-            //清空联系人信息
+            //清空催收人信息
             dbTask = emptyCollectionInfo(dbTask);
         } else if (repaymentMessage.getPayoffTime() != null){ //还清时间不为null说明已还清
             //还清
@@ -266,6 +266,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             if (task.getCollectTime() != null) {
                 orderInfo.setCollectionTime(task.getCollectTime().getTime());
             }
+            orderInfo.setReliefAmount(task.getReliefAmount() == null ? BigDecimal.ZERO : task.getReliefAmount());
         }
 
 //        orderInfo.setMobileLocation();todo 手机号归属地
