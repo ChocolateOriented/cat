@@ -97,6 +97,20 @@ public class OrderInfo implements Serializable {
      */
     private BigDecimal postponeAmount;
 
+    /**
+     * 减免金额
+     * @return
+     */
+    private BigDecimal reliefAmount;
+
+    public BigDecimal getReliefAmount() {
+        return reliefAmount;
+    }
+
+    public void setReliefAmount(BigDecimal reliefAmount) {
+        this.reliefAmount = reliefAmount;
+    }
+
     public String getOrderId() {
         return orderId;
     }
