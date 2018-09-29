@@ -4,6 +4,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import javax.persistence.Entity;
 import java.util.Date;
+import javax.persistence.Table;
+
 
 /**
  *
@@ -11,6 +13,7 @@ import java.util.Date;
  * @date 2018/9/19
  */
 @Entity
+@Table(name = "t_customer_info")
 public class CustomerBaseInfo extends BaseEntity {
     /**
      * 用户code
@@ -79,6 +82,10 @@ public class CustomerBaseInfo extends BaseEntity {
 
     private String contactsList;
 
+    private Boolean black;
+
+    private String blackReason;
+
     public String getContactsList() {
         return contactsList;
     }
@@ -130,6 +137,22 @@ public class CustomerBaseInfo extends BaseEntity {
         } else {
             this.gender = "女";
         }
+    }
+
+    public Boolean getBlack() {
+        return black;
+    }
+
+    public void setBlack(Boolean black) {
+        this.black = black;
+    }
+
+    public String getBlackReason() {
+        return blackReason;
+    }
+
+    public void setBlackReason(String blackReason) {
+        this.blackReason = blackReason;
     }
 
     public String getIdCardAddress() {

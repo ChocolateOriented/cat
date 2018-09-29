@@ -2,9 +2,11 @@ package com.cat.web;
 
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
+import com.cat.module.entity.BlackListDto;
 import com.cat.module.vo.OrderInfo;
 import com.cat.service.DisposeOrderAndCustomerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,4 +29,8 @@ public class CustomerController extends BaseController{
             return new Results(ResultConstant.INNER_ERROR);
         }
     }
+
+/*    public Results blackList(@Validated BlackListDto blackListDto){
+
+    }*/
 }
