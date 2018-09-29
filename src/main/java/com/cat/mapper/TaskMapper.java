@@ -74,4 +74,6 @@ public interface TaskMapper  {
 	void updateByPrimaryKey(Task dbTask);
 
 	public void updateReliefAmount(@Param("orderId")String orderId, @Param("reliefAmount")BigDecimal reliefAmount, @Param("userId")String userId);
+
+	public List<String> findCustomeId();
 }

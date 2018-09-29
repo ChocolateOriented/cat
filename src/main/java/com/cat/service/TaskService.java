@@ -151,7 +151,8 @@ public class TaskService extends BaseService {
 	@ClustersSchedule
 	public void synAddressBook(){
 		Long maxCareateTime = contactService.maxCareateTime();
-		List<AddressBook> list = contactService.getAddressBook(maxCareateTime == null ? 0 : maxCareateTime);
+		List<String>  listCustomeId= taskMapper.findCustomeId();
+		List<AddressBook> list = contactService.getAddressBook(listCustomeId,maxCareateTime == null ? 0 : maxCareateTime);
 		logger.info("获取通讯录完成");
 		if(list == null || list.size() == 0){
 			logger.info("未查到通讯录信息");
@@ -160,11 +161,18 @@ public class TaskService extends BaseService {
 		for (AddressBook addressBook : list) {
 			String contacts = addressBook.getContactList();
 			String customerId = addressBook.getCustomerId();
-			List<Contact> contactList = this.parseToContactInfo(contacts);
+			List<Contact> contactList;
+			try {
+				contactList = this.parseToContactInfo(contacts);
+			} catch (Exception e) {
+				logger.error(customerId+"通讯录格式异常",e);
+				continue;
+			}
 			if(contactList == null || contactList.size() == 0){
 				logger.info("客户id={}未查到通讯录",addressBook.getCustomerId());
 				continue;
 			}
+			
 			contactService.deleteBycustomerId(customerId);
 			for (Contact contact : contactList) {
 				contact.setId(this.generateId());
@@ -173,14 +181,14 @@ public class TaskService extends BaseService {
 			}
 			contactService.insertAll(contactList);
 		}
-	
+	 logger.info("通讯录同步完成");
 	}
 	 /**
      * 解析成联系人对象
      * @param message
      * @return
      */
-    private List<Contact> parseToContactInfo(String cocString) {
+    private List<Contact> parseToContactInfo(String cocString) throws Exception {
     	List<Contact> contactList = new ArrayList<>();
     	int firstIndex = cocString.indexOf("[");
     	int lastIndex = cocString.indexOf("]");

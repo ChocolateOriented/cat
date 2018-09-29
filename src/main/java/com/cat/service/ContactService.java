@@ -116,13 +116,14 @@ public class ContactService extends BaseService {
 	}
 	/**
 	 * 获取通讯录
+	 * @param listCustomeId 
 	 * @param maxCareateTime
 	 * @return
 	 */
 	@DataSource(DynamicDataSource.RAPTOR_DATASOURCE)
-	public  List<AddressBook>  getAddressBook(Long maxCareateTime){
+	public  List<AddressBook>  getAddressBook(List<String> listCustomeId, Long maxCareateTime){
 		logger.info("获取通讯录");
-		return  contactMapper.findListContact(maxCareateTime);
+		return  contactMapper.findListContact(listCustomeId,maxCareateTime);
 		
 	}
 

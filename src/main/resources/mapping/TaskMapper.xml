@@ -442,5 +442,8 @@
       
     </update>
     
+    <select id="findCustomeId" resultType="java.lang.String">
+      select customer_id from t_task where  order_status='PAYMENT'
     
+    </select>
 </mapper>
