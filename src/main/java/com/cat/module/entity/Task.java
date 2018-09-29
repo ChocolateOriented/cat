@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.cat.module.enums.CollectTaskStatus;
+import com.cat.module.enums.OrderStatus;
 import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
@@ -116,7 +117,7 @@ public class Task  extends BaseEntity {
 	}
 	public void setOrderStatus(String orderStatus) {
 		if ("LENT".equals(orderStatus)) {
-			this.orderStatus = "PAYMENT";
+			this.orderStatus = OrderStatus.PAYMENT.name();
 		} else {
 			this.orderStatus = orderStatus;
 		}
