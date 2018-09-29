@@ -18,12 +18,12 @@ spring:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     raptor:
-	  name: datasource
-	  url: jdbc:mysql://mo9simulation.mysql.rds.aliyuncs.com:3306/raptor?useUnicode=true&characterEncoding=utf-8&useSSL=true
-	  username: dev
-	  password: dev@mo9.com
-	  type: com.alibaba.druid.pool.DruidDataSource
-	  driverClassName: com.mysql.jdbc.Driver
+      name: datasource
+      url: jdbc:mysql://mo9simulation.mysql.rds.aliyuncs.com:3306/raptor?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: dev
+      password: dev@mo9.com
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
     maxActive: 50
     initialSize: 10
     maxWait: 10000
