@@ -42,7 +42,7 @@ public class ContactService extends BaseService {
 	 */
 	@DataSource(DynamicDataSource.RISK_DATASOURCE)
 	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
-		List<CallLog> callLogs = callLogRepository.findByMobile(mobile);
+		List<CallLog> callLogs = callLogRepository.findTop300ByMobile(mobile);
 		
 		List<ContactVo> cotactVos = callLogs.stream().distinct()
 			.map(callLog -> {

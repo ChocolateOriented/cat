@@ -8,5 +8,5 @@ import com.cat.module.entity.risk.CallLog;
 
 public interface CallLogRepository extends PagingAndSortingRepository<CallLog, Long> {
 
-	List<CallLog> findByMobile(String mobile);
+	List<CallLog> findTop300ByMobile(String mobile);
 }
