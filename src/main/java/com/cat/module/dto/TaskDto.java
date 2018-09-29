@@ -26,12 +26,12 @@ public class TaskDto implements Serializable{
 	private Long organizationId;//机构id
 	private String collectorId;//催收员id
 	private String actionFeedback;//行动码
-	
+	private Double reliefAmount; //减免金额
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
 	private Integer overdueDaysEnd;//逾期天数第2个值
-	private Date payoffTimeStart;//还清日期第一个值
-	private Date payoffTimeEnd;//还清日期第二个值
+	private Long payoffTimeStart;//还清日期第一个值
+	private Long payoffTimeEnd;//还清日期第二个值
 	public String getOrderId() {
 		return orderId;
 	}
@@ -139,16 +139,22 @@ public class TaskDto implements Serializable{
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
 	public Date getPayoffTimeStart() {
-		return payoffTimeStart;
+		return this.payoffTimeStart == null ? null : new Date(this.payoffTimeStart);
 	}
-	public void setPayoffTimeStart(Date payoffTimeStart) {
+	public void setPayoffTimeStart(Long payoffTimeStart) {
 		this.payoffTimeStart = payoffTimeStart;
 	}
 	public Date getPayoffTimeEnd() {
-		return payoffTimeEnd;
+		return this.payoffTimeEnd == null ? null : new Date(this.payoffTimeEnd) ;
 	}
-	public void setPayoffTimeEnd(Date payoffTimeEnd) {
+	public void setPayoffTimeEnd(Long payoffTimeEnd) {
 		this.payoffTimeEnd = payoffTimeEnd;
+	}
+	public Double getReliefAmount() {
+		return reliefAmount;
+	}
+	public void setReliefAmount(Double reliefAmount) {
+		this.reliefAmount = reliefAmount;
 	}
 	
 }

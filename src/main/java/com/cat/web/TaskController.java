@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -107,11 +108,10 @@ public class TaskController extends BaseController {
 		taskService.synAddressBook();
 		logger.info("手动同步通讯录结束");
 	}
-	@GetMapping(value="relief_amount")
-	public BaseResponse reliefAmount(@RequestBody String orderId,@RequestBody Double reliefAmount,HttpServletRequest request){
+	@PostMapping(value="relief_amount")
+	public BaseResponse reliefAmount(@RequestBody TaskDto taskDto,HttpServletRequest request){
 		String userId = request.getHeader("User-Id");
-		
-		BaseResponse baseResponse =	taskService.reliefAmount(orderId,reliefAmount,userId);
+		BaseResponse baseResponse =	taskService.reliefAmount(taskDto.getOrderId(),taskDto.getReliefAmount(),userId); 
 		
 		return baseResponse;
 	}
