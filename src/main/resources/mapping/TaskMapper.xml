@@ -250,7 +250,7 @@
 		   	 SELECT 
 					CASE
 			        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
-			        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
+			        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(#{newDateTest}, t.repayment_time)
 			        END  AS "overdueDays",
 					t.customer_id  AS  customerId,
 					t.customer_name  AS  customerName,
@@ -289,7 +289,7 @@
 			 <where>
 					t.collect_cycle =  #{collectCycle} 
 					AND  t.collect_task_status = #{collectTaskStatus}
-					AND DATEDIFF(curdate(), t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
+					AND DATEDIFF(#{newDateTest}, t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
 			 </where>
 			ORDER BY loan_amount DESC
 	</select>
@@ -299,7 +299,7 @@
 		SELECT
 			CASE
 	        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
-	        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
+	        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(#{newDateTest}, t.repayment_time)
 	        END  AS "overdueDays",
 			t.customer_id  AS  customerId,
 			t.customer_name  AS  customerName,
@@ -337,7 +337,7 @@
 		FROM t_task AS t
 		where
 			t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE'
-			AND DATEDIFF(curdate(), t.repayment_time) >= #{day}
+			AND DATEDIFF(#{newDateTest}, t.repayment_time) >= #{day}
 		ORDER BY loan_amount DESC
 	</select>
 	
