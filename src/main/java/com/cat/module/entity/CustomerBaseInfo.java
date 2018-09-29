@@ -82,7 +82,7 @@ public class CustomerBaseInfo extends BaseEntity {
 
     private String contactsList;
 
-    private Boolean blacklist;
+    private String blacklist;
 
     private String blacklistReason;
 
@@ -139,15 +139,15 @@ public class CustomerBaseInfo extends BaseEntity {
         }
     }
 
-    public Boolean getBlacklist() {
-        return blacklist;
-    }
+  public String getBlacklist() {
+    return blacklist;
+  }
 
-    public void setBlacklist(Boolean blacklist) {
-        this.blacklist = blacklist;
-    }
+  public void setBlacklist(String blacklist) {
+    this.blacklist = blacklist;
+  }
 
-    public String getBlacklistReason() {
+  public String getBlacklistReason() {
         return blacklistReason;
     }
 

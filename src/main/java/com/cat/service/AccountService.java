@@ -132,7 +132,7 @@ public class AccountService extends BaseService {
 
   public void sendValidateCode(String email) {
     String validateCode = RandomStringUtils.randomNumeric(6);
-    RedisUtil.set(CACHE_VALIDATE_CODE_PREFIX + email, validateCode, 3*60);
+    RedisUtil.set(CACHE_VALIDATE_CODE_PREFIX + email, validateCode, 5*60);
 
     SuonaMessageDto messageDto = new SuonaMessageDto();
     messageDto.setMessageId(super.generateId()+"");
@@ -149,7 +149,7 @@ public class AccountService extends BaseService {
     }
   }
 
-  public boolean isValidValidateCode(String email, String validateCode) {
+  private boolean isValidValidateCode(String email, String validateCode) {
     String cachedCode = RedisUtil.get(CACHE_VALIDATE_CODE_PREFIX + email);
     if (Objects.equals(cachedCode, validateCode)) {
       return true;
