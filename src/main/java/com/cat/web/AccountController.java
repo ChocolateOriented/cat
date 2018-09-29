@@ -48,14 +48,13 @@ public class AccountController extends BaseController {
       return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
     }
 
-    LoginVo loginVo;
     try {
-      loginVo = accountService.registerByEmail(registerDto,request);
+      accountService.registerByEmail(registerDto,request);
     }catch (Exception e){
       logger.info("注册失败"+registerDto,e);
       return new Results(ResultConstant.INNER_ERROR,"注册失败:"+e.getMessage());
     }
-    return Results.ok().putData(loginVo);
+    return Results.ok();
   }
 
   @PostMapping("send_validate_code")

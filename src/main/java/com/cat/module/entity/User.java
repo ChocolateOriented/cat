@@ -19,6 +19,8 @@ public class User extends AuditingEntity {
 
   @Column(nullable = false)
   private String email;
+  @Column(nullable = false)
+  private String password;
 
   private String name;
 
@@ -76,6 +78,14 @@ public class User extends AuditingEntity {
         ", role=" + role +
         ", autoDivision=" + autoDivision +
         "} " + super.toString();
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getName() {
