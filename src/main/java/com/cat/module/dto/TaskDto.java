@@ -26,7 +26,7 @@ public class TaskDto implements Serializable{
 	private Long organizationId;//机构id
 	private String collectorId;//催收员id
 	private String actionFeedback;//行动码
-	private Double reliefAmount; //减免金额
+	private BigDecimal reliefAmount; //减免金额
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
 	private Integer overdueDaysEnd;//逾期天数第2个值
@@ -150,10 +150,10 @@ public class TaskDto implements Serializable{
 	public void setPayoffTimeEnd(Long payoffTimeEnd) {
 		this.payoffTimeEnd = payoffTimeEnd;
 	}
-	public Double getReliefAmount() {
+	public BigDecimal getReliefAmount() {
 		return reliefAmount;
 	}
-	public void setReliefAmount(Double reliefAmount) {
+	public void setReliefAmount(BigDecimal reliefAmount) {
 		this.reliefAmount = reliefAmount;
 	}
 	
