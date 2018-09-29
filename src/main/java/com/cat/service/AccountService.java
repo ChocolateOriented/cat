@@ -24,6 +24,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by jxli on 2018/9/21.
@@ -47,6 +48,7 @@ public class AccountService extends BaseService {
   private static final String PASSWORD_SALT = "356a192b7913b04c54574d1";
   private static final String CACHE_VALIDATE_CODE_PREFIX = "validateCode";
 
+  @Transactional
   public void registerByEmail(RegisterDto registerDto, HttpServletRequest request) {
     String email = registerDto.getEmail();
     String validateCode = registerDto.getValidateCode();
