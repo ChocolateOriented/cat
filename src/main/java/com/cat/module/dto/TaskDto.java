@@ -139,13 +139,13 @@ public class TaskDto implements Serializable{
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
 	public Date getPayoffTimeStart() {
-		return new Date(this.payoffTimeStart);
+		return this.payoffTimeStart == null ? null : new Date(this.payoffTimeStart);
 	}
 	public void setPayoffTimeStart(Long payoffTimeStart) {
 		this.payoffTimeStart = payoffTimeStart;
 	}
 	public Date getPayoffTimeEnd() {
-		return new Date(this.payoffTimeEnd);
+		return this.payoffTimeEnd == null ? null : new Date(this.payoffTimeEnd);
 	}
 	public void setPayoffTimeEnd(Long payoffTimeEnd) {
 		this.payoffTimeEnd = payoffTimeEnd;
