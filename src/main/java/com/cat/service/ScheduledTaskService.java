@@ -33,9 +33,9 @@ import com.mysql.fabric.xmlrpc.base.Data;
 @Service
 public class ScheduledTaskService extends BaseService{
 	
-	public static Date newDateTest = newDateTest();
+	public Date newDateTest = new Date();
 	
-	public static Date newDateTest(){
+	public Date newDateTest(){
 //		String string = "2016-10-24 21:59:06";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String value =  DictUtils.getDictValue("newDateTest", "newDateTest", sdf.format(new Data()));
@@ -91,13 +91,13 @@ public class ScheduledTaskService extends BaseService{
 	 * @param repaymentDate 还款日
 	 * @return
 	 */
-	public static int GetOverdueDay(Date repaymentDate)
-	{
-		Date now = newDateTest;
-		long timeSub = toDate(now).getTime()-toDate(repaymentDate).getTime();
-		double dayTimes = 24*60*60*1000d;
-		return (int)Math.floor(timeSub/dayTimes);
-	}
+//	public static int GetOverdueDay(Date repaymentDate)
+//	{
+//		Date now = newDateTest;
+//		long timeSub = toDate(now).getTime()-toDate(repaymentDate).getTime();
+//		double dayTimes = 24*60*60*1000d;
+//		return (int)Math.floor(timeSub/dayTimes);
+//	}
 	
 	/**
 	 *  新自动分案
@@ -684,7 +684,7 @@ public class ScheduledTaskService extends BaseService{
      * 选择催收周期段类型
      * @return
      */
-	public static String getDunningCycleType() {
+	public String getDunningCycleType() {
 		switch (getDaysOfMonth(newDateTest)) {
 		case 30:
 			switch (getDays()) {
