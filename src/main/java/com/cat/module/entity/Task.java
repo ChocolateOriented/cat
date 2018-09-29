@@ -8,6 +8,8 @@ import com.cat.module.enums.CollectTaskStatus;
 import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
@@ -57,6 +59,7 @@ public class Task  extends BaseEntity {
 	private Date  taskEndTime;//任务结束时间
 	private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
+	@Enumerated(EnumType.STRING)
 	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
 	private String  actionFeedback;//行动码
