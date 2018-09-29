@@ -145,7 +145,7 @@ public class TaskDto implements Serializable{
 		this.payoffTimeStart = payoffTimeStart;
 	}
 	public Date getPayoffTimeEnd() {
-		return this.payoffTimeEnd == null ? null : new Date(this.payoffTimeEnd);
+		return this.payoffTimeEnd == null ? null : new Date(this.payoffTimeEnd) ;
 	}
 	public void setPayoffTimeEnd(Long payoffTimeEnd) {
 		this.payoffTimeEnd = payoffTimeEnd;
