@@ -23,7 +23,11 @@ public class CustomerController extends BaseController{
     public Results getCustomerInfo(@RequestParam("orderId") String orderId) {
         try {
             OrderInfo orderInfo = disposeCustomerInfoService.getCustomerAllInfo(orderId);
+            if (orderInfo == null) {
+                return new Results(ResultConstant.EMPTY_ENTITY, "没有此订单");
+            }
             return Results.ok().putData(orderInfo);
+
         } catch (Exception e) {
             logger.info("获取客户信息异常", e);
             return new Results(ResultConstant.INNER_ERROR);

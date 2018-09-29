@@ -18,6 +18,9 @@ public class ContactTypeValidator implements ConstraintValidator<ContactTypeCons
 
 	@Override
 	public boolean isValid(Integer value, ConstraintValidatorContext context) {
+		if (value == null) {
+			return false;
+		}
 		return ContactType.valueOf(value) != null;
 	}
 

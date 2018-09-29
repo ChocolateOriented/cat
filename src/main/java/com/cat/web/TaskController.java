@@ -108,7 +108,7 @@ public class TaskController extends BaseController {
 		logger.info("手动同步通讯录结束");
 	}
 	@GetMapping(value="relief_amount")
-	public BaseResponse reliefAmount(@RequestParam("orderId")String orderId,@RequestParam("reliefAmount") Double reliefAmount,HttpServletRequest request){
+	public BaseResponse reliefAmount(@RequestBody String orderId,@RequestBody Double reliefAmount,HttpServletRequest request){
 		String userId = request.getHeader("User-Id");
 		
 		BaseResponse baseResponse =	taskService.reliefAmount(orderId,reliefAmount,userId);
