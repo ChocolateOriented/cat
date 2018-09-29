@@ -182,7 +182,7 @@
                 AND t.order_id = #{orderId}
             </if>
             <if test="collectorName != null and collectorName != ''">
-                AND t.collectorName LIKE concat('%',#{collectorName},'%') 
+                AND t.collector_name LIKE concat('%',#{collectorName},'%') 
             </if>
             <if test="actionFeedback != null and actionFeedback != ''">
                 AND t.action_feedback = #{actionFeedback}
