@@ -9,6 +9,7 @@ import java.util.Date;
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
 import com.cat.service.ScheduledTaskService;
+import com.cat.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -73,7 +74,7 @@ public class TaskLog extends BaseEntity {
 	 */
 	public int calculateOverdueDays()
 	{
-		return ScheduledTaskService.GetOverdueDay(repaymentTime);
+		return DateUtils.getOverdueDay(repaymentTime);
 	}
 
 

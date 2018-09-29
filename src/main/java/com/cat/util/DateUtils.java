@@ -329,4 +329,26 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 //		Date firstDate = cal.getTime();
 
 	}
+
+	private static Date toDate(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+	/**
+	 * 计算逾期天数，不满一天按一天计算
+	 * @param repaymentDate 还款日
+	 * @return
+	 */
+	public static int getOverdueDay(Date repaymentDate)
+	{
+		Date now = new Date();
+		long timeSub = toDate(now).getTime()-toDate(repaymentDate).getTime();
+		double dayTimes = 24*60*60*1000d;
+		return (int)Math.floor(timeSub/dayTimes);
+	}
 }
