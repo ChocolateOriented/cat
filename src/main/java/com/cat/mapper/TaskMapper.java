@@ -5,6 +5,7 @@ package com.cat.mapper;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.cat.module.dto.TaskDto;
@@ -33,14 +34,14 @@ public interface TaskMapper  {
 	 * @param dunningcycle
 	 * @return
 	 */
-	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("collectTaskStatus")String collectTaskStatus,@Param("collectCycle")String collectCycle,@Param("begin")String begin,@Param("end")String end);
+	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("newDateTest")Date newDateTest,@Param("collectTaskStatus")String collectTaskStatus,@Param("collectCycle")String collectCycle,@Param("begin")String begin,@Param("end")String end);
 
 	/**
 	 * 根据逾期天数查询未生成任务task的订单
 	 * @param day
 	 * @return
 	 */
-	public List<TaskLog> newfingDelayOrderByNotTask(@Param("day")String day);
+	public List<TaskLog> newfingDelayOrderByNotTask(@Param("newDateTest")Date newDateTest,@Param("day")String day);
 	
 	
 	/**

@@ -47,7 +47,7 @@ public class TaskTester {
 	@Test
 	public void testInsert() {
 //		scheduledTaskService.autoAssign();
-		service.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0, "-1", "0");
+//		service.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0, "-1", "0");
 		service.autoAssignNewOrder();
 	}
 }
