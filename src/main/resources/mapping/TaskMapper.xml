@@ -181,8 +181,8 @@
             <if test="orderId != null and orderId != ''">
                 AND t.order_id = #{orderId}
             </if>
-            <if test="collectorId != null and collectorId != ''">
-                AND t.collector_id = #{collectorId}
+            <if test="collectorName != null and collectorName != ''">
+                AND t.collector_id = #{collectorName}
             </if>
             <if test="actionFeedback != null and actionFeedback != ''">
                 AND t.action_feedback = #{actionFeedback}
