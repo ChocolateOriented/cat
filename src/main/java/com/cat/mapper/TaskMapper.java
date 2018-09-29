@@ -4,6 +4,7 @@
 package com.cat.mapper;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.cat.module.dto.TaskDto;
@@ -71,5 +72,5 @@ public interface TaskMapper  {
 
 	void updateByPrimaryKey(Task dbTask);
 
-	public void updateReliefAmount(@Param("orderId")String orderId, @Param("reliefAmount")Double reliefAmount, @Param("userId")String userId);
+	public void updateReliefAmount(@Param("orderId")String orderId, @Param("reliefAmount")BigDecimal reliefAmount, @Param("userId")String userId);
 }

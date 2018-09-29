@@ -203,6 +203,7 @@
                 AND u.organization_id = #{organizationId}
             </if>
             and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
+            and t.collector_id is not null
 
         </where>
         ORDER BY t.repayment_time DESC
