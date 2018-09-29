@@ -35,15 +35,15 @@ public class ActionController extends BaseController {
 
 	/**
 	 * 查询催收记录列表
-	 * @param ownerId
+	 * @param customerId
 	 * @param pageNum
 	 * @param pageSize
 	 * @return
 	 */
 	@GetMapping(value = "/list_action_record")
-	public PageResponse<Action> list(String ownerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+	public PageResponse<Action> list(String customerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		Page<Action> page = actionService.findPage(ownerId, pageNum - 1, pageSize);
+		Page<Action> page = actionService.findPage(customerId, pageNum - 1, pageSize);
 		PageResponse<Action> pageResp = new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements());
 		return pageResp;
 	}
