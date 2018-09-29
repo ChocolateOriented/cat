@@ -2,7 +2,7 @@ package com.cat.web;
 
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
-import com.cat.module.entity.BlackListDto;
+import com.cat.module.dto.BlackListDto;
 import com.cat.module.vo.OrderInfo;
 import com.cat.service.DisposeOrderAndCustomerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,8 @@ public class CustomerController extends BaseController{
         }
     }
 
-/*    public Results blackList(@Validated BlackListDto blackListDto){
-
-    }*/
+    @PostMapping("blackList_customer")
+    public Results blackList(@Validated @RequestBody BlackListDto blackListDto){
+        return Results.ok();
+    }
 }

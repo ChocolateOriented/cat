@@ -82,9 +82,9 @@ public class CustomerBaseInfo extends BaseEntity {
 
     private String contactsList;
 
-    private Boolean black;
+    private Boolean blacklist;
 
-    private String blackReason;
+    private String blacklistReason;
 
     public String getContactsList() {
         return contactsList;
@@ -139,20 +139,20 @@ public class CustomerBaseInfo extends BaseEntity {
         }
     }
 
-    public Boolean getBlack() {
-        return black;
+    public Boolean getBlacklist() {
+        return blacklist;
     }
 
-    public void setBlack(Boolean black) {
-        this.black = black;
+    public void setBlacklist(Boolean blacklist) {
+        this.blacklist = blacklist;
     }
 
-    public String getBlackReason() {
-        return blackReason;
+    public String getBlacklistReason() {
+        return blacklistReason;
     }
 
-    public void setBlackReason(String blackReason) {
-        this.blackReason = blackReason;
+    public void setBlacklistReason(String blacklistReason) {
+        this.blacklistReason = blacklistReason;
     }
 
     public String getIdCardAddress() {
