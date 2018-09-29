@@ -27,7 +27,7 @@
 <sql id="baseSql">
     id, customer_id, mobile, real_name, id_card, gender, id_card_address, permanent_address,
     salary_time, salary, credit_status, mobile_contacts, call_history, user_ip, login_enable,
-    deleted, last_login_time, blacklist, blacklist_reason
+    deleted, last_login_time, IFNULL(blacklist, 0) AS blacklist, blacklist_reason
 </sql>
 <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_customer_info
