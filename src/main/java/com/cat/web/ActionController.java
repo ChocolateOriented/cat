@@ -20,6 +20,7 @@ import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.entity.Action;
 import com.cat.module.entity.Task;
+import com.cat.module.vo.ActionVo;
 import com.cat.service.ActionService;
 import com.cat.service.TaskService;
 
@@ -41,10 +42,10 @@ public class ActionController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/list_action_record")
-	public PageResponse<Action> list(String customerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+	public PageResponse<ActionVo> list(String customerId, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		Page<Action> page = actionService.findPage(customerId, pageNum - 1, pageSize);
-		PageResponse<Action> pageResp = new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements());
+		Page<ActionVo> page = actionService.findPage(customerId, pageNum - 1, pageSize);
+		PageResponse<ActionVo> pageResp = new PageResponse<>(page.getContent(), pageNum, pageSize, page.getTotalElements());
 		return pageResp;
 	}
 
