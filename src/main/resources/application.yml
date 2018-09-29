@@ -89,7 +89,7 @@ nest:
   group: CatGroup
   mode: ALONE
   exclude:
-    urls: /cat/account/login, /cat/account/register,/cat/account/send_validate_code
+    urls: /cat/v1/account/login, /cat/v1/account/register,/cat/v1/account/send_validate_code
 
 feign:
   httpclient:
