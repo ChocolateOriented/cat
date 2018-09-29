@@ -418,7 +418,7 @@ public class ScheduledTaskService extends BaseService{
 			} catch (Exception e) {
 				logger.error("过期分案产品-" +  dunningcycle + "队列分配任务失败,全部事务回滚");
 				logger.error("错误信息"+e.getMessage());
-//				throw new ServiceException(e);
+				throw new RuntimeException(e);
 			} finally {
 				logger.info("过期分案产品-" + dunningcycle + "队列任务结束" + newDateTest());
 			}
