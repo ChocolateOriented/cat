@@ -134,4 +134,8 @@ public class ContactService extends BaseService {
 	public void deleteBycustomerId(String customerId) {
 		contactMapper.deleteContact(customerId);
 	}
+	@DataSource(DynamicDataSource.RAPTOR_DATASOURCE)
+	public List<AddressBook> reloadAddressBook(List<String> customerIds) {
+		return contactMapper.reloadAddressBook( customerIds);
+	}
 }

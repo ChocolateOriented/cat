@@ -232,5 +232,41 @@ public class TaskService extends BaseService {
 		logger.info("减免成功订单号={},减免金额={}",orderId,reliefAmount);
 		return baseResponse;
 	}
+	/**
+	 * 补拿获取通讯录
+	 * @param customerIds 
+	 */
+	public void reloadAddressBook(List<String> customerIds) {
+		List<AddressBook> list = contactService.reloadAddressBook(customerIds);
+		logger.info("补拿获取通讯录完成");
+		if(list == null || list.size() == 0){
+			logger.info("补拿未查到通讯录信息");
+			return;
+		}
+		for (AddressBook addressBook : list) {
+			String contacts = addressBook.getContactList();
+			String customerId = addressBook.getCustomerId();
+			List<Contact> contactList;
+			try {
+				contactList = this.parseToContactInfo(contacts);
+			} catch (Exception e) {
+				logger.error(customerId+"通讯录格式异常,补拿",e);
+				continue;
+			}
+			if(contactList == null || contactList.size() == 0){
+				logger.info("补拿,客户id={}未查到通讯录",addressBook.getCustomerId());
+				continue;
+			}
+			
+			contactService.deleteBycustomerId(customerId);
+			for (Contact contact : contactList) {
+				contact.setId(this.generateId());
+				contact.setCustomerId(customerId);
+				contact.setCreateTime(null);
+			}
+			contactService.insertAll(contactList);
+		}
+	 logger.info("补拿通讯录同步完成");
+	}
 
 }

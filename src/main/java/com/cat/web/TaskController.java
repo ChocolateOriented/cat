@@ -115,4 +115,8 @@ public class TaskController extends BaseController {
 		
 		return baseResponse;
 	}
+	@PostMapping(value="reload_address_book")
+	public void reloadAddressBook(@RequestBody List<String> customerIds){
+		taskService.reloadAddressBook(customerIds);
+	}
 }

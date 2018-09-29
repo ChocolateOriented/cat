@@ -33,4 +33,6 @@ public interface ContactMapper {
     Long maxCareateTime();
 
 	List<AddressBook> findListContact(@Param("list")List<String> listCustomeId, @Param("createTime")Long createTime);
+
+	List<AddressBook> reloadAddressBook(List<String> customerIds);
 }
