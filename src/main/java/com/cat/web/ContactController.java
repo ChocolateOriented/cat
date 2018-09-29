@@ -50,7 +50,7 @@ public class ContactController extends BaseController {
 	}
 	/**
 	 * 客户的通讯录
-	 * @param ownerId
+	 * @param customerId
 	 * @return
 	 */
 	@GetMapping(value="list_addressbook")
