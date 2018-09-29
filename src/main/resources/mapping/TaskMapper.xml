@@ -432,12 +432,10 @@
 <!-- 	</select> -->
     
     <update id="updateReliefAmount">
-     update t_task 
-     <set>
+     update t_task  set
      	update_time = now(),
 	    update_by = #{userId},
 	    relief_amount = #{reliefAmount}
-     </set>
      where  order_id = #{orderId}
       
     </update>
