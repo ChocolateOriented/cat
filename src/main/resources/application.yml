@@ -12,9 +12,16 @@ spring:
       driverClassName: com.mysql.jdbc.Driver
     risk:
       name: datasource
-      url: jdbc:mysql://192.168.3.17:3306/mis?useUnicode=true&characterEncoding=utf-8&useSSL=true
-      username: root
-      password: rootroot
+      url: jdbc:mysql://mo9simulation.mysql.rds.aliyuncs.com:3306/clncrawler?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: dev
+      password: dev@mo9.com
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+    raptor:
+      name: datasource
+      url: jdbc:mysql://mo9simulation.mysql.rds.aliyuncs.com:3306/raptor?useUnicode=true&characterEncoding=utf-8&useSSL=true
+      username: dev
+      password: dev@mo9.com
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     maxActive: 50
@@ -82,7 +89,7 @@ nest:
   group: CatGroup
   mode: ALONE
   exclude:
-    urls: /cat/account/login, /cat/account/register,/cat/account/send_validate_code
+    urls: /cat/v1/account/login, /cat/v1/account/register,/cat/v1/account/send_validate_code
 
 feign:
   httpclient:
@@ -92,7 +99,9 @@ feignClient:
     url:  https://suona.alpha.mo9.com/suonaApi
     systemCode: BOURSE
     captchaTemplateCode: GENERAL_CAPTCHA
-
+  raptor:
+    url:  http://gqwu.local.mo9.com/raptorApi
+    secret:  rtsDDcogZcPCu!NYkfgfjQq6O;~2Brtr
 logging:
   level:
     root: debug

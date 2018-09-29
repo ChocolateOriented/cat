@@ -1,5 +1,7 @@
 package com.cat.module.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -96,6 +98,34 @@ public class OrderInfo implements Serializable {
      * 续期总额
      */
     private BigDecimal postponeAmount;
+
+    /**
+     * 减免金额
+     * @return
+     */
+    private BigDecimal reliefAmount;
+
+    /**
+     * 是否拉黑
+     * @return
+     */
+    private Boolean blacklist;
+
+    public Boolean getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(Boolean blacklist) {
+        this.blacklist = blacklist;
+    }
+
+    public BigDecimal getReliefAmount() {
+        return reliefAmount;
+    }
+
+    public void setReliefAmount(BigDecimal reliefAmount) {
+        this.reliefAmount = reliefAmount;
+    }
 
     public String getOrderId() {
         return orderId;

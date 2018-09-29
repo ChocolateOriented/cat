@@ -6,6 +6,7 @@ import com.cat.module.entity.*;
 import com.cat.module.enums.BankType;
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
+import com.cat.module.enums.OrderStatus;
 import com.cat.module.vo.OrderInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      */
     public OrderInfo getCustomerAllInfo(String orderId) {
         Task task = taskService.findByOrderId(orderId);
+        if (task == null) {
+            return null;
+        }
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
@@ -100,6 +104,10 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 
         //保存任务信息
         Task task = customerAllInfo.getTask();
+        Task dbTask = taskService.findByOrderId(task.getOrderId());
+        if (dbTask != null) {
+            throw new RuntimeException("此订单已存在,task:"+task);
+        }
         task.setId(this.generateId());
         task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
         taskService.insert(task);
@@ -126,7 +134,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask = coverToTask(dbTask, repaymentMessage, REPAY_POSTPONE);
             //转换成日志表,对象
             taskLog = covertToTaskLog(dbTask, repaymentMessage, REPAY_POSTPONE);
-            //清空联系人信息
+            //清空催收人信息
             dbTask = emptyCollectionInfo(dbTask);
         } else if (repaymentMessage.getPayoffTime() != null){ //还清时间不为null说明已还清
             //还清
@@ -163,6 +171,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask.setTaskEndTime(new Date());
             //催收任务状态
             dbTask.setCollectTaskStatus(CollectTaskStatus.TASK_FINISHED);
+            //修改订单状态
+            dbTask.setOrderStatus(OrderStatus.PAYOFF.name());
             dbTask.setIspayoff(true);
         }
         return dbTask;
@@ -174,7 +184,6 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      * @return
      */
     private Task emptyCollectionInfo(Task dbTask) {
-        //清空催收人信息
         dbTask.setCollectorId(null);
         dbTask.setCollectorName(null);
         dbTask.setTaskStartTime(null);
@@ -242,6 +251,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             orderInfo.setMobile(customerBaseInfo.getMobile());
             orderInfo.setGender(customerBaseInfo.getGender());
             orderInfo.setIdCardAddress(customerBaseInfo.getIdCardAddress());
+            orderInfo.setBlacklist(customerBaseInfo.getBlacklist());
         }
 
         if (task != null) {
@@ -260,6 +270,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             if (task.getCollectTime() != null) {
                 orderInfo.setCollectionTime(task.getCollectTime().getTime());
             }
+            orderInfo.setReliefAmount(task.getReliefAmount() == null ? BigDecimal.ZERO : task.getReliefAmount());
         }
 
 //        orderInfo.setMobileLocation();todo 手机号归属地

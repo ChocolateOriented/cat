@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
@@ -26,13 +25,13 @@ public class TaskDto implements Serializable{
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
 	private String collectorId;//催收员id
-	private ActionFeedback actionFeedback;//行动码
-	
+	private String actionFeedback;//行动码
+	private BigDecimal reliefAmount; //减免金额
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
 	private Integer overdueDaysEnd;//逾期天数第2个值
-	private Date payoffTimeStart;//还清日期第一个值
-	private Date payoffTimeEnd;//还清日期第二个值
+	private Long payoffTimeStart;//还清日期第一个值
+	private Long payoffTimeEnd;//还清日期第二个值
 	public String getOrderId() {
 		return orderId;
 	}
@@ -121,10 +120,10 @@ public class TaskDto implements Serializable{
 		this.collectorId = collectorId;
 	}
 
-	public ActionFeedback getActionFeedback() {
+	public String getActionFeedback() {
 		return actionFeedback;
 	}
-	public void setActionFeedback(ActionFeedback actionFeedback) {
+	public void setActionFeedback(String actionFeedback) {
 		this.actionFeedback = actionFeedback;
 	}
 	public Integer getOverdueDaysStart() {
@@ -140,16 +139,22 @@ public class TaskDto implements Serializable{
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
 	public Date getPayoffTimeStart() {
-		return payoffTimeStart;
+		return this.payoffTimeStart == null ? null : new Date(this.payoffTimeStart);
 	}
-	public void setPayoffTimeStart(Date payoffTimeStart) {
+	public void setPayoffTimeStart(Long payoffTimeStart) {
 		this.payoffTimeStart = payoffTimeStart;
 	}
 	public Date getPayoffTimeEnd() {
-		return payoffTimeEnd;
+		return this.payoffTimeEnd == null ? null : new Date(this.payoffTimeEnd) ;
 	}
-	public void setPayoffTimeEnd(Date payoffTimeEnd) {
+	public void setPayoffTimeEnd(Long payoffTimeEnd) {
 		this.payoffTimeEnd = payoffTimeEnd;
+	}
+	public BigDecimal getReliefAmount() {
+		return reliefAmount;
+	}
+	public void setReliefAmount(BigDecimal reliefAmount) {
+		this.reliefAmount = reliefAmount;
 	}
 	
 }

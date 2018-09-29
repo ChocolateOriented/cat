@@ -5,9 +5,12 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.cat.module.enums.CollectTaskStatus;
+import com.cat.module.enums.OrderStatus;
 import com.cat.service.ScheduledTaskService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
@@ -57,6 +60,7 @@ public class Task  extends BaseEntity {
 	private Date  taskEndTime;//任务结束时间
 	private Integer  collectPeriodBegin;//催讨周期-逾期周期起始
 	private Integer  collectPeriodEnd;//催讨周期-逾期周期截至
+	@Enumerated(EnumType.STRING)
 	private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 	private String  collectTelRemark;//催收备注
 	private String  actionFeedback;//行动码
@@ -113,7 +117,7 @@ public class Task  extends BaseEntity {
 	}
 	public void setOrderStatus(String orderStatus) {
 		if ("LENT".equals(orderStatus)) {
-			this.orderStatus = "PAYMENT";
+			this.orderStatus = OrderStatus.PAYMENT.name();
 		} else {
 			this.orderStatus = orderStatus;
 		}
@@ -321,7 +325,7 @@ public class Task  extends BaseEntity {
 	}*/
 
 	/**
-	 * 应催金额:本金+利息+逾期费   利息:interestValue固定的值
+	 * 应催金额:本金+利息+逾期费-减免金额   利息:interestValue固定的值
 	 * @return
 	 */
 	public BigDecimal getRepayAmount() {
@@ -329,7 +333,7 @@ public class Task  extends BaseEntity {
 		BigDecimal overDueAmount = getOverDueAmount();
 		//订单金额
 		BigDecimal orderAmount = getOrderAmount();
-		return orderAmount.add(overDueAmount);
+		return orderAmount.add(overDueAmount).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
 	}
 
 	/**
@@ -338,7 +342,7 @@ public class Task  extends BaseEntity {
 	 */
 	public BigDecimal getOverDueAmount() {
 		int betweenDays = ScheduledTaskService.GetOverdueDay(repaymentTime);
-		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays)).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
+		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays));
 		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
 	}
 
@@ -350,4 +354,45 @@ public class Task  extends BaseEntity {
 		return loanAmount.add(interestValue);
 	}
 
+	@Override
+	public String toString() {
+		return "Task{" +
+				"orderId='" + orderId + '\'' +
+				", customerId='" + customerId + '\'' +
+				", customerName='" + customerName + '\'' +
+				", mobile='" + mobile + '\'' +
+				", bankNo='" + bankNo + '\'' +
+				", orderType='" + orderType + '\'' +
+				", productType='" + productType + '\'' +
+				", orderStatus='" + orderStatus + '\'' +
+				", loanAmount=" + loanAmount +
+				", loanTerm=" + loanTerm +
+				", lentAmount=" + lentAmount +
+				", interestMode='" + interestMode + '\'' +
+				", interestValue=" + interestValue +
+				", penaltyMode='" + penaltyMode + '\'' +
+				", penaltyValue=" + penaltyValue +
+				", reliefAmount=" + reliefAmount +
+				", chargeValue=" + chargeValue +
+				", postponeUnitCharge=" + postponeUnitCharge +
+				", postponeCount=" + postponeCount +
+				", postponeTotalAmount=" + postponeTotalAmount +
+				", lendTime=" + lendTime +
+				", payoffTime=" + payoffTime +
+				", repaymentTime=" + repaymentTime +
+				", collectorId='" + collectorId + '\'' +
+				", collectorName='" + collectorName + '\'' +
+				", taskStartTime=" + taskStartTime +
+				", taskEndTime=" + taskEndTime +
+				", collectPeriodBegin=" + collectPeriodBegin +
+				", collectPeriodEnd=" + collectPeriodEnd +
+				", collectTaskStatus=" + collectTaskStatus +
+				", collectTelRemark='" + collectTelRemark + '\'' +
+				", actionFeedback='" + actionFeedback + '\'' +
+				", collectTime=" + collectTime +
+				", collectCycle='" + collectCycle + '\'' +
+				", remark='" + remark + '\'' +
+				", ispayoff=" + ispayoff +
+				'}';
+	}
 }

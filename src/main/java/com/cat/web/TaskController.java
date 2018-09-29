@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,5 +101,18 @@ public class TaskController extends BaseController {
 		logger.info("开始新增未生成催收任务(task)的订单");
 		scheduledTaskService.autoAssignNewOrder();
 		logger.info("新增未生成催收任务(task)的订单结束");
+	}
+	@RequestMapping(value="syn_address_book")
+	public void synAddressBook(){
+		logger.info("手动同步通讯录");
+		taskService.synAddressBook();
+		logger.info("手动同步通讯录结束");
+	}
+	@PostMapping(value="relief_amount")
+	public BaseResponse reliefAmount(@RequestBody TaskDto taskDto,HttpServletRequest request){
+		String userId = request.getHeader("User-Id");
+		BaseResponse baseResponse =	taskService.reliefAmount(taskDto.getOrderId(),taskDto.getReliefAmount(),userId); 
+		
+		return baseResponse;
 	}
 }

@@ -17,10 +17,6 @@ public class CallLog {
 
 	private String callTel;
 
-	private String callMethod;
-
-	private Integer callDuration;
-
 	public String getMobile() {
 		return mobile;
 	}
@@ -35,22 +31,6 @@ public class CallLog {
 
 	public void setCallTel(String callTel) {
 		this.callTel = callTel;
-	}
-
-	public String getCallMethod() {
-		return callMethod;
-	}
-
-	public void setCallMethod(String callMethod) {
-		this.callMethod = callMethod;
-	}
-
-	public Integer getCallDuration() {
-		return callDuration;
-	}
-
-	public void setCallDuration(Integer callDuration) {
-		this.callDuration = callDuration;
 	}
 
 	@Override

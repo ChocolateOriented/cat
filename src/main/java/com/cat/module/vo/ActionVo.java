@@ -1,29 +1,28 @@
-package com.cat.module.entity;
+package com.cat.module.vo;
+
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-import com.cat.annotation.ActionFeedbackConstraint;
-import com.cat.annotation.ContactTypeConstraint;
 import com.cat.module.enums.ActionFeedback;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.cat.module.enums.ContactType;
 
 @Entity
 @Table(name = "t_action")
-@JsonIgnoreProperties({"createBy", "createTime", "updateBy", "updateTime"})
-public class Action extends AuditingEntity {
+public class ActionVo {
 
 	@Id
 	private Long id;
 
-	@NotBlank(message = "订单号不能为空")
 	private String orderId;
+
+	private String orderStatus;
+
+	private Date repaymentTime;
 
     private String customerId;
 
@@ -31,19 +30,20 @@ public class Action extends AuditingEntity {
 
     private String collectorName;
 
-	@NotNull(message = "联系人电话不能为空")
     private String contactTel;
 
     private String contactName;
 
-    @ContactTypeConstraint
     private Integer contactType;
 
     @Enumerated(EnumType.STRING)
-    @ActionFeedbackConstraint
     private ActionFeedback actionFeedback;
 
     private String remark;
+
+    private String updateBy;
+
+    private Date updateTime;
 
 	public Long getId() {
 		return id;
@@ -59,6 +59,22 @@ public class Action extends AuditingEntity {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public Long getRepaymentTime() {
+		return repaymentTime == null ? null : repaymentTime.getTime();
+	}
+
+	public void setRepaymentTime(Date repaymentTime) {
+		this.repaymentTime = repaymentTime;
 	}
 
 	public String getCustomerId() {
@@ -109,12 +125,25 @@ public class Action extends AuditingEntity {
 		this.contactType = contactType;
 	}
 
+	public String getContactTypeDesc() {
+		if (contactType == null) {
+			return null;
+		}
+		
+		ContactType contactTypeEnum = ContactType.valueOf(contactType);
+		return contactTypeEnum == null ? null : contactTypeEnum.getDesc();
+	}
+
 	public ActionFeedback getActionFeedback() {
 		return actionFeedback;
 	}
 
 	public void setActionFeedback(ActionFeedback actionFeedback) {
 		this.actionFeedback = actionFeedback;
+	}
+
+	public String getActionFeedbackDesc() {
+		return actionFeedback == null ? null : actionFeedback.getDesc();
 	}
 
 	public String getRemark() {
@@ -125,4 +154,11 @@ public class Action extends AuditingEntity {
 		this.remark = remark;
 	}
 
+	public String getOperatorName() {
+		return updateBy;
+	}
+
+	public Long getOperateTime() {
+		return updateTime == null ? null : updateTime.getTime();
+	}
 }

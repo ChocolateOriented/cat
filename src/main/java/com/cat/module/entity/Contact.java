@@ -28,7 +28,9 @@ public class Contact {
      * 联系人手机号
      */
     private String contactMobile;
-
+    
+	private Long createTime;
+	
     public Long getId() {
         return id;
     }
@@ -89,4 +91,14 @@ public class Contact {
         result = 31 * result + (contactMobile != null ? contactMobile.hashCode() : 0);
         return result;
     }
+
+	public Long getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
+	}
+    
+    
 }
