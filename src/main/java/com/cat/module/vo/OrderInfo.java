@@ -103,6 +103,20 @@ public class OrderInfo implements Serializable {
      */
     private BigDecimal reliefAmount;
 
+    /**
+     * 是否拉黑
+     * @return
+     */
+    private Boolean blacklist;
+
+    public Boolean getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(Boolean blacklist) {
+        this.blacklist = blacklist;
+    }
+
     public BigDecimal getReliefAmount() {
         return reliefAmount;
     }

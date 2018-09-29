@@ -21,11 +21,13 @@
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="blacklist" property="blacklist"/>
+    <result column="blacklist_reason" property="blacklistReason"/>
 </resultMap>
 <sql id="baseSql">
     id, customer_id, mobile, real_name, id_card, gender, id_card_address, permanent_address,
     salary_time, salary, credit_status, mobile_contacts, call_history, user_ip, login_enable,
-    deleted, last_login_time
+    deleted, last_login_time, blacklist, blacklist_reason
 </sql>
 <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_customer_info
@@ -37,13 +39,13 @@
     id_card_address, permanent_address, salary_time,
     salary, credit_status, mobile_contacts,
     call_history, user_ip, login_enable,
-    deleted, last_login_time)
+    deleted, last_login_time,blacklist,blacklist_reason)
     values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
     #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
     #{idCardAddress,jdbcType=VARCHAR}, #{permanentAddress,jdbcType=VARCHAR}, #{salaryTime,jdbcType=TIMESTAMP},
     #{salary,jdbcType=INTEGER}, #{creditStatus,jdbcType=VARCHAR}, #{mobileContacts,jdbcType=TINYINT},
     #{callHistory,jdbcType=TINYINT}, #{userIp,jdbcType=VARCHAR}, #{loginEnable,jdbcType=TINYINT},
-    #{deleted,jdbcType=TINYINT}, #{lastLoginTime,jdbcType=TIMESTAMP})
+    #{deleted,jdbcType=TINYINT}, #{lastLoginTime,jdbcType=TIMESTAMP},#{blacklist},#{blacklistReason})
 </insert>
 <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.CustomerBaseInfo">
     update t_customer_info
@@ -62,7 +64,9 @@
     user_ip = #{userIp,jdbcType=VARCHAR},
     login_enable = #{loginEnable,jdbcType=TINYINT},
     deleted = #{deleted,jdbcType=TINYINT},
-    last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+    last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+    blacklist = #{blacklist},
+    blacklist_reason = #{blacklistReason}
     where id = #{id,jdbcType=BIGINT}
 </update>
 <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

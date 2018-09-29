@@ -248,6 +248,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             orderInfo.setMobile(customerBaseInfo.getMobile());
             orderInfo.setGender(customerBaseInfo.getGender());
             orderInfo.setIdCardAddress(customerBaseInfo.getIdCardAddress());
+            orderInfo.setBlacklist(customerBaseInfo.getBlacklist());
         }
 
         if (task != null) {
