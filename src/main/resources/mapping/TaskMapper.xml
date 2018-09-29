@@ -190,10 +190,10 @@
             <if test="orderStatus != null and orderStatus != ''">
                 AND t.order_status = #{orderStatus}
             </if>
-            <if test="payoffTimeStart != null and payoffTimeEnd != null and payoffTimeStart != '' and payoffTimeEnd != ''">
+            <if test="payoffTimeStart != null and payoffTimeEnd != null ">
                 AND t.payoff_time BETWEEN #{payoffTimeStart} AND #{payoffTimeEnd}
             </if>
-            <if test="overdueDaysStart != null and overdueDaysEnd != null and overdueDaysStart != '' and overdueDaysEnd != ''">
+            <if test="overdueDaysStart != null and overdueDaysEnd != null ">
                 AND DATEDIFF(NOW(),t.repayment_time) BETWEEN #{overdueDaysStart} AND #{overdueDaysEnd}
             </if>
 
