@@ -148,7 +148,7 @@
     
         SELECT
         t.customer_id AS "customerId",
-        u.name AS "name",
+        t.customer_name AS "name",
         t.mobile AS "mobile",
         CASE
         WHEN t.order_status = 'PAYOFF' THEN 0
