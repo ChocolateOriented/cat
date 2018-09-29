@@ -1,13 +1,10 @@
 package com.cat.module.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -15,7 +12,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.cat.annotation.ActionFeedbackConstraint;
 import com.cat.annotation.ContactTypeConstraint;
 import com.cat.module.enums.ActionFeedback;
-import com.cat.module.enums.ContactType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -28,12 +24,6 @@ public class Action extends AuditingEntity {
 
 	@NotBlank(message = "订单号不能为空")
 	private String orderId;
-
-	@Transient
-	private String orderStatus;
-
-	@Transient
-	private Date repaymentTime;
 
     private String customerId;
 
@@ -69,22 +59,6 @@ public class Action extends AuditingEntity {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
-	}
-
-	public String getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
-	}
-
-	public Long getRepaymentTime() {
-		return repaymentTime == null ? null : repaymentTime.getTime();
-	}
-
-	public void setRepaymentTime(Date repaymentTime) {
-		this.repaymentTime = repaymentTime;
 	}
 
 	public String getCustomerId() {
@@ -135,25 +109,12 @@ public class Action extends AuditingEntity {
 		this.contactType = contactType;
 	}
 
-	public String getContactTypeDesc() {
-		if (contactType == null) {
-			return null;
-		}
-		
-		ContactType contactTypeEnum = ContactType.valueOf(contactType);
-		return contactTypeEnum == null ? null : contactTypeEnum.getDesc();
-	}
-
 	public ActionFeedback getActionFeedback() {
 		return actionFeedback;
 	}
 
 	public void setActionFeedback(ActionFeedback actionFeedback) {
 		this.actionFeedback = actionFeedback;
-	}
-
-	public String getActionFeedbackDesc() {
-		return actionFeedback == null ? null : actionFeedback.getDesc();
 	}
 
 	public String getRemark() {
@@ -164,11 +125,4 @@ public class Action extends AuditingEntity {
 		this.remark = remark;
 	}
 
-	public String getOperatorName() {
-		return super.getUpdateBy();
-	}
-
-	public Long getOperateTime() {
-		return super.getUpdateTime() == null ? null : super.getUpdateTime().getTime();
-	}
 }

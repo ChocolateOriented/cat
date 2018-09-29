@@ -12,13 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cat.module.dto.Code;
 import com.cat.module.entity.Action;
 import com.cat.module.enums.ActionFeedback;
+import com.cat.module.vo.ActionVo;
 import com.cat.repository.ActionRepository;
+import com.cat.repository.ActionVoRepository;
 
 @Service
 public class ActionService extends BaseService {
 
 	@Autowired
 	private ActionRepository actionRepository;
+
+	@Autowired
+	private ActionVoRepository actionVoRepository;
 
 	@Autowired
 	private TaskService taskService;
@@ -30,8 +35,8 @@ public class ActionService extends BaseService {
 	 * @param pageSize
 	 * @return
 	 */
-	public Page<Action> findPage(String customerId, int pageNum, int pageSize) {
-		Page<Action> actions = actionRepository.findByCustomerIdOrderByCreateTimeDesc(customerId, new PageRequest(pageNum, pageSize));
+	public Page<ActionVo> findPage(String customerId, int pageNum, int pageSize) {
+		Page<ActionVo> actions = actionVoRepository.findByCustomerIdOrderByCreateTimeDesc(customerId, new PageRequest(pageNum, pageSize));
 		return actions;
 	}
 

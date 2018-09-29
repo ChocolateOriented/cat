@@ -99,7 +99,9 @@ feignClient:
     url:  https://suona.alpha.mo9.com/suonaApi
     systemCode: BOURSE
     captchaTemplateCode: GENERAL_CAPTCHA
-
+  raptor:
+    url:  http://gqwu.local.mo9.com/raptorApi
+    secret:  rtsDDcogZcPCu!NYkfgfjQq6O;~2Brtr
 logging:
   level:
     root: debug

@@ -25,4 +25,12 @@ public class BlackListDto {
   public void setReason(String reason) {
     this.reason = reason;
   }
+
+  @Override
+  public String toString() {
+    return "BlackListDto{" +
+        "customerId='" + customerId + '\'' +
+        ", reason='" + reason + '\'' +
+        '}';
+  }
 }

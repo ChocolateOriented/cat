@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.annotation.ClustersSchedule;
-import com.cat.manager.ReliefAmountManager;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.BaseResponse;
