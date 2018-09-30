@@ -39,7 +39,7 @@ public class CustomerController extends BaseController{
         }
     }
 
-    @PostMapping("blackList_customer")
+    @PostMapping("blacklist_customer")
     public Results blackList(@Validated @RequestBody BlackListDto blackListDto,BindingResult bindingResult){
       if (bindingResult.hasErrors()) {
         return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));

@@ -3,6 +3,7 @@ package com.cat.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import com.cat.module.enums.Role;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
 import com.cat.util.EncryptionUtils;
+import com.cat.util.Md5Encrypt;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
@@ -41,7 +43,7 @@ public class TaskService extends BaseService {
 	private TaskRepository taskRepository;
 	@Autowired
 	private RaptorManager raptorManager;
-	@Value("${feignClient.raptor.secret}")
+	@Value("${feignClient.raptor.secret2}")
     private String secret;
 
 	/**
@@ -151,13 +153,14 @@ public class TaskService extends BaseService {
 	@ClustersSchedule
 	public void synAddressBook(){
 		Long maxCareateTime = contactService.maxCareateTime();
+		logger.info("本次通讯录同步时间戳要大于{}",maxCareateTime);
 		List<String>  listCustomeId= taskMapper.findCustomeId();
 		List<AddressBook> list = contactService.getAddressBook(listCustomeId,maxCareateTime == null ? 0 : maxCareateTime);
-		logger.info("获取通讯录完成");
 		if(list == null || list.size() == 0){
-			logger.info("未查到通讯录信息");
+			logger.info("本次未查到通讯录信息");
 			return;
 		}
+		logger.info("获取通讯录完成,总获取到客户的通讯录数量为{}",list.size());
 		for (AddressBook addressBook : list) {
 			String contacts = addressBook.getContactList();
 			String customerId = addressBook.getCustomerId();
@@ -213,17 +216,19 @@ public class TaskService extends BaseService {
 		}
 		User user = userRepository.findOne(userId);
 		//催收员没有减免权限
-		if(user.getRole() == Role.COLLECTOR){
-			return  new BaseResponse(-1,"您没有权限,请联系管理员");
-		}
-		ReliefAmountDto reliefAmountDto = new ReliefAmountDto(reliefAmount,orderId,"贷后系统","无");
-		//做签名
-		String toMd5String = "number="+reliefAmount+"&bundleId="+orderId+"&creator=贷后系统&reason=无&secret="+secret;
-		String sign = EncryptionUtils.md5Encode(toMd5String);
-		reliefAmountDto.setSign(sign);
+//		if(user.getRole() == Role.COLLECTOR){
+//			return  new BaseResponse(-1,"您没有权限,请联系管理员");
+//		}
+	    HashMap<String, String> params = new HashMap<String, String>();
+        params.put("number", reliefAmount.toString());
+        params.put("bundleId", orderId);
+        params.put("creator", "贷后系统");
+        params.put("reason", "无");
+        String sign = Md5Encrypt.sign(params, secret);
+        params.put("sign", sign);
 		BaseResponse baseResponse = null;
 		try {
-			 baseResponse = raptorManager.send(reliefAmountDto);
+			 baseResponse = raptorManager.send(params);
 		} catch (Exception e) {
 			logger.error("减免出现异常,orderId={}", orderId, e);
 			 return new BaseResponse(-1,"服务出现异常,稍后再试");
@@ -238,11 +243,11 @@ public class TaskService extends BaseService {
 	 */
 	public void reloadAddressBook(List<String> customerIds) {
 		List<AddressBook> list = contactService.reloadAddressBook(customerIds);
-		logger.info("补拿获取通讯录完成");
 		if(list == null || list.size() == 0){
 			logger.info("补拿未查到通讯录信息");
 			return;
 		}
+		logger.info("补拿获取通讯录完成数量为{}",list.size());
 		for (AddressBook addressBook : list) {
 			String contacts = addressBook.getContactList();
 			String customerId = addressBook.getCustomerId();
