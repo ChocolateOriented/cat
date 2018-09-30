@@ -108,10 +108,15 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (dbTask != null) {
             throw new RuntimeException("此订单已存在,task:"+task);
         }
+        if (task.getPayoffTime() != null && OrderStatus.PAYOFF.equals(task.getOrderStatus())) {
+            task.setCollectTaskStatus(CollectTaskStatus.TASK_FINISHED);
+            task.setIspayoff(true);
+        } else {
+            task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
+        }
         task.setId(this.generateId());
-        task.setCollectTaskStatus(CollectTaskStatus.UNOPEND_TASK);
         taskService.insert(task);
-
+        logger.info("插入订单任务成功,orderID:{}",task.getOrderId());
     }
 
     /**
@@ -144,6 +149,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         }
         taskService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
+        logger.info("延期或还款成功,orderId:{}", dbTask.getOrderId());
     }
 
     /**
