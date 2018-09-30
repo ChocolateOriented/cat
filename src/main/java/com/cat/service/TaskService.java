@@ -182,7 +182,12 @@ public class TaskService extends BaseService {
 				contact.setCustomerId(customerId);
 				contact.setCreateTime(addressBook.getCreateTime());
 			}
-			contactService.insertAll(contactList);
+			try {
+				
+				contactService.insertAll(contactList);
+			} catch (Exception e) {
+				logger.error(customerId+"定时插入数据库异常",e);
+			}
 		}
 	 logger.info("通讯录同步完成");
 	}
@@ -269,7 +274,12 @@ public class TaskService extends BaseService {
 				contact.setCustomerId(customerId);
 				contact.setCreateTime(null);
 			}
-			contactService.insertAll(contactList);
+			try {
+				
+				contactService.insertAll(contactList);
+			} catch (Exception e) {
+				logger.error(customerId+"补插入数据库异常",e);
+			}
 		}
 	 logger.info("补拿通讯录同步完成");
 	}
