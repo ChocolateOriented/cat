@@ -151,13 +151,14 @@ public class TaskService extends BaseService {
 	@ClustersSchedule
 	public void synAddressBook(){
 		Long maxCareateTime = contactService.maxCareateTime();
+		logger.info("本次通讯录同步时间戳要大于{}",maxCareateTime);
 		List<String>  listCustomeId= taskMapper.findCustomeId();
 		List<AddressBook> list = contactService.getAddressBook(listCustomeId,maxCareateTime == null ? 0 : maxCareateTime);
-		logger.info("获取通讯录完成");
 		if(list == null || list.size() == 0){
-			logger.info("未查到通讯录信息");
+			logger.info("本次未查到通讯录信息");
 			return;
 		}
+		logger.info("获取通讯录完成,总获取到客户的通讯录数量为{}",list.size());
 		for (AddressBook addressBook : list) {
 			String contacts = addressBook.getContactList();
 			String customerId = addressBook.getCustomerId();
@@ -238,11 +239,11 @@ public class TaskService extends BaseService {
 	 */
 	public void reloadAddressBook(List<String> customerIds) {
 		List<AddressBook> list = contactService.reloadAddressBook(customerIds);
-		logger.info("补拿获取通讯录完成");
 		if(list == null || list.size() == 0){
 			logger.info("补拿未查到通讯录信息");
 			return;
 		}
+		logger.info("补拿获取通讯录完成数量为{}",list.size());
 		for (AddressBook addressBook : list) {
 			String contacts = addressBook.getContactList();
 			String customerId = addressBook.getCustomerId();
