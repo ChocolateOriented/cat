@@ -11,10 +11,12 @@ import com.cat.module.entity.Contact;
 import com.cat.module.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cat.annotation.ClustersSchedule;
 import com.cat.manager.RaptorManager;
 import com.cat.mapper.TaskMapper;
@@ -231,9 +233,10 @@ public class TaskService extends BaseService {
         params.put("reason", "无");
         String sign = Md5Encrypt.sign(params, secret);
         params.put("sign", sign);
+        String jsonString = JSON.toJSONString(params);
 		BaseResponse baseResponse = null;
 		try {
-			 baseResponse = raptorManager.send(params);
+			 baseResponse = raptorManager.send(jsonString);
 		} catch (Exception e) {
 			logger.error("减免出现异常,orderId={}", orderId, e);
 			 return new BaseResponse(-1,"服务出现异常,稍后再试");
