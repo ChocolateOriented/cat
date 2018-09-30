@@ -54,6 +54,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
+        orderInfo.setCollectionTime(task.getLendTime().getTime()); 			// 临时添加
         return orderInfo;
     }
 
