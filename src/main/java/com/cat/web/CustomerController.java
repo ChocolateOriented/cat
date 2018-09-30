@@ -52,4 +52,19 @@ public class CustomerController extends BaseController{
       }
       return Results.ok();
     }
+
+
+  @PostMapping("bkList_customer")
+  public Results bkList(@Validated @RequestBody BlackListDto blackListDto,BindingResult bindingResult){
+    if (bindingResult.hasErrors()) {
+      return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
+    }
+    try {
+      customerService.blackList(blackListDto);
+    }catch (Exception e){
+      logger.info("拉黑失败"+blackListDto,e);
+      return new Results(ResultConstant.INNER_ERROR,"拉黑失败:"+e.getMessage());
+    }
+    return Results.ok();
+  }
 }
