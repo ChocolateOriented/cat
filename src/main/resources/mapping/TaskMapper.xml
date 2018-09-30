@@ -339,7 +339,7 @@
 			t.id AS taskId
 		FROM t_task AS t
 		where
-			t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE'
+			(t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE')
 			AND DATEDIFF(#{newDateTest}, t.repayment_time) >= #{day}
 		ORDER BY loan_amount DESC
 	</select>
