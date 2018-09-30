@@ -253,6 +253,7 @@
 			        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
 			        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(#{newDateTest}, t.repayment_time)
 			        END  AS "overdueDays",
+			        t.order_id  AS  orderId ,
 					t.customer_id  AS  customerId,
 					t.customer_name  AS  customerName,
 					t.mobile  AS  mobile,
@@ -302,6 +303,7 @@
 	        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
 	        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(#{newDateTest}, t.repayment_time)
 	        END  AS "overdueDays",
+	        t.order_id  AS  orderId,
 			t.customer_id  AS  customerId,
 			t.customer_name  AS  customerName,
 			t.mobile  AS  mobile,
