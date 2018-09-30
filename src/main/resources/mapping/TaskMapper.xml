@@ -150,6 +150,7 @@
         t.customer_id AS "customerId",
         t.customer_name AS "name",
         t.mobile AS "mobile",
+        t.action_feedback AS "actionFeedback",
         CASE
         WHEN t.order_status = 'PAYOFF' THEN 0
         WHEN t.order_status = 'PAYMENT' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
