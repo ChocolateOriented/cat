@@ -116,7 +116,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         }
         task.setId(this.generateId());
         taskService.insert(task);
-
+        logger.info("插入订单任务成功,orderID:{}",task.getOrderId());
     }
 
     /**
@@ -149,6 +149,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         }
         taskService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
+        logger.info("延期或还款成功,orderId:{}", dbTask.getOrderId());
     }
 
     /**
