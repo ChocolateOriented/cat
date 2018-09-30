@@ -1,5 +1,6 @@
 package com.cat.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -8,20 +9,24 @@ import java.util.List;
 import com.cat.module.entity.Contact;
 import com.cat.module.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.annotation.ClustersSchedule;
+import com.cat.manager.RaptorManager;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.PageResponse;
+import com.cat.module.dto.ReliefAmountDto;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.User;
 import com.cat.module.enums.Role;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
+import com.cat.util.EncryptionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
@@ -34,8 +39,10 @@ public class TaskService extends BaseService {
 	private	ContactService contactService;
 	@Autowired
 	private TaskRepository taskRepository;
-//	@Autowired
-//	private ReliefAmountManager reliefAmountManager;
+	@Autowired
+	private RaptorManager raptorManager;
+	@Value("${feignClient.raptor.secret}")
+    private String secret;
 
 	/**
 	 * 获取任务列表
@@ -144,20 +151,29 @@ public class TaskService extends BaseService {
 	@ClustersSchedule
 	public void synAddressBook(){
 		Long maxCareateTime = contactService.maxCareateTime();
-		List<AddressBook> list = contactService.getAddressBook(maxCareateTime == null ? 0 : maxCareateTime);
-		logger.info("获取通讯录完成");
+		logger.info("本次通讯录同步时间戳要大于{}",maxCareateTime);
+		List<String>  listCustomeId= taskMapper.findCustomeId();
+		List<AddressBook> list = contactService.getAddressBook(listCustomeId,maxCareateTime == null ? 0 : maxCareateTime);
 		if(list == null || list.size() == 0){
-			logger.info("未查到通讯录信息");
+			logger.info("本次未查到通讯录信息");
 			return;
 		}
+		logger.info("获取通讯录完成,总获取到客户的通讯录数量为{}",list.size());
 		for (AddressBook addressBook : list) {
 			String contacts = addressBook.getContactList();
 			String customerId = addressBook.getCustomerId();
-			List<Contact> contactList = this.parseToContactInfo(contacts);
+			List<Contact> contactList;
+			try {
+				contactList = this.parseToContactInfo(contacts);
+			} catch (Exception e) {
+				logger.error(customerId+"通讯录格式异常",e);
+				continue;
+			}
 			if(contactList == null || contactList.size() == 0){
 				logger.info("客户id={}未查到通讯录",addressBook.getCustomerId());
 				continue;
 			}
+			
 			contactService.deleteBycustomerId(customerId);
 			for (Contact contact : contactList) {
 				contact.setId(this.generateId());
@@ -166,14 +182,14 @@ public class TaskService extends BaseService {
 			}
 			contactService.insertAll(contactList);
 		}
-	
+	 logger.info("通讯录同步完成");
 	}
 	 /**
      * 解析成联系人对象
      * @param message
      * @return
      */
-    private List<Contact> parseToContactInfo(String cocString) {
+    private List<Contact> parseToContactInfo(String cocString) throws Exception {
     	List<Contact> contactList = new ArrayList<>();
     	int firstIndex = cocString.indexOf("[");
     	int lastIndex = cocString.indexOf("]");
@@ -192,8 +208,8 @@ public class TaskService extends BaseService {
 	 * @param userId 
 	 * @return
 	 */
-	public BaseResponse reliefAmount(String orderId, Double reliefAmount, String userId) {
-		if(reliefAmount == null || reliefAmount == 0){
+	public BaseResponse reliefAmount(String orderId, BigDecimal reliefAmount, String userId) {
+		if(reliefAmount == null ){
 			return  new BaseResponse(-1,"金额不能为空");
 		}
 		User user = userRepository.findOne(userId);
@@ -201,15 +217,57 @@ public class TaskService extends BaseService {
 		if(user.getRole() == Role.COLLECTOR){
 			return  new BaseResponse(-1,"您没有权限,请联系管理员");
 		}
-		
+		ReliefAmountDto reliefAmountDto = new ReliefAmountDto(reliefAmount,orderId,"贷后系统","无");
+		//做签名
+		String toMd5String = "number="+reliefAmount+"&bundleId="+orderId+"&creator=贷后系统&reason=无&secret="+secret;
+		String sign = EncryptionUtils.md5Encode(toMd5String);
+		reliefAmountDto.setSign(sign);
+		BaseResponse baseResponse = null;
 		try {
-//			reliefAmountManager.send(null);
+			 baseResponse = raptorManager.send(reliefAmountDto);
 		} catch (Exception e) {
 			logger.error("减免出现异常,orderId={}", orderId, e);
 			 return new BaseResponse(-1,"服务出现异常,稍后再试");
 		}
 		taskMapper.updateReliefAmount(orderId,reliefAmount,userId);
 		logger.info("减免成功订单号={},减免金额={}",orderId,reliefAmount);
-		return BaseResponse.success();
+		return baseResponse;
 	}
+	/**
+	 * 补拿获取通讯录
+	 * @param customerIds 
+	 */
+	public void reloadAddressBook(List<String> customerIds) {
+		List<AddressBook> list = contactService.reloadAddressBook(customerIds);
+		if(list == null || list.size() == 0){
+			logger.info("补拿未查到通讯录信息");
+			return;
+		}
+		logger.info("补拿获取通讯录完成数量为{}",list.size());
+		for (AddressBook addressBook : list) {
+			String contacts = addressBook.getContactList();
+			String customerId = addressBook.getCustomerId();
+			List<Contact> contactList;
+			try {
+				contactList = this.parseToContactInfo(contacts);
+			} catch (Exception e) {
+				logger.error(customerId+"通讯录格式异常,补拿",e);
+				continue;
+			}
+			if(contactList == null || contactList.size() == 0){
+				logger.info("补拿,客户id={}未查到通讯录",addressBook.getCustomerId());
+				continue;
+			}
+			
+			contactService.deleteBycustomerId(customerId);
+			for (Contact contact : contactList) {
+				contact.setId(this.generateId());
+				contact.setCustomerId(customerId);
+				contact.setCreateTime(null);
+			}
+			contactService.insertAll(contactList);
+		}
+	 logger.info("补拿通讯录同步完成");
+	}
+
 }

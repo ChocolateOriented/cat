@@ -6,6 +6,8 @@ import com.cat.module.vo.ContactVo;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * Created by cyuan on 2018/9/21.
  */
@@ -30,5 +32,7 @@ public interface ContactMapper {
     
     Long maxCareateTime();
 
-	List<AddressBook> findListContact(Long createTime);
+	List<AddressBook> findListContact(@Param("list")List<String> listCustomeId, @Param("createTime")Long createTime);
+
+	List<AddressBook> reloadAddressBook(List<String> customerIds);
 }

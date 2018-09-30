@@ -150,6 +150,7 @@
         t.customer_id AS "customerId",
         t.customer_name AS "name",
         t.mobile AS "mobile",
+        t.action_feedback AS "actionFeedback",
         CASE
         WHEN t.order_status = 'PAYOFF' THEN 0
         WHEN t.order_status = 'PAYMENT' and DATEDIFF(CURDATE(), t.repayment_time) <![CDATA[ > ]]>0
@@ -203,6 +204,7 @@
                 AND u.organization_id = #{organizationId}
             </if>
             and t.collect_task_status in ("TASK_IN_PROGRESS","TASK_FINISHED")
+            and t.collector_id is not null
 
         </where>
         ORDER BY t.repayment_time DESC
@@ -213,7 +215,7 @@
 	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
 				UPDATE t_task 
 				<set>
-				    update_time = now(),
+				    update_time = #{item.updateTime},
 				    update_by = #{item.updateBy},
 					collector_id = #{item.collectorId},
 					collector_name = #{item.collectorName},
@@ -230,7 +232,7 @@
 	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
 				UPDATE t_task 
 				<set>
-				    update_time = now(),
+				    update_time = #{item.updateTime},
 				    update_by = #{item.updateBy},
 				    task_start_time = now(),
 					collector_id = #{item.collectorId},
@@ -249,7 +251,7 @@
 		   	 SELECT 
 					CASE
 			        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
-			        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
+			        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(#{newDateTest}, t.repayment_time)
 			        END  AS "overdueDays",
 					t.customer_id  AS  customerId,
 					t.customer_name  AS  customerName,
@@ -288,7 +290,7 @@
 			 <where>
 					t.collect_cycle =  #{collectCycle} 
 					AND  t.collect_task_status = #{collectTaskStatus}
-					AND DATEDIFF(curdate(), t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
+					AND DATEDIFF(#{newDateTest}, t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
 			 </where>
 			ORDER BY loan_amount DESC
 	</select>
@@ -298,7 +300,7 @@
 		SELECT
 			CASE
 	        WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time,t.repayment_time)
-	        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time)
+	        WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(#{newDateTest}, t.repayment_time)
 	        END  AS "overdueDays",
 			t.customer_id  AS  customerId,
 			t.customer_name  AS  customerName,
@@ -336,7 +338,7 @@
 		FROM t_task AS t
 		where
 			t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE'
-			AND DATEDIFF(curdate(), t.repayment_time) >= #{day}
+			AND DATEDIFF(#{newDateTest}, t.repayment_time) >= #{day}
 		ORDER BY loan_amount DESC
 	</select>
 	
@@ -431,15 +433,16 @@
 <!-- 	</select> -->
     
     <update id="updateReliefAmount">
-     update t_task 
-     <set>
+     update t_task  set
      	update_time = now(),
 	    update_by = #{userId},
 	    relief_amount = #{reliefAmount}
-     </set>
      where  order_id = #{orderId}
       
     </update>
     
+    <select id="findCustomeId" resultType="java.lang.String">
+      select customer_id from t_task where  order_status='PAYMENT'
     
+    </select>
 </mapper>

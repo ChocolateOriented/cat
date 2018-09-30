@@ -1,5 +1,8 @@
 package com.cat.module.vo;
 
+import com.cat.util.DesensitizationUtill;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -154,7 +157,7 @@ public class OrderInfo implements Serializable {
     }
 
     public void setBankNo(String bankNo) {
-        this.bankNo = bankNo;
+        this.bankNo = bankNo == null ? bankNo : DesensitizationUtill.hideBankNo(bankNo);
     }
 
     public String getCustomerId() {

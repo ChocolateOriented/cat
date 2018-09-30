@@ -75,10 +75,28 @@
 	r.user_code AS customerId,
 	r.contacts_list AS contactList,
 	r.create_time AS createTime
-	FROM (SELECT * FROM t_raptor_user_contacts ORDER BY create_time desc) r
+	FROM (SELECT * FROM t_raptor_user_contacts where
+	  user_code in
+	  <foreach collection="list" item="item" separator="," index="index" open="(" close=")" >
+	     #{item}
+      </foreach>
+	 ORDER BY create_time desc) r
 	<where>
-      create_time <![CDATA[ > ]]> #{createTime}
+      r.create_time <![CDATA[ > ]]> #{createTime}
 	</where>
+	group by r.user_code
+</select>
+<select id="reloadAddressBook" resultType="com.cat.module.dto.AddressBook">
+    SELECT 
+	r.user_code AS customerId,
+	r.contacts_list AS contactList,
+	r.create_time AS createTime
+	FROM (SELECT * FROM t_raptor_user_contacts where
+	  user_code in
+	  <foreach collection="list" item="item" separator="," index="index" open="(" close=")" >
+	     #{item}
+      </foreach>
+	 ORDER BY create_time desc) r
 	group by r.user_code
 </select>
 

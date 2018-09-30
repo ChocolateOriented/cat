@@ -6,6 +6,7 @@ import com.cat.module.entity.*;
 import com.cat.module.enums.BankType;
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
+import com.cat.module.enums.OrderStatus;
 import com.cat.module.vo.OrderInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +171,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask.setTaskEndTime(new Date());
             //催收任务状态
             dbTask.setCollectTaskStatus(CollectTaskStatus.TASK_FINISHED);
+            //修改订单状态
+            dbTask.setOrderStatus(OrderStatus.PAYOFF.name());
             dbTask.setIspayoff(true);
         }
         return dbTask;
