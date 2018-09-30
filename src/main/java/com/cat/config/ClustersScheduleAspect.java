@@ -27,13 +27,12 @@ public class ClustersScheduleAspect implements Ordered {
     String taskKey = this.getTaskKey(point);
 
     boolean lockSuccess = RedisUtil.tryLock(taskKey ,localAddress ,5*1000,24*60*60*1000);
-    if (lockSuccess){
-      logger.debug(localAddress+"成功执行任务"+taskKey);
-      point.proceed();
+    if (!lockSuccess){
+      logger.debug(localAddress+"未能执行任务"+taskKey);
       return;
     }
-    logger.debug(localAddress+"未能执行任务"+taskKey);
-    return;
+    logger.info(localAddress+"成功执行任务"+taskKey);
+    point.proceed();
   }
 
   /**
