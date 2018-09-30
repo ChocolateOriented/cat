@@ -41,7 +41,7 @@ public class ScheduledTaskService extends BaseService{
 		String value =  DictUtils.getDictValue("newDateTest", "newDateTest", sdf.format(date).toString());
 		System.out.println(value);
 		try {
-			System.out.println("测试分案时间" + sdf.parse(value));
+//			System.out.println("测试分案时间" + sdf.parse(value));
 			return sdf.parse(value);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -318,6 +318,7 @@ public class ScheduledTaskService extends BaseService{
 						dunningTask.setCollectPeriodBegin(Integer.parseInt(dict.getValue().split("_")[0]));
 						dunningTask.setCollectPeriodEnd(Integer.parseInt(dict.getValue().split("_")[1]));
 						dunningTask.setUpdateBy(AUTO_ADMIN);
+						dunningTask.setUpdateTime(newDateTest());
 						dunningTask.setLoanAmount(dunningTaskLog.getLoanAmount());
 						/**
 						 * 每个周期的任务集合
@@ -801,6 +802,7 @@ public class ScheduledTaskService extends BaseService{
 		task.setCollectPeriodEnd(max);
 		task.setCollectTaskStatus(CollectTaskStatus.TASK_IN_PROGRESS);
 		task.setUpdateBy(AUTO_ADMIN);
+		task.setUpdateTime(newDateTest());
 //		task.setRepaymentTime(new java.sql.Date(taskLog.getRepaymentTime().getTime()));
 		
 //		task.setBegin(toDate(now));
