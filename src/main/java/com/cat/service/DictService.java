@@ -14,12 +14,12 @@ import com.cat.module.bean.Dict;
 import com.google.common.collect.Lists;
 
 @Service
-@CacheConfig(cacheNames = "DictCache")
+//@CacheConfig(cacheNames = "DictCache")
 public class DictService extends BaseService {
 	@Autowired
 	DictMapper dictMapper;
 
-	@Cacheable(key = "'findAllList'")
+//	@Cacheable(key = "'findAllList'")
 	public Map<String, List<Dict>> findAllList() {
 		logger.info("把数据字典表放入缓存");
 		Map<String, List<Dict>> dictMap = new HashMap<>();
