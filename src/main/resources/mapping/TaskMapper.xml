@@ -197,7 +197,9 @@
             <if test="overdueDaysStart != null and overdueDaysEnd != null ">
                 AND DATEDIFF(NOW(),t.repayment_time) BETWEEN #{overdueDaysStart} AND #{overdueDaysEnd}
             </if>
-
+			<if test="collectorId != null and collectorId != ''">
+                AND t.collector_id ＝ #{collectorId} 
+            </if>
             <!-- 角色条件 -->
             <if test="organizationId != null and organizationId != ''">
                 <!--   主管 -->
