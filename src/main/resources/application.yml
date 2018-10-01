@@ -102,7 +102,7 @@ feignClient:
   raptor:
     url:  http://gqwu.local.mo9.com/raptorApi
     secret:  rtsDDcogZcPCu!NYkfgfjQq6O;~2Brtr
-    secret2: 0123456789
+    secret2: '0123456789'
 logging:
   level:
     root: info

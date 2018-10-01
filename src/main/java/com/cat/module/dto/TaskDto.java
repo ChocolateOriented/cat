@@ -24,6 +24,7 @@ public class TaskDto implements Serializable{
 	private String collectorName;//催收人
 	private Date payoffTime;//还清日期
 	private Long organizationId;//机构id
+	private String organizationLeaderId;//机构组长id
 	private String collectorId;//催收员id
 	private String actionFeedback;//行动码
 	private BigDecimal reliefAmount; //减免金额
@@ -155,6 +156,12 @@ public class TaskDto implements Serializable{
 	}
 	public void setReliefAmount(BigDecimal reliefAmount) {
 		this.reliefAmount = reliefAmount;
+	}
+	public String getOrganizationLeaderId() {
+		return organizationLeaderId;
+	}
+	public void setOrganizationLeaderId(String organizationLeaderId) {
+		this.organizationLeaderId = organizationLeaderId;
 	}
 	
 }

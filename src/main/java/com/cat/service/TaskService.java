@@ -71,12 +71,13 @@ public class TaskService extends BaseService {
 		
 		//是主管
 		if(role == Role.ORGANIZATION_LEADER){
-			taskDto.setOrganizationId(user.getOrganizationId());
+			taskDto.setOrganizationLeaderId(userId);
 			taskDto.setCollectorId(null);
 		 }
 		//是催收员
 		if(role == Role.COLLECTOR){
 			taskDto.setCollectorId(userId);
+			taskDto.setOrganizationLeaderId(null);
 		}
 		//进行查询
 		PageHelper.startPage(pageNum, pageSize);
