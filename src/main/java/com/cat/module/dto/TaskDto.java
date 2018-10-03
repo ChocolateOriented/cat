@@ -2,6 +2,7 @@ package com.cat.module.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -139,14 +140,16 @@ public class TaskDto implements Serializable{
 	public void setOverdueDaysEnd(Integer overdueDaysEnd) {
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
-	public Date getPayoffTimeStart() {
-		return this.payoffTimeStart == null ? null : new Date(this.payoffTimeStart);
+	public String getPayoffTimeStart() {
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		return this.payoffTimeStart == null ? null : sd.format(new Date(this.payoffTimeStart));
 	}
 	public void setPayoffTimeStart(Long payoffTimeStart) {
 		this.payoffTimeStart = payoffTimeStart;
 	}
-	public Date getPayoffTimeEnd() {
-		return this.payoffTimeEnd == null ? null : new Date(this.payoffTimeEnd) ;
+	public String getPayoffTimeEnd() {
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		return this.payoffTimeEnd == null ? null : sd.format(new Date(this.payoffTimeEnd)) ;
 	}
 	public void setPayoffTimeEnd(Long payoffTimeEnd) {
 		this.payoffTimeEnd = payoffTimeEnd;
