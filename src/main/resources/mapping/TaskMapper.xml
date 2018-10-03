@@ -197,7 +197,12 @@
                 AND t.payoff_time BETWEEN #{payoffTimeStart} AND #{payoffTimeEnd}
             </if>
             <if test="overdueDaysStart != null and overdueDaysEnd != null ">
-                AND DATEDIFF(NOW(),t.repayment_time) BETWEEN #{overdueDaysStart} AND #{overdueDaysEnd}
+                <![CDATA[
+				AND  (CASE WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time, t.repayment_time)
+						   WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time) END) >= #{overdueDaysStart}
+				AND  (CASE WHEN t.order_status = 'PAYOFF' THEN DATEDIFF(t.payoff_time, t.repayment_time)
+						   WHEN t.order_status = 'PAYMENT' THEN DATEDIFF(CURDATE(), t.repayment_time) END) <= #{overdueDaysEnd}
+			  ]]>
             </if>
 			<if test="collectorId != null and collectorId != ''">
                 AND t.collector_id = #{collectorId} 
