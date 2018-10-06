@@ -13,6 +13,7 @@ import com.cat.module.dto.Code;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.PageResponse.Page;
+import com.cat.module.vo.CallLogVo;
 import com.cat.module.vo.ContactVo;
 import com.cat.service.ContactService;
 
@@ -31,10 +32,10 @@ public class ContactController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/list_call_log")
-	public PageResponse<ContactVo> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+	public PageResponse<CallLogVo> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		Page<ContactVo> page = contactService.findCalllog(mobile, pageNum, pageSize);
-		PageResponse<ContactVo> pageResp = new PageResponse<>();
+		Page<CallLogVo> page = contactService.findCalllog(mobile, pageNum, pageSize);
+		PageResponse<CallLogVo> pageResp = new PageResponse<>();
 		pageResp.setData(page);
 		return pageResp;
 	}

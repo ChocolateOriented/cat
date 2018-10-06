@@ -1,7 +1,9 @@
 package com.cat.mapper;
 
+import com.cat.module.bean.CallLogBean;
 import com.cat.module.dto.AddressBook;
 import com.cat.module.entity.Contact;
+import com.cat.module.vo.CallLogVo;
 import com.cat.module.vo.ContactVo;
 
 import java.util.List;
@@ -35,4 +37,8 @@ public interface ContactMapper {
 	List<AddressBook> findListContact(@Param("list")List<String> listCustomeId, @Param("createTime")Long createTime);
 
 	List<AddressBook> reloadAddressBook(List<String> customerIds);
+
+	List<CallLogBean> findCallLogList(String mobile);
+
+	CallLogVo findByCallTel(String callTel);
 }
