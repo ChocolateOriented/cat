@@ -16,11 +16,11 @@ public class CallLogBean implements Serializable {
 
 	private String callTel;
 	
-	private String callDuration;//'通话总时长'
+	private Long callDuration;//'通话总时长'
 	
 	private String callTime;//'通话起始时间'
 	
-	private String callnum;//'通话总次数'
+	private String callNum;//'通话总次数'
 	
 //	private String full_name;//手机登记姓名'
 //	private String address;//'手机登记地址'
@@ -51,11 +51,11 @@ public class CallLogBean implements Serializable {
 		this.callTel = callTel;
 	}
 
-	public String getCallDuration() {
+	public Long getCallDuration() {
 		return callDuration;
 	}
 
-	public void setCallDuration(String callDuration) {
+	public void setCallDuration(Long callDuration) {
 		this.callDuration = callDuration;
 	}
 
@@ -67,14 +67,14 @@ public class CallLogBean implements Serializable {
 		this.callTime = callTime;
 	}
 
-	public String getCallnum() {
-		return callnum;
+	public String getCallNum() {
+		return callNum;
 	}
 
-	public void setCallnum(String callnum) {
-		this.callnum = callnum;
+	public void setCallNum(String callNum) {
+		this.callNum = callNum;
 	}
-	
+
 
 	
 	

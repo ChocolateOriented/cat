@@ -100,4 +100,34 @@
 	group by r.user_code
 </select>
 
+<select id="findCallLogList" resultType="com.cat.module.bean.CallLogBean">
+
+	SELECT
+		id,
+		mobile,
+		call_tel AS callTel,
+		count(*) AS callnum,
+		sum(call_duration) AS callduration
+	FROM
+		t_risk_call_log
+	WHERE
+		mobile = #{mobile}
+	GROUP BY
+		call_tel
+	ORDER BY
+		callduration DESC
+</select>
+
+<select id="findByCallTel" resultType="com.cat.module.vo.CallLogVo">
+
+	SELECT
+		c.contact_name AS 'name',
+		COUNT(a.id) AS 'actionRecordNum'
+	FROM
+		`t_contact` c
+	LEFT JOIN t_action a ON c.contact_mobile = a.contact_tel
+	WHERE
+		c.contact_mobile = #{callTel}
+	
+</select>
 </mapper>

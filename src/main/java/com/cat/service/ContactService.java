@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 
 import com.cat.annotation.DataSource;
 import com.cat.config.DynamicDataSource;
+import com.cat.module.bean.CallLogBean;
 import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.entity.risk.CallLog;
 import com.cat.module.enums.ContactType;
+import com.cat.module.vo.CallLogVo;
 import com.cat.module.vo.ContactVo;
 import com.cat.repository.CallLogRepository;
 import com.github.pagehelper.PageHelper;
@@ -32,7 +34,9 @@ public class ContactService extends BaseService {
 
 	@Autowired
 	private ContactMapper contactMapper;
-
+	@Autowired
+	private OtherDateBaseService otherDateBaseService;
+	
 	/**
 	 * 查询风控通话记录
 	 * @param mobile
@@ -40,27 +44,59 @@ public class ContactService extends BaseService {
 	 * @param pageSize
 	 * @return
 	 */
-	@DataSource(DynamicDataSource.RISK_DATASOURCE)
-	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
-		List<CallLog> callLogs = callLogRepository.findTop300ByMobile(mobile);
-		
-		List<ContactVo> cotactVos = callLogs.stream().distinct()
-			.map(callLog -> {
-				ContactVo cv = new ContactVo();
-				cv.setTel(callLog.getCallTel());
-				return cv;
-			})
-			.sorted((ContactVo c1, ContactVo c2) -> StringUtils.compare(c1.getTel(), c2.getTel(), false))
-			.collect(Collectors.toList());
-		
+//	@DataSource(DynamicDataSource.RISK_DATASOURCE)
+//	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
+//		List<CallLog> callLogs = callLogRepository.findTop300ByMobile(mobile);
+//		
+//		List<ContactVo> cotactVos = callLogs.stream().distinct()
+//			.map(callLog -> {
+//				ContactVo cv = new ContactVo();
+//				cv.setTel(callLog.getCallTel());
+//				return cv;
+//			})
+//			.sorted((ContactVo c1, ContactVo c2) -> StringUtils.compare(c1.getTel(), c2.getTel(), false))
+//			.collect(Collectors.toList());
+//		
+//		int from = (pageNum - 1) * pageSize;
+//		int to = Math.min(pageNum * pageSize, cotactVos.size());
+//
+//		Page<ContactVo> page = new Page<>();
+//		page.setEntities(cotactVos.subList(from, to));
+//		page.setPageNum(pageNum);
+//		page.setPageSize(pageSize);
+//		page.setTotal(Long.valueOf(cotactVos.size()));
+//
+//		return page;
+//	}
+	/**
+	 * 查询风控通话记录2
+	 * @param mobile
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	public Page<CallLogVo> findCalllog(String mobile, int pageNum, int pageSize) {
+		List<CallLogBean> callLogBeans = otherDateBaseService.findCallLogList(mobile);
 		int from = (pageNum - 1) * pageSize;
-		int to = Math.min(pageNum * pageSize, cotactVos.size());
-
-		Page<ContactVo> page = new Page<>();
-		page.setEntities(cotactVos.subList(from, to));
+		int to = Math.min(pageNum * pageSize, callLogBeans.size());
+		List<CallLogBean> list = callLogBeans.subList(from, to);
+		List<CallLogVo> callLogVos = new ArrayList<>();
+		for (CallLogBean callLogBean : list) {
+			String callTel = callLogBean.getCallTel();
+			CallLogVo callLogVo = contactMapper.findByCallTel(callTel);
+			if(callLogVo == null){
+				callLogVo = new CallLogVo();
+			}
+			callLogVo.setCallDuration(callLogBean.getCallDuration());
+			callLogVo.setCallNum(callLogBean.getCallNum());
+			callLogVo.setTel(callTel);
+			callLogVos.add(callLogVo);
+		}
+		Page<CallLogVo> page = new Page<>();
+		page.setEntities(callLogVos);
 		page.setPageNum(pageNum);
 		page.setPageSize(pageSize);
-		page.setTotal(Long.valueOf(cotactVos.size()));
+		page.setTotal(Long.valueOf(callLogBeans.size()));
 
 		return page;
 	}
