@@ -603,7 +603,7 @@ public class ScheduledTaskService extends BaseService{
 			} catch (Exception e) {
 				logger.error("新增未生成催收任务(task)的订单失败,全部事务回滚",e);
 				logger.error("错误信息"+e);
-//				throw new ServiceException(e);
+				throw new RuntimeException(e);
 			} finally {
 				logger.info("新增未生成催收任务(task)的订单任务结束" + newDateTest());
 			}
