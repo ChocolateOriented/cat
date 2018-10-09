@@ -54,7 +54,6 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
-        orderInfo.setCollectionTime(task.getLendTime().getTime()); 			// 临时添加
         return orderInfo;
     }
 
@@ -274,8 +273,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             orderInfo.setLoanTerm(task.getLoanTerm());
             orderInfo.setPostponeCount(task.getPostponeCount() );
             orderInfo.setPostponeAmount(task.getPostponeTotalAmount() == null ? BigDecimal.ZERO : task.getPostponeTotalAmount());
-            if (task.getCollectTime() != null) {
-                orderInfo.setCollectionTime(task.getCollectTime().getTime());
+            if (task.getLendTime() != null) {
+                orderInfo.setCollectionTime(task.getLendTime().getTime());
             }
             orderInfo.setReliefAmount(task.getReliefAmount() == null ? BigDecimal.ZERO : task.getReliefAmount());
         }
