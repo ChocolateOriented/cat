@@ -2,12 +2,11 @@ package com.cat.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.cat.mapper.ContactMapper;
+import com.cat.mapper.CustomerMapper;
 import com.cat.module.entity.Contact;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.Code;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.PageResponse.Page;
-import com.cat.module.entity.risk.CallLog;
 import com.cat.module.enums.ContactType;
 import com.cat.module.vo.CallLogVo;
 import com.cat.module.vo.ContactVo;
@@ -35,7 +33,9 @@ public class ContactService extends BaseService {
 	@Autowired
 	private ContactMapper contactMapper;
 	@Autowired
-	private OtherDateBaseService otherDateBaseService;
+	private CallLogService callLogService;
+	@Autowired
+	private CustomerMapper customerMapper;
 	
 	/**
 	 * 查询风控通话记录
@@ -76,17 +76,19 @@ public class ContactService extends BaseService {
 	 * @return
 	 */
 	public Page<CallLogVo> findCalllog(String mobile, int pageNum, int pageSize) {
-		List<CallLogBean> callLogBeans = otherDateBaseService.findCallLogList(mobile);
+		List<CallLogBean> callLogBeans = callLogService.findCallLogList(mobile);
 		int from = (pageNum - 1) * pageSize;
 		int to = Math.min(pageNum * pageSize, callLogBeans.size());
 		List<CallLogBean> list = callLogBeans.subList(from, to);
+		String customerId = customerMapper.findCustomerIdByMobile(mobile);
 		List<CallLogVo> callLogVos = new ArrayList<>();
 		for (CallLogBean callLogBean : list) {
 			String callTel = callLogBean.getCallTel();
-			CallLogVo callLogVo = contactMapper.findByCallTel(callTel);
-			if(callLogVo == null){
-				callLogVo = new CallLogVo();
-			}
+			String contactName = contactMapper.findContactName(callTel);
+			Integer actionRecordNum = contactMapper.findActionRecordNum(callTel,customerId);
+			CallLogVo callLogVo = new CallLogVo();
+			callLogVo.setName(contactName);
+			callLogVo.setActionRecordNum(actionRecordNum);
 			callLogVo.setCallDuration(callLogBean.getCallDuration());
 			callLogVo.setCallNum(callLogBean.getCallNum());
 			callLogVo.setTel(callTel);
@@ -126,6 +128,12 @@ public class ContactService extends BaseService {
 	public PageResponse<ContactVo> findListAddressbook(String customerId, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		List<ContactVo> list = contactMapper.findListByCustomerId(customerId);
+		if(list != null && list.size() >0){
+			for (ContactVo contactVo : list) {
+				Integer actionRecordNum = contactMapper.findActionRecordNum(contactVo.getTel(),customerId);
+				contactVo.setActionRecordNum(actionRecordNum);
+			}
+		}
 		PageInfo<ContactVo> pageInfo = new PageInfo<>(list);
 		return new PageResponse<ContactVo>(list, pageNum, pageSize, pageInfo.getTotal());
 	}

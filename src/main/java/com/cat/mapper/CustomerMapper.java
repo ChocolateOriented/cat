@@ -23,4 +23,6 @@ public interface CustomerMapper {
 
     List<CustomerBaseInfo> selectAll();
 
+	String findCustomerIdByMobile(String mobile);
+
 }

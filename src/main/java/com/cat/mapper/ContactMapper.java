@@ -3,7 +3,6 @@ package com.cat.mapper;
 import com.cat.module.bean.CallLogBean;
 import com.cat.module.dto.AddressBook;
 import com.cat.module.entity.Contact;
-import com.cat.module.vo.CallLogVo;
 import com.cat.module.vo.ContactVo;
 
 import java.util.List;
@@ -40,5 +39,7 @@ public interface ContactMapper {
 
 	List<CallLogBean> findCallLogList(String mobile);
 
-	CallLogVo findByCallTel(String callTel);
+	String findContactName(String callTel);
+
+	Integer findActionRecordNum(@Param("callTel")String callTel,@Param("customerId")String customerId);
 }

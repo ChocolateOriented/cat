@@ -84,4 +84,13 @@ public class ActionController extends BaseController {
 		List<Code> actionCodes = actionService.listActionFeedback();
 		return new EntitiesResponse<Code>(actionCodes);
 	}
+	/**
+	 * 催收记录次数详情
+	 * @return
+	 */
+	@GetMapping(value = "/list_action_record_detail")
+	public EntitiesResponse<Action> listCodeDetail(String customerId,String mobile) {
+		List<Action> actionCodes = actionService.listCodeDetail(customerId,mobile);
+		return new EntitiesResponse<Action>(actionCodes);
+	}
 }

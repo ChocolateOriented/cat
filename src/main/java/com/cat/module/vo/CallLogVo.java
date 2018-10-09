@@ -10,7 +10,7 @@ public class CallLogVo {
 	
 	private String callNum;//'通话总次数'	
 	
-	private String  actionRecordNum;//'催记次数'	
+	private Integer  actionRecordNum;//'催记次数'	
 
 	public String getName() {
 		return name;
@@ -50,16 +50,12 @@ public class CallLogVo {
 		this.callNum = callNum;
 	}
 
-	public String getActionRecordNum() {
+	public Integer getActionRecordNum() {
 		return actionRecordNum;
 	}
 
-	public void setActionRecordNum(String actionRecordNum) {
+	public void setActionRecordNum(Integer actionRecordNum) {
 		this.actionRecordNum = actionRecordNum;
 	}
 	
-  public static void main(String[] args) {
-	System.out.println(10675%3600);
-	System.out.println(10675/3600);
-}
 }

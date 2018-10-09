@@ -10,7 +10,7 @@ import com.cat.config.DynamicDataSource;
 import com.cat.mapper.ContactMapper;
 import com.cat.module.bean.CallLogBean;
 @Service
-public class OtherDateBaseService {
+public class CallLogService {
 
 	@Autowired
 	private ContactMapper contactMapper;
