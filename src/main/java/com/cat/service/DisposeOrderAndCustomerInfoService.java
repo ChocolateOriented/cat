@@ -181,6 +181,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask.setOrderStatus(OrderStatus.PAYOFF.name());
             dbTask.setIspayoff(true);
         }
+        //减免总金额
+        dbTask.setReliefAmount(repaymentMessage.getTotalReliefAmount());
         return dbTask;
     }
 
