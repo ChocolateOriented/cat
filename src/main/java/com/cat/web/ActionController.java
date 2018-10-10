@@ -89,8 +89,8 @@ public class ActionController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/list_action_record_detail")
-	public EntitiesResponse<Action> listCodeDetail(String customerId,String mobile) {
-		List<Action> actionCodes = actionService.listCodeDetail(customerId,mobile);
-		return new EntitiesResponse<Action>(actionCodes);
+	public EntitiesResponse<ActionVo> listCodeDetail(String customerId,String mobile) {
+		List<ActionVo> actionCodes = actionService.listCodeDetail(customerId,mobile);
+		return new EntitiesResponse<ActionVo>(actionCodes);
 	}
 }
