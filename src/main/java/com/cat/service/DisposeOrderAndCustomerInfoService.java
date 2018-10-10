@@ -63,6 +63,11 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void disposeOrderAndCustomer(CustomerAllInfo customerAllInfo) {
+        Task task = customerAllInfo.getTask();
+        //只接受消息是lent状态的订单,对应payment
+        if (!OrderStatus.PAYMENT.name().equals(task.getOrderStatus())) {
+            return;
+        }
         //保存用户基本信息
         CustomerBaseInfo customerBaseInfo = customerAllInfo.getCustomerBaseInfo();
         CustomerBaseInfo dbCustomerInfo = customerService.fetchCustomerByCustomerId(customerBaseInfo.getCustomerId());
@@ -103,7 +108,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 //        }
 
         //保存任务信息
-        Task task = customerAllInfo.getTask();
+
         Task dbTask = taskService.findByOrderId(task.getOrderId());
         if (dbTask != null) {
             throw new RuntimeException("此订单已存在,task:"+task);
