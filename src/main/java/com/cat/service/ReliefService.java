@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.manager.RaptorManager;
@@ -12,6 +13,7 @@ import com.cat.mapper.TaskMapper;
 import com.cat.module.dto.BaseResponse;
 import com.cat.util.Md5Encrypt;
 
+@Service
 public class ReliefService extends BaseService {
 
 	@Autowired
