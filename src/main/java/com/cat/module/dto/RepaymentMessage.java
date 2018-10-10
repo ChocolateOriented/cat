@@ -81,12 +81,24 @@ public class RepaymentMessage implements Serializable {
      * 是否入账完成
      */
     private Boolean isEntryDone;
-
     /**
      * 还清时间
      * @return
      */
     private Date payoffTime;
+    /**
+     * 减免总金额
+     * @return
+     */
+    private BigDecimal totalReliefAmount;
+
+    public BigDecimal getTotalReliefAmount() {
+        return totalReliefAmount;
+    }
+
+    public void setTotalReliefAmount(BigDecimal totalReliefAmount) {
+        this.totalReliefAmount = totalReliefAmount;
+    }
 
     public Date getPayoffTime() {
         return payoffTime;
