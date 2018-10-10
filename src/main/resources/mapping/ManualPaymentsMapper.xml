@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.mapper.ManualPaymentsMapper">
+  <resultMap id="BaseResultMap" type="com.cat.module.entity.ManualPayments">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="actual_payment_amount" jdbcType="DECIMAL" property="actualPaymentAmount" />
+    <result column="payment_status" jdbcType="VARCHAR" property="paymentStatus" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="product_type" jdbcType="VARCHAR" property="productType" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_manual_payments
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cat.module.entity.ManualPayments">
+    insert into t_manual_payments (id, order_id, customer_id, 
+      actual_payment_amount, payment_status, user_id, 
+      user_name, product_type, created_time, 
+      updated_time, create_by, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, 
+      #{actualPaymentAmount,jdbcType=DECIMAL}, #{paymentStatus,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.ManualPayments">
+    update t_manual_payments
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=VARCHAR},
+      actual_payment_amount = #{actualPaymentAmount,jdbcType=DECIMAL},
+      payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, order_id, customer_id, actual_payment_amount, payment_status, user_id, 
+    user_name, product_type, created_time, updated_time, create_by, remark
+    from t_manual_payments
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, order_id, customer_id, actual_payment_amount, payment_status, user_id, 
+    user_name, product_type, created_time, updated_time, create_by, remark
+    from t_manual_payments
+  </select>
+</mapper>

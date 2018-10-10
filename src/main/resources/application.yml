@@ -103,6 +103,9 @@ feignClient:
     url:  http://gqwu.local.mo9.com/raptorApi
     secret:  rtsDDcogZcPCu!NYkfgfjQq6O;~2Brtr
     secret2: '0123456789'
+  manualPayment:
+    url: http://192.168.14.60/raptorApi
+    primaryKey: TWlBfbVtgmJb6tlYeWuTl2N26xtKT5SX
 logging:
   level:
     root: info

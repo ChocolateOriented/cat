@@ -5,8 +5,8 @@ package com.cat.module.enums;
  */
 public enum OrderStatus {
     PAYMENT("未还清"),
-    PAYOFF("已还清");
-
+    PAYOFF("已还清"),
+    POSTPONE("延期还款");
     String desc;
     OrderStatus(String desc) {
         this.desc = desc;
