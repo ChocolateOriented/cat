@@ -20,15 +20,11 @@ import com.cat.module.dto.PageResponse.Page;
 import com.cat.module.enums.ContactType;
 import com.cat.module.vo.CallLogVo;
 import com.cat.module.vo.ContactVo;
-import com.cat.repository.CallLogRepository;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 @Service
 public class ContactService extends BaseService {
-
-	@Autowired
-	private CallLogRepository callLogRepository;
 
 	@Autowired
 	private ContactMapper contactMapper;
@@ -44,32 +40,9 @@ public class ContactService extends BaseService {
 	 * @param pageSize
 	 * @return
 	 */
-//	@DataSource(DynamicDataSource.RISK_DATASOURCE)
-//	public Page<ContactVo> findCalllog(String mobile, int pageNum, int pageSize) {
-//		List<CallLog> callLogs = callLogRepository.findTop300ByMobile(mobile);
-//		
-//		List<ContactVo> cotactVos = callLogs.stream().distinct()
-//			.map(callLog -> {
-//				ContactVo cv = new ContactVo();
-//				cv.setTel(callLog.getCallTel());
-//				return cv;
-//			})
-//			.sorted((ContactVo c1, ContactVo c2) -> StringUtils.compare(c1.getTel(), c2.getTel(), false))
-//			.collect(Collectors.toList());
-//		
-//		int from = (pageNum - 1) * pageSize;
-//		int to = Math.min(pageNum * pageSize, cotactVos.size());
-//
-//		Page<ContactVo> page = new Page<>();
-//		page.setEntities(cotactVos.subList(from, to));
-//		page.setPageNum(pageNum);
-//		page.setPageSize(pageSize);
-//		page.setTotal(Long.valueOf(cotactVos.size()));
-//
-//		return page;
-//	}
+
 	/**
-	 * 查询风控通话记录2
+	 * 查询风控通话记录
 	 * @param mobile
 	 * @param pageNum
 	 * @param pageSize
