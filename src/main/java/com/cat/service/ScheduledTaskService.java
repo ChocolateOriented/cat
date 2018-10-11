@@ -212,60 +212,60 @@ public class ScheduledTaskService extends BaseService{
 	
 	
 	
-	public TmpMoveCycle getTmpMoveCycle(String cycle){
-		TmpMoveCycle tmpMoveCycle = new TmpMoveCycle();
-		try {
-//			String Q0 =  DictUtils.getDictValue("Q0", "dunningCycle1", "-1_0");
-			if("Q0".equals(cycle)){
-				tmpMoveCycle.setDatetimestart(DateUtils.getDate(-1));
-				tmpMoveCycle.setDatetimeend(DateUtils.getDate(-1));
-				return tmpMoveCycle;
-			}else{
-				switch (getDaysOfMonth(newDateTest())) {
-				case 30:
-					if(getDays() < 16){
-						tmpMoveCycle.setDatetimestart(DateUtils.getMonthFirstDayDate());
-						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
-						return tmpMoveCycle;
-					}else{
-						tmpMoveCycle.setDatetimestart(DateUtils.getDateOfMonth(16));
-						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
-						return tmpMoveCycle;
-					}
-				case 31:
-					if(getDays() < 17){
-						tmpMoveCycle.setDatetimestart(DateUtils.getMonthFirstDayDate());
-						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
-						return tmpMoveCycle;
-					}else{
-						tmpMoveCycle.setDatetimestart(DateUtils.getDateOfMonth(17));
-						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
-						return tmpMoveCycle;
-					}
-				case 28:
-					if(getDays() < 14){
-						tmpMoveCycle.setDatetimestart(DateUtils.getMonthFirstDayDate());
-						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
-						return tmpMoveCycle;
-					}else{
-						tmpMoveCycle.setDatetimestart(DateUtils.getDateOfMonth(14));
-						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
-						return tmpMoveCycle;
-					}
-				default:
-					tmpMoveCycle.setDatetimestart(DateUtils.getDate(-1));
-					tmpMoveCycle.setDatetimeend(DateUtils.getDate(-1));
-					return tmpMoveCycle;
-				}
-			}
-		} catch (Exception e) {
-			logger.warn("tmpMoveCycle返回失败默认赋值昨天日期"+ newDateTest());
-			logger.error("错误信息"+e.getMessage());
-			tmpMoveCycle.setDatetimestart(DateUtils.getDate(-1));
-			tmpMoveCycle.setDatetimeend(DateUtils.getDate(-1));
-			return tmpMoveCycle;
-		}
-	}
+//	public TmpMoveCycle getTmpMoveCycle(String cycle){
+//		TmpMoveCycle tmpMoveCycle = new TmpMoveCycle();
+//		try {
+////			String Q0 =  DictUtils.getDictValue("Q0", "dunningCycle1", "-1_0");
+//			if("Q0".equals(cycle)){
+//				tmpMoveCycle.setDatetimestart(DateUtils.getDate(-1));
+//				tmpMoveCycle.setDatetimeend(DateUtils.getDate(-1));
+//				return tmpMoveCycle;
+//			}else{
+//				switch (getDaysOfMonth(newDateTest())) {
+//				case 30:
+//					if(getDays() < 16){
+//						tmpMoveCycle.setDatetimestart(DateUtils.getMonthFirstDayDate());
+//						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
+//						return tmpMoveCycle;
+//					}else{
+//						tmpMoveCycle.setDatetimestart(DateUtils.getDateOfMonth(16));
+//						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
+//						return tmpMoveCycle;
+//					}
+//				case 31:
+//					if(getDays() < 17){
+//						tmpMoveCycle.setDatetimestart(DateUtils.getMonthFirstDayDate());
+//						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
+//						return tmpMoveCycle;
+//					}else{
+//						tmpMoveCycle.setDatetimestart(DateUtils.getDateOfMonth(17));
+//						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
+//						return tmpMoveCycle;
+//					}
+//				case 28:
+//					if(getDays() < 14){
+//						tmpMoveCycle.setDatetimestart(DateUtils.getMonthFirstDayDate());
+//						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
+//						return tmpMoveCycle;
+//					}else{
+//						tmpMoveCycle.setDatetimestart(DateUtils.getDateOfMonth(14));
+//						tmpMoveCycle.setDatetimeend(DateUtils.getDate(0));
+//						return tmpMoveCycle;
+//					}
+//				default:
+//					tmpMoveCycle.setDatetimestart(DateUtils.getDate(-1));
+//					tmpMoveCycle.setDatetimeend(DateUtils.getDate(-1));
+//					return tmpMoveCycle;
+//				}
+//			}
+//		} catch (Exception e) {
+//			logger.warn("tmpMoveCycle返回失败默认赋值昨天日期"+ newDateTest());
+//			logger.error("错误信息"+e.getMessage());
+//			tmpMoveCycle.setDatetimestart(DateUtils.getDate(-1));
+//			tmpMoveCycle.setDatetimeend(DateUtils.getDate(-1));
+//			return tmpMoveCycle;
+//		}
+//	}
 	
 	/**
 	 * 过期自动分案
@@ -352,9 +352,9 @@ public class ScheduledTaskService extends BaseService{
 						/**
 						 * 根据周期查询催收人员按金额排序
 						 */
-						TmpMoveCycle tmpMoveCycle = this.getTmpMoveCycle(entry.getKey());
-						System.out.println("过期分案产品-findPeopleSumcorpusamountByDunningcycle:参数entry.getKey()"+entry.getKey() 
-						+ "tmpMoveCycle.getDatetimestart()" +tmpMoveCycle.getDatetimestart()+ "tmpMoveCycle.getDatetimeend()" +tmpMoveCycle.getDatetimeend() );
+//						TmpMoveCycle tmpMoveCycle = this.getTmpMoveCycle(entry.getKey());
+//						System.out.println("过期分案产品-findPeopleSumcorpusamountByDunningcycle:参数entry.getKey()"+entry.getKey() 
+//						+ "tmpMoveCycle.getDatetimestart()" +tmpMoveCycle.getDatetimestart()+ "tmpMoveCycle.getDatetimeend()" +tmpMoveCycle.getDatetimeend() );
 						List<DivisionUserDto> dunningPeoples = taskRepository.findPeopleSumcorpusamountByDunningcycle(entry.getKey());
 						System.out.println("过期分案产品-findPeopleSumcorpusamountByDunningcycle:"+ dunningPeoples.size() + "个人员");
 						/**
@@ -443,8 +443,7 @@ public class ScheduledTaskService extends BaseService{
 				/**
 				 * 根据逾期天数查询未生成任务task的订单
 				 */
-//				String begin_Q0 = this.getCycleDict_Q0().get("begin");
-				String begin_Q0 = "-1";
+				String begin_Q0 = this.getCycleDict_Q0().get("begin");
 				logger.info("newfingDelayOrderByNotTask_day-begin_Q0"+ begin_Q0  + newDateTest());
 				List<TaskLog>  newDunningTaskLogs = tMisDunningTaskDao.newfingDelayOrderByNotTask(newDateTest(),begin_Q0);
 				
@@ -542,7 +541,7 @@ public class ScheduledTaskService extends BaseService{
 						/**
 						 * 根据周期查询催收人员按金额排序
 						 */
-						TmpMoveCycle tmpMoveCycle = this.getTmpMoveCycle(entry.getKey());
+//						TmpMoveCycle tmpMoveCycle = this.getTmpMoveCycle(entry.getKey());
 						List<DivisionUserDto> dunningPeoples = taskRepository.findPeopleSumcorpusamountByDunningcycle(entry.getKey());
 						
 						/**
