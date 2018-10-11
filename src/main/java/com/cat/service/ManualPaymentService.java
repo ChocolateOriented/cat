@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @Service
 public class ManualPaymentService extends BaseService {
-    @Value("${feignClient.manualPayment.primaryKey}")
+    @Value("${feignClient.raptor.primaryKey}")
     private String privateKey;
     @Autowired
     private ManualPaymentsMapper manualPaymentsMapper;

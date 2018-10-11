@@ -12,7 +12,7 @@ import java.util.Map;
  * @author cyuan
  * @date 2018/10/10
  */
-@FeignClient(url = "${feignClient.manualPayment.url}", name = "raptor")
+@FeignClient(url = "${feignClient.raptor.url}", name = "raptor")
 public interface PaymentManager {
     @PostMapping("/offline/repay")
     Results repay(@RequestBody Map<String, String> repayInfo);
