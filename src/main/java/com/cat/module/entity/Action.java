@@ -124,5 +124,15 @@ public class Action extends AuditingEntity {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	public String getOperatorName() {
+		return getUpdateBy();
+	}
+
+	public Long getOperateTime() {
+		return getUpdateTime() == null ? null : getUpdateTime().getTime();
+	}
+	public String getActionFeedbackDesc() {
+		return actionFeedback == null ? null : actionFeedback.getDesc();
+	}
 
 }

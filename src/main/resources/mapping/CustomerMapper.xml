@@ -84,5 +84,10 @@
     FROM `t_customer_info`
     WHERE `customer_id` = #{customerId}
 </select>
+<select id="findCustomerIdByMobile" resultType="java.lang.String">
+    SELECT customer_id 
+    FROM `t_customer_info`
+    WHERE mobile = #{mobile}
+</select>
 
 </mapper>

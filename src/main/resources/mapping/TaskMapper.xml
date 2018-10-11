@@ -147,6 +147,7 @@
     <select id="findList" resultType="com.cat.module.dto.TaskDto">
     
         SELECT
+        t.collect_time AS "collectTime",
         t.customer_id AS "customerId",
         t.customer_name AS "name",
         t.mobile AS "mobile",
@@ -195,6 +196,9 @@
             </if>
             <if test="payoffTimeStart != null and payoffTimeEnd != null ">
                 AND t.payoff_time BETWEEN #{payoffTimeStart} AND #{payoffTimeEnd}
+            </if>
+            <if test="collectTimeStart != null and collectTimeEnd != null ">
+                AND t.collect_time BETWEEN #{collectTimeStart} AND #{collectTimeEnd}
             </if>
             <if test="overdueDaysStart != null and overdueDaysEnd != null ">
                 <![CDATA[

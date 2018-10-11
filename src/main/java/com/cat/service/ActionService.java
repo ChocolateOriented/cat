@@ -67,4 +67,8 @@ public class ActionService extends BaseService {
 		}
 		return codes;
 	}
+
+	public List<ActionVo> listCodeDetail(String customerId, String mobile) {
+		return actionVoRepository.findByCustomerIdAndContactTel(customerId, mobile);
+	}
 }

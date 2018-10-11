@@ -108,13 +108,7 @@ public class TaskController extends BaseController {
 		taskService.synAddressBook();
 		logger.info("手动同步通讯录结束");
 	}
-	@PostMapping(value="relief_amount")
-	public BaseResponse reliefAmount(@RequestBody TaskDto taskDto,HttpServletRequest request){
-		String userId = request.getHeader("User-Id");
-		BaseResponse baseResponse =	taskService.reliefAmount(taskDto.getOrderId(),taskDto.getReliefAmount(),userId); 
-		
-		return baseResponse;
-	}
+
 	@PostMapping(value="reload_address_book")
 	public void reloadAddressBook(@RequestBody List<String> customerIds){
 		taskService.reloadAddressBook(customerIds);

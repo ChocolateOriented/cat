@@ -24,6 +24,7 @@ public class TaskDto implements Serializable{
 	private String remark;//催收备注
 	private String collectorName;//催收人
 	private Date payoffTime;//还清日期
+	private Date collectTime;//最近催收时间
 	private Long organizationId;//机构id
 	private String organizationLeaderId;//机构组长id
 	private String collectorId;//催收员id
@@ -34,6 +35,8 @@ public class TaskDto implements Serializable{
 	private Integer overdueDaysEnd;//逾期天数第2个值
 	private Long payoffTimeStart;//还清日期第一个值
 	private Long payoffTimeEnd;//还清日期第二个值
+	private Long collectTimeStart;//最近催收时间第一个值
+	private Long collectTimeEnd;//最近催收时间第二个值
 	public String getOrderId() {
 		return orderId;
 	}
@@ -165,6 +168,26 @@ public class TaskDto implements Serializable{
 	}
 	public void setOrganizationLeaderId(String organizationLeaderId) {
 		this.organizationLeaderId = organizationLeaderId;
+	}
+	public Long getCollectTime() {
+		return  collectTime == null ? null : collectTime.getTime();
+	}
+	public void setCollectTime(Date collectTime) {
+		this.collectTime = collectTime;
+	}
+	public String getCollectTimeStart() {
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		return this.collectTimeStart == null ? null : sd.format(new Date(this.collectTimeStart));
+	}
+	public void setCollectTimeStart(Long collectTimeStart) {
+		this.collectTimeStart = collectTimeStart;
+	}
+	public String getCollectTimeEnd() {
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		return this.collectTimeEnd == null ? null : sd.format(new Date(this.collectTimeEnd));
+	}
+	public void setCollectTimeEnd(Long collectTimeEnd) {
+		this.collectTimeEnd = collectTimeEnd;
 	}
 	
 }

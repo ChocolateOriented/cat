@@ -118,16 +118,26 @@
 		callduration DESC
 </select>
 
-<select id="findByCallTel" resultType="com.cat.module.vo.CallLogVo">
+<select id="findContactName" resultType="java.lang.String">
 
 	SELECT
-		c.contact_name AS 'name',
-		COUNT(a.id) AS 'actionRecordNum'
+		contact_name AS 'name'
 	FROM
-		`t_contact` c
-	LEFT JOIN t_action a ON c.contact_mobile = a.contact_tel
+		`t_contact` 
 	WHERE
-		c.contact_mobile = #{callTel}
-	
+		contact_mobile = #{callTel}
+	limit 1
 </select>
+
+<select id="findActionRecordNum" resultType="java.lang.Integer">
+
+	SELECT
+		count(*)
+	FROM
+		`t_action` 
+	WHERE
+		contact_tel = #{callTel}
+		AND customer_id = #{customerId}
+</select>
+
 </mapper>

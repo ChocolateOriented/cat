@@ -8,7 +8,6 @@ import java.util.Date;
 
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
-import com.cat.service.ScheduledTaskService;
 import com.cat.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -33,7 +32,8 @@ public class TaskLog extends BaseEntity {
 	private String mobile;		// 手机号
 	private Date repaymentTime;		// 到期还款日期
 	private BigDecimal loanAmount;		// 本金
-	
+	private String  orderType;//订单类型
+	private String  productType;//产品类型	
 	private BigDecimal  lentAmount;//放款金额
 	private String  interestMode;//利息模式
 	private BigDecimal  interestValue;//利息值
@@ -360,8 +360,23 @@ public class TaskLog extends BaseEntity {
 	}
 
 
+	public String getOrderType() {
+		return orderType;
+	}
 
-	
-	
+
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
+
+
+	public String getProductType() {
+		return productType;
+	}
+
+
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
 
 }

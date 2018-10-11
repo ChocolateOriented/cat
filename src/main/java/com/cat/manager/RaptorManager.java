@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(url = "${feignClient.raptor.url}", name = "raptor")
 public interface RaptorManager {
 
-  @PostMapping(consumes="application/json",value="/coupon/create")
+  @PostMapping(consumes="application/json", value="/coupon/create")
   BaseResponse send( String jsonString);
 
   @GetMapping("/outside/to_black_user")

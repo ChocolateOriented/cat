@@ -54,7 +54,6 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
-        orderInfo.setCollectionTime(task.getLendTime().getTime()); 			// 临时添加
         return orderInfo;
     }
 
@@ -64,6 +63,11 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void disposeOrderAndCustomer(CustomerAllInfo customerAllInfo) {
+        Task task = customerAllInfo.getTask();
+        //只接受消息是lent状态的订单,对应payment
+        if (!OrderStatus.PAYMENT.name().equals(task.getOrderStatus())) {
+            return;
+        }
         //保存用户基本信息
         CustomerBaseInfo customerBaseInfo = customerAllInfo.getCustomerBaseInfo();
         CustomerBaseInfo dbCustomerInfo = customerService.fetchCustomerByCustomerId(customerBaseInfo.getCustomerId());
@@ -104,7 +108,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 //        }
 
         //保存任务信息
-        Task task = customerAllInfo.getTask();
+
         Task dbTask = taskService.findByOrderId(task.getOrderId());
         if (dbTask != null) {
             throw new RuntimeException("此订单已存在,task:"+task);
@@ -182,6 +186,10 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask.setOrderStatus(OrderStatus.PAYOFF.name());
             dbTask.setIspayoff(true);
         }
+        //减免总金额
+        dbTask.setReliefAmount(repaymentMessage.getTotalReliefAmount());
+        //产品类型
+        dbTask.setProductType(repaymentMessage.getProductType());
         return dbTask;
     }
 
@@ -274,8 +282,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             orderInfo.setLoanTerm(task.getLoanTerm());
             orderInfo.setPostponeCount(task.getPostponeCount() );
             orderInfo.setPostponeAmount(task.getPostponeTotalAmount() == null ? BigDecimal.ZERO : task.getPostponeTotalAmount());
-            if (task.getCollectTime() != null) {
-                orderInfo.setCollectionTime(task.getCollectTime().getTime());
+            if (task.getLendTime() != null) {
+                orderInfo.setCollectionTime(task.getLendTime().getTime());
             }
             orderInfo.setReliefAmount(task.getReliefAmount() == null ? BigDecimal.ZERO : task.getReliefAmount());
         }
