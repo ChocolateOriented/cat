@@ -3,8 +3,6 @@
  */
 package com.cat.mapper;
 
-
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +12,7 @@ import com.cat.module.dto.TaskDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
+import com.cat.module.entity.Relief;
 import com.cat.module.entity.User;
 import com.cat.module.entity.Task;
 
@@ -76,12 +75,11 @@ public interface TaskMapper  {
 
 	void updateByPrimaryKey(Task dbTask);
 
-	public void updateReliefAmount(@Param("orderId")String orderId, @Param("reliefAmount")BigDecimal reliefAmount, @Param("userId")String userId);
+	public void updateReliefAmount(Relief relief);
 
 	public List<String> findCustomeId();
 
 	public List<CollectDto> findCollectList(CollectDto collectDto);
-
 
 	public List<Task> findAndValidateTaskList(AssignDto assignDto);
 
