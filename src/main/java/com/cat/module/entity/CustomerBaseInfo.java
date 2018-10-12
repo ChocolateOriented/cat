@@ -132,11 +132,7 @@ public class CustomerBaseInfo extends BaseEntity {
     }
 
     public void setGender(String gender) {
-        if ("1".equals(gender)) {
-            this.gender = "男";
-        } else {
-            this.gender = "女";
-        }
+        this.gender = gender;
     }
 
     public Boolean getBlacklist() {
