@@ -8,10 +8,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.cat.module.dto.AssignDto;
+import com.cat.module.dto.CollectDto;
 import com.cat.module.dto.TaskDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
+import com.cat.module.entity.User;
 import com.cat.module.entity.Task;
 
 /**
@@ -76,4 +79,11 @@ public interface TaskMapper  {
 	public void updateReliefAmount(@Param("orderId")String orderId, @Param("reliefAmount")BigDecimal reliefAmount, @Param("userId")String userId);
 
 	public List<String> findCustomeId();
+
+	public List<CollectDto> findCollectList(CollectDto collectDto);
+
+
+	public List<Task> findAndValidateTaskList(AssignDto assignDto);
+
+	public List<User> findAndValidateUserList(AssignDto assignDto);
 }
