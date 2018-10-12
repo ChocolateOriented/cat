@@ -138,21 +138,35 @@ public class TaskService extends BaseService {
 		}
 		
 		if(assignDto == null ){
+			logger.warn("手动分案失败,参数为null");
 			return new BaseResponse(-1, "分案失败,必要参数为空");
 		}
 		List<String> collectIds = assignDto.getCollectIds();
 		List<String> orderIds = assignDto.getOrderIds();
-		if(collectIds.isEmpty() || orderIds.isEmpty()){
-			logger.info("手动分案失败,订单id或催收员id为空");
+		if(collectIds == null || orderIds == null || collectIds.isEmpty() || orderIds.isEmpty()){
+			logger.warn("手动分案失败,订单id或催收员id为空");
 			return new BaseResponse(-1, "分案失败,必要参数为空");
 		}
 		//校验案件是否正确
-		List<Task> listTask = taskMapper.findAndValidateTaskList(assignDto);
+		List<Task> listOrders = taskMapper.findAndValidateTaskList(assignDto);
+		if(listOrders == null || listOrders.size() != orderIds.size()){
+			logger.warn("手动分案失败,案件选择规则错误");
+			return new BaseResponse(-1, "分案失败,案件选择有误");
+		}
 		//校验催收员是否正确
-		List<User> listUser = taskMapper.findAndValidateUserList(assignDto);
+		List<User> listCollects = taskMapper.findAndValidateUserList(assignDto);
+		if(listCollects == null || listCollects.size() != collectIds.size()){
+			logger.warn("手动分案失败,催收员选择有误");
+			return new BaseResponse(-1, "分案失败,催收员选择有误");
+		}
+		this.assignOperation(listOrders, listCollects);
 		return BaseResponse.success();
 	}
-
+	
+	private void assignOperation(List<Task> listOrders,List<User> listCollects) {
+		
+	}
+	
 	public void insert(Task task) {
 		taskMapper.insert(task);
 	}
