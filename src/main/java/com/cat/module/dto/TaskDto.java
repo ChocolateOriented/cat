@@ -18,6 +18,7 @@ public class TaskDto implements Serializable{
 	private String  mobile;//用户手机号
 	private String  orderStatus;//订单状态
 	private BigDecimal  principalAndInterest;//欠款金额
+	private BigDecimal  principal;//本金
 	private Integer  customerTotalAmount;//应催金额
 	private Date repaymentTime; //到期还款日
 	private Integer overdueDays;//逾期天数
@@ -29,6 +30,8 @@ public class TaskDto implements Serializable{
 	private String organizationLeaderId;//机构组长id
 	private String collectorId;//催收员id
 	private String actionFeedback;//行动码
+	private String productType;//产品类型
+	private String collectCycle;//案件所属队列
 	private BigDecimal reliefAmount; //减免金额
 	//------------请求参数----------
 	private Integer overdueDaysStart;//逾期天数第1个值
@@ -188,6 +191,24 @@ public class TaskDto implements Serializable{
 	}
 	public void setCollectTimeEnd(Long collectTimeEnd) {
 		this.collectTimeEnd = collectTimeEnd;
+	}
+	public BigDecimal getPrincipal() {
+		return principal;
+	}
+	public void setPrincipal(BigDecimal principal) {
+		this.principal = principal;
+	}
+	public String getProductType() {
+		return productType;
+	}
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+	public String getCollectCycle() {
+		return collectCycle;
+	}
+	public void setCollectCycle(String collectCycle) {
+		this.collectCycle = collectCycle;
 	}
 	
 }

@@ -147,6 +147,9 @@
     <select id="findList" resultType="com.cat.module.dto.TaskDto">
     
         SELECT
+        t.product_type AS "productType",
+        t.collect_cycle AS "collectCycle",
+        t.loan_amount AS "principal",
         t.collect_time AS "collectTime",
         t.customer_id AS "customerId",
         t.customer_name AS "name",
@@ -176,6 +179,12 @@
         LEFT JOIN t_organization o ON u.organization_id = o.id
         
         <where>
+            <if test="productType != null and productType != ''">
+                AND t.product_type = #{productType}
+            </if>
+            <if test="collectCycle != null and collectCycle != ''">
+                AND t.collect_cycle = #{collectCycle}
+            </if>
             <if test="name != null and name != ''">
                 AND t.customer_name LIKE concat('%',#{name},'%')
             </if>
@@ -458,6 +467,33 @@
     
     <select id="findCustomeId" resultType="java.lang.String">
       select customer_id from t_task where  order_status='PAYMENT'
+    
+    </select>
+    <select id="findCollectList" resultType="com.cat.module.dto.CollectDto">
+        SELECT
+		id as  collectorId,
+		name as collectorName
+		FROM
+			`t_user`
+		<where>
+		<if test="collectCycle != null and collectCycle != '' ">
+			and	collect_cycle LIKE concat('%',#{item},'%')
+		</if>
+		<if test="productType != null and productType != '' ">
+			and	product_type = #{productType}
+		</if>
+		<if test="organization != null">
+			and organization_id in
+			<foreach collection="organization" item="item"  open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test="isAutoAssign != null and isAutoAssign != '' ">
+			and auto_division = #{isAutoAssign}
+		</if>
+		and `status` = 'NORMAL'
+		and role = 'COLLECTOR' 
+		</where>
     
     </select>
 </mapper>

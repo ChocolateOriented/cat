@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.cat.module.entity.Contact;
+import com.cat.module.entity.Organization;
 import com.cat.module.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,10 +16,14 @@ import com.alibaba.fastjson.JSON;
 import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.dto.AddressBook;
+import com.cat.module.dto.AssignDto;
+import com.cat.module.dto.BaseResponse;
+import com.cat.module.dto.CollectDto;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.User;
 import com.cat.module.enums.Role;
+import com.cat.repository.OrganizationRepository;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
 import com.github.pagehelper.PageHelper;
@@ -33,6 +38,8 @@ public class TaskService extends BaseService {
 	private	ContactService contactService;
 	@Autowired
 	private TaskRepository taskRepository;
+	@Autowired
+	private OrganizationRepository organizationRepository;
 
 	/**
 	 * 获取任务列表
@@ -101,29 +108,49 @@ public class TaskService extends BaseService {
 	 * 获取所有的催收员的id和姓名
 	 * @return
 	 */
-		public List<TaskDto> findUserList() {
-		List<TaskDto> list = new ArrayList<>();
-		Iterable<User> itreable = userRepository.findAll();
-		Iterator<User> iterator = itreable.iterator();
-		if(iterator.hasNext()){
-			TaskDto taskDto = new TaskDto();
-			User next = iterator.next();
-			taskDto.setCollectorId(next.getId());
-			taskDto.setCollectorName(next.getName());
-			list.add(taskDto);
-		}
-		
-		return list;
+		public List<User> findUserList() {
+		return userRepository.findAll();
 	}
+		/**
+		 * 获取所有的机构的id和姓名
+		 * @return
+		 */
+		public List<Organization> findOrganizationList() {
+			return organizationRepository.findAll();
+		}
 	/**
 	 * 手动分案
+	 * @param userId 
 	 * 
 	 * @param orderIds
 	 * @param userId
 	 * @return
 	 */
-	public boolean assign(List<String> orderIds, String userId) {
-		return false;
+	public BaseResponse assign(AssignDto assignDto, String userId) {
+		User user = userRepository.findOne(userId);
+		if(user == null){
+			logger.warn("该用户不存在,userID={}",userId);
+			return new BaseResponse(-1, "分案失败,您没有权限");
+		}
+		if(user.getRole()  != Role.ADMIN){
+			logger.warn("该用户不是admin角色,userID={}",userId);
+			return new BaseResponse(-1, "分案失败,您没有权限");
+		}
+		
+		if(assignDto == null ){
+			return new BaseResponse(-1, "分案失败,必要参数为空");
+		}
+		List<String> collectIds = assignDto.getCollectIds();
+		List<String> orderIds = assignDto.getOrderIds();
+		if(collectIds.isEmpty() || orderIds.isEmpty()){
+			logger.info("手动分案失败,订单id或催收员id为空");
+			return new BaseResponse(-1, "分案失败,必要参数为空");
+		}
+		//校验案件是否正确
+		List<Task> listTask = taskMapper.findAndValidateTaskList(assignDto);
+		//校验催收员是否正确
+		List<User> listUser = taskMapper.findAndValidateUserList(assignDto);
+		return BaseResponse.success();
 	}
 
 	public void insert(Task task) {
@@ -237,6 +264,16 @@ public class TaskService extends BaseService {
 			}
 		}
 	 logger.info("补拿通讯录同步完成");
+	}
+	
+	/**
+	 * 手动分案查询催收人员
+	 * @param collectDto
+	 * @return
+	 */
+	public List<CollectDto> findCollectList(CollectDto collectDto) {
+		
+		return taskMapper.findCollectList(collectDto);
 	}
 
 }

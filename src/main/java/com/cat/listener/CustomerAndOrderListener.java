@@ -105,12 +105,11 @@ public class CustomerAndOrderListener {
         CustomerBaseInfo customerBaseInfo = parseToCustomerInfo(message);
         Task task = parseToTask(message);
         Bank bank = parseToBank(message);
-//        List<Contact> contactList = parseToContactInfo(message);
 
         CustomerAllInfo customerAllInfo = new CustomerAllInfo();
         customerAllInfo.setBank(bank);
         customerAllInfo.setTask(task);
-//        customerAllInfo.setContactList(contactList);
+
         customerAllInfo.setCustomerBaseInfo(customerBaseInfo);
         return customerAllInfo;
     }
@@ -123,7 +122,7 @@ public class CustomerAndOrderListener {
     private List<Contact> parseToContactInfo(JSONObject message) {
         String contactsListString = message.getString("contactsList");
         Boolean flag = contactListIsArray(contactsListString);
-//        JSONObject contactsListJSON = JSON.parseObject(contactsListString);
+
         List<Contact> contactList = new ArrayList<>();
         if (!flag) {
             contactList = JSON.parseObject(contactsListString).getJSONArray("contact").toJavaList(Contact.class);
@@ -172,6 +171,11 @@ public class CustomerAndOrderListener {
      */
     private CustomerBaseInfo parseToCustomerInfo(JSONObject message) throws Exception {
         CustomerBaseInfo customerBaseInfo = JSON.parseObject(message.toJSONString(), CustomerBaseInfo.class);
+        if ("1".equals(customerBaseInfo.getGender())) {
+            customerBaseInfo.setGender("男");
+        } else if ("0".equals(customerBaseInfo.getGender())) {
+            customerBaseInfo.setGender("女");
+        }
         return customerBaseInfo;
     }
 

@@ -10,6 +10,7 @@ import com.cat.util.Md5Encrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class ManualPaymentService extends BaseService {
     private PaymentManager paymentManager;
     @Autowired
     private TaskService taskService;
+    @Transactional(rollbackFor = Exception.class)
     public void disposeManualPayment(ManualPayments manualPayments) throws ServiceException{
         //检查获取这笔订单
         Task task = taskService.findByOrderId(manualPayments.getOrderId());
