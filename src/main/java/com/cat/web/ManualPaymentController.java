@@ -4,6 +4,8 @@ import com.cat.exception.ServiceException;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
 import com.cat.module.entity.ManualPayments;
+import com.cat.module.entity.User;
+import com.cat.module.enums.Role;
 import com.cat.service.ManualPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,10 @@ public class ManualPaymentController extends BaseController{
     private ManualPaymentService manualPaymentService;
     @PostMapping("/repay_loan")
     public Results repayLoan(@RequestHeader("User-Id") String userId, @Validated @RequestBody ManualPayments manualPayments, BindingResult bindingResult) {
+        User user = userRepository.findOne(userId);
+        if (!Role.ADMIN.equals(user.getRole())) {
+            return new Results(ResultConstant.SYSTEM_BUSY, "只用管理员有权限操作,请联系管理员");
+        }
         if (bindingResult.hasErrors()) {
             return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
         }
