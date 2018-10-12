@@ -23,7 +23,7 @@ public class ManualPaymentController extends BaseController{
     @Autowired
     private ManualPaymentService manualPaymentService;
     @PostMapping("/repay_loan")
-    @RoleAuth(include = {Role.ADMIN}, exclude = Role.ADMIN)
+    @RoleAuth(include = {Role.ADMIN})
     public Results repayLoan(@RequestHeader("User-Id") String userId, @Validated @RequestBody ManualPayments manualPayments, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
