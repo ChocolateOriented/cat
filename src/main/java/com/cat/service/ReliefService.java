@@ -11,6 +11,9 @@ import com.alibaba.fastjson.JSON;
 import com.cat.manager.RaptorManager;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.dto.BaseResponse;
+import com.cat.module.entity.User;
+import com.cat.module.enums.Role;
+import com.cat.repository.UserRepository;
 import com.cat.util.Md5Encrypt;
 
 @Service
@@ -24,7 +27,8 @@ public class ReliefService extends BaseService {
 
 	@Value("${feignClient.raptor.secret2}")
     private String secret;
-
+	@Autowired 
+	private	UserRepository userRepository;
 	/**
 	 * 
 	 * @param orderId
@@ -36,7 +40,16 @@ public class ReliefService extends BaseService {
 		if(reliefAmount == null ){
 			return  new BaseResponse(-1,"金额不能为空");
 		}
-
+		User user = userRepository.findOne(userId);
+		if(user == null){
+			logger.warn("该用户不存在,userID={}",userId);
+			return new BaseResponse(-1,"您没有权限");
+		}
+		Role role = user.getRole() ;
+		if(role == null || role == Role.COLLECTOR ){
+			logger.warn("该用户没分配角色,userID={}",userId);
+			return new BaseResponse(-1,"您没有权限");
+		}
 	    HashMap<String, String> params = new HashMap<String, String>();
         params.put("number", reliefAmount.toString());
         params.put("bundleId", orderId);

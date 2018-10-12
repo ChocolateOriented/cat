@@ -477,7 +477,7 @@
 			`t_user`
 		<where>
 		<if test="collectCycle != null and collectCycle != '' ">
-			and	collect_cycle LIKE concat('%',#{item},'%')
+			and	collect_cycle LIKE concat('%',#{collectCycle},'%')
 		</if>
 		<if test="productType != null and productType != '' ">
 			and	product_type = #{productType}
@@ -496,4 +496,37 @@
 		</where>
     
     </select>
+    
+    <select id="findAndValidateTaskList" resultMap="BaseResultMap">
+        SELECT <include refid="baseSql"/>
+        FROM  `t_task` 
+        WHERE 
+        `order_id` in
+        <foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+        	#{item}
+        </foreach>
+        and collect_cycle = #{collectCycle}
+        and product_type = #{productType}
+        and order_status = 'PAYMENT'
+    </select>
+    
+    <select id="findAndValidateUserList" resultType="com.cat.module.entity.User">
+        SELECT
+			id ,
+			name
+		FROM
+			`t_user`
+		WHERE
+        	`id` in
+        <foreach collection="collectIds" item="item" open="(" close=")" separator=",">
+        	#{item}
+        </foreach>
+        and collect_cycle LIKE concat('%',#{collectCycle},'%')
+        and product_type = #{productType}
+		and `status` = 'NORMAL'
+		and role = 'COLLECTOR' 
+    
+    </select>
+    
+    
 </mapper>
