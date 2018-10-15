@@ -19,35 +19,22 @@ import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskLogMapper;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.bean.Dict;
-import com.cat.module.bean.TmpMoveCycle;
 import com.cat.module.dto.DivisionUserDto;
 import com.cat.module.entity.Task;
 import com.cat.module.entity.TaskLog;
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
 import com.cat.repository.TaskRepository;
-import com.cat.util.DateUtils;
 import com.cat.util.DictUtils;
 import com.cat.util.ListSortUtil;
+
+/**
+ * 迁徙按月分案规则
+ * @author  
+ */
 @Service
 public class ScheduledTaskService extends BaseService{
 	
-//	public Date newDateTest() = newDateTest()();
-	
-	public Date newDateTest(){
-//		String string = "2016-10-24 21:59:06";
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String value =  DictUtils.getDictValue("newDateTest", "newDateTest", sdf.format(date).toString());
-		System.out.println(value);
-		try {
-//			System.out.println("测试分案时间" + sdf.parse(value));
-			return sdf.parse(value);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return new Date();
-		}
-	}
 	
 	public static final String  AUTOQ0_ID_1 = "autoQ0_id_1";
 	public static final String  AUTOQ0_NAME_1 = "autoQ0机器人1号";
@@ -77,16 +64,35 @@ public class ScheduledTaskService extends BaseService{
 	@Autowired
 	private TaskRepository taskRepository;
 	
-	
-	private static Date toDate(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		return calendar.getTime();
+	/**
+	 * 测试使用时间
+	 * @return
+	 */
+	public Date newDateTest(){
+//		String string = "2016-10-24 21:59:06";
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String value =  DictUtils.getDictValue("newDateTest", "newDateTest", sdf.format(date).toString());
+		System.out.println(value);
+		try {
+//			System.out.println("测试分案时间" + sdf.parse(value));
+			return sdf.parse(value);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return new Date();
+		}
 	}
+	
+	
+//	private static Date toDate(Date date) {
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.setTime(date);
+//		calendar.set(Calendar.HOUR_OF_DAY, 0);
+//		calendar.set(Calendar.MINUTE, 0);
+//		calendar.set(Calendar.SECOND, 0);
+//		calendar.set(Calendar.MILLISECOND, 0);
+//		return calendar.getTime();
+//	}
 	/**
 	 * 计算逾期天数，不满一天按一天计算
 	 * @param repaymentDate 还款日
@@ -100,12 +106,20 @@ public class ScheduledTaskService extends BaseService{
 //		return (int)Math.floor(timeSub/dayTimes);
 //	}
 	
+	
+	@Transactional(readOnly = false)
+//	@Scheduled(cron = "0 10 0 * * ?")
+//	@ClustersSchedule
+	public void autoAssignAndNewOrder() {
+		this.autoAssign();
+		this.autoAssignNewOrder();
+	}
+	
+	
 	/**
 	 *  新自动分案
 	 */
 	@Transactional(readOnly = false)
-	@Scheduled(cron = "0 10 0 * * ?")
-	@ClustersSchedule
 	public void autoAssign() {
 		switch (getDaysOfMonth(newDateTest())) {
 			/**
@@ -430,8 +444,6 @@ public class ScheduledTaskService extends BaseService{
 	 *  新增未生成催收任务(task)的订单
 	 */
 	@Transactional(readOnly = false)
-	@Scheduled(cron = "0 15 0 * * ?")
-	@ClustersSchedule
 	public void autoAssignNewOrder() {
 //		List<Dict> debtBizTypes = DictUtils.getDictList(DEBTBIZ_TYPE);
 //		logger.info("产品-" + debtBizTypes + "个,新增案件"+ newDateTest());
