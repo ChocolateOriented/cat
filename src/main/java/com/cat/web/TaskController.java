@@ -97,16 +97,16 @@ public class TaskController extends BaseController {
 	}
 	@RequestMapping(value="auto_assign")
 	public void autoAssign(){
-		logger.info("开始自动分案");
-		scheduledTaskService.autoAssign();
-		logger.info("自动分案结束");
+		logger.info("手动开始自动分案");
+		taskService.autoAssign();
+		logger.info("手动自动分案结束");
 	}
-	@RequestMapping(value="auto_assign_new_order")
-	public void autoAssignNewOrder(){
-		logger.info("开始新增未生成催收任务(task)的订单");
-		scheduledTaskService.autoAssignNewOrder();
-		logger.info("新增未生成催收任务(task)的订单结束");
-	}
+//	@RequestMapping(value="auto_assign_new_order")
+//	public void autoAssignNewOrder(){
+//		logger.info("开始新增未生成催收任务(task)的订单");
+//		scheduledTaskService.autoAssignNewOrder();
+//		logger.info("新增未生成催收任务(task)的订单结束");
+//	}
 	@RequestMapping(value="syn_address_book")
 	public void synAddressBook(){
 		logger.info("手动同步通讯录");
