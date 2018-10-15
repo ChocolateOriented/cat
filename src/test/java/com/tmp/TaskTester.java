@@ -8,6 +8,7 @@ import com.cat.module.enums.UserStatus;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
 import com.cat.service.ScheduledTaskService;
+import com.cat.service.TaskService;
 
 import java.util.List;
 import org.junit.Test;
@@ -27,12 +28,12 @@ public class TaskTester {
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
-	private ScheduledTaskService service;
+	private TaskService service;
 	
 	@Test
 	public void testSearch() {
-		List<DivisionUserDto> users = taskRepository.findPeopleSumcorpusamountByDunningcycle("Q1");
-		System.out.println(users);
+//		List<DivisionUserDto> users = taskRepository.findPeopleSumcorpusamountByDunningcycle("Q1");
+//		System.out.println(users);
 
 	}
 	public static final String  C0 = "Q0";      //  提醒0-0
