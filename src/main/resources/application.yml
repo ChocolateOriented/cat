@@ -98,7 +98,8 @@ feignClient:
   suona:
     url:  https://suona.alpha.mo9.com/suonaApi
     systemCode: BOURSE
-    captchaTemplateCode: GENERAL_CAPTCHA
+    captchaTemplateCode: CAT_CAPTCHA_V1
+    resetPasswordTemplateCode: CAT_RESET_PASSWORD_V0.0.1
   raptor:
     url:  http://gqwu.local.mo9.com/raptorApi
     secret:  rtsDDcogZcPCu!NYkfgfjQq6O;~2Brtr
