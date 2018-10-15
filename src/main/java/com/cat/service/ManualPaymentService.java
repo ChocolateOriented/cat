@@ -82,7 +82,7 @@ public class ManualPaymentService extends BaseService {
         map.put("type", "PAYOFF".equals(manualPayments.getPaymentStatus()) ? "REPAY" : manualPayments.getPaymentStatus());
         map.put("amount", manualPayments.getActualPaymentAmount().toString());
         map.put("creator", manualPayments.getCreateBy());
-        map.put("reliefReason", "此用户有优惠");
+        map.put("reliefReason", null);
         String sign = Md5Encrypt.sign(map, privateKey);
         map.put("sign",sign);
         return map;
