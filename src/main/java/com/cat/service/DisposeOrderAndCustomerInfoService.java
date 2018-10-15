@@ -8,6 +8,7 @@ import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
 import com.cat.module.enums.OrderStatus;
 import com.cat.module.vo.OrderInfo;
+import com.cat.module.vo.PostponeHistoryVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     private TaskService taskService;
 
     @Autowired
-    private ContactService contactService;
+    private PostponeHistoryService postponeHistoryService;
 
     @Autowired
     private TaskLogService taskLogService;
@@ -51,8 +52,10 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (task == null) {
             return null;
         }
+
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
+
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
         return orderInfo;
     }
@@ -146,6 +149,9 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             taskLog = covertToTaskLog(dbTask, repaymentMessage, REPAY_POSTPONE);
             //清空催收人信息
             dbTask = emptyCollectionInfo(dbTask);
+            //增加延期还款记录
+            addPostponeHistory(repaymentMessage);
+
         } else if (repaymentMessage.getPayoffTime() != null){ //还清时间不为null说明已还清
             //还清
             dbTask = coverToTask(dbTask, repaymentMessage, repaymentMessage.getPayType());
@@ -155,6 +161,17 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         taskService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
         logger.info("延期或还款成功,orderId:{}", dbTask.getOrderId());
+    }
+
+    /**
+     * 添加延期还款记录
+     * @param repaymentMessage
+     */
+    private void addPostponeHistory(RepaymentMessage repaymentMessage) {
+        PostponeHistory postponeHistory = new PostponeHistory();
+        BeanUtils.copyProperties(repaymentMessage, postponeHistory);
+        postponeHistory.setId(generateId());
+        postponeHistoryService.insert(postponeHistory);
     }
 
     /**
@@ -290,5 +307,14 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 
 //        orderInfo.setMobileLocation();todo 手机号归属地
         return orderInfo;
+    }
+
+    public List<PostponeHistoryVo> getPostponeHistory(String orderId) {
+        Task task = taskService.findByOrderId(orderId);
+        if (task == null) {
+            return null;
+        }
+        List<PostponeHistoryVo> voList = postponeHistoryService.fetchpostponeHistoryByOrderId(orderId);
+        return voList;
     }
 }

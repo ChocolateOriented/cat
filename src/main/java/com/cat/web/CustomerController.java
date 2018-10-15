@@ -6,16 +6,20 @@ import com.cat.module.entity.User;
 import com.cat.module.enums.Role;
 import com.cat.module.dto.BlackListDto;
 import com.cat.module.vo.OrderInfo;
+import com.cat.module.vo.PostponeHistoryVo;
 import com.cat.repository.UserRepository;
 import com.cat.service.CustomerService;
 import com.cat.service.DisposeOrderAndCustomerInfoService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.cat.service.PostponeHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  *
@@ -31,6 +35,9 @@ public class CustomerController extends BaseController{
     private CustomerService customerService;
 	@Autowired 
 	private	UserRepository userRepository;
+	@Autowired
+    private PostponeHistoryService postponeHistoryService;
+
     @GetMapping("get_customer_and_order_info")
     public Results getCustomerInfo(@RequestParam("orderId") String orderId) {
         try {
@@ -44,6 +51,15 @@ public class CustomerController extends BaseController{
             logger.info("获取客户信息异常", e);
             return new Results(ResultConstant.INNER_ERROR);
         }
+    }
+
+    @GetMapping("get_postpone_history")
+    public Results getPostponeHistory(@RequestParam("orderId") String orderId) {
+        List<PostponeHistoryVo> voList = disposeCustomerInfoService.getPostponeHistory(orderId);
+        if (voList == null) {
+            return new Results(ResultConstant.EMPTY_ENTITY, "没有此订单");
+        }
+        return Results.ok().putData("entities", voList);
     }
 
     @PostMapping("blacklist_customer")
