@@ -1,9 +1,12 @@
 package com.cat.web;
 
 import com.cat.exception.ServiceException;
+import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
 import com.cat.module.entity.ManualPayments;
+import com.cat.module.entity.User;
+import com.cat.module.enums.Role;
 import com.cat.service.ManualPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -24,6 +27,13 @@ public class ManualPaymentController extends BaseController{
     public Results repayLoan(@RequestHeader("User-Id") String userId, @Validated @RequestBody ManualPayments manualPayments, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
+        }
+        User user = userRepository.findOne(userId);
+        if(user == null){
+            return new Results(ResultConstant.SYSTEM_BUSY, "该用户不存在");
+        }
+        if(!Role.ADMIN.equals(user.getRole())){
+            return new Results(ResultConstant.SYSTEM_BUSY, "该用户没有权限}");
         }
         try {
             manualPayments.setCreateBy(userId);
