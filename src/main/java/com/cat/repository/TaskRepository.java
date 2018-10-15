@@ -23,10 +23,11 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
       + "   AND t.collect_cycle = ?1 "
       + " WHERE a.collect_cycle LIKE concat('%',?1,'%') "
       + "   AND a.status = 'NORMAL' AND a.auto_division = 1"
-      + "   AND a.product_id = ?2 "
+      + "   AND a.product_code = ?2 "
       + " GROUP BY a.id "
       + " ORDER BY sum_corpus_amount", nativeQuery = true)
-  List<DivisionUserDto> findPeopleSumcorpusamountByDunningcycle(String dunningcycle,Long productId);
+  List<DivisionUserDto> findPeopleSumcorpusamountByDunningcycle(String dunningcycle,String
+      productCode);
 
   @Modifying
   @Query("update Task t set t.actionFeedback = ?2, t.collectTelRemark = ?3, t.collectTime = ?4"

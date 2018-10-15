@@ -1,11 +1,23 @@
 package com.cat.module.entity;
 
+import javax.persistence.Id;
+
 /**
  * Created by jxli on 2018/10/15.
  */
-public class Product extends BaseEntity{
+public class Product extends AuditingEntity{
+  @Id
+  private String code;
   private String name;
   private String divisionStrategy;//分案策略
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
 
   public String getName() {
     return name;
