@@ -80,10 +80,11 @@ public class ActionController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/list_action_feedback")
-	public EntitiesResponse<Code> listCode() {
+	public EntitiesResponse<Code> listActionFeedback() {
 		List<Code> actionCodes = actionService.listActionFeedback();
 		return new EntitiesResponse<Code>(actionCodes);
 	}
+
 	/**
 	 * 催收记录次数详情
 	 * @return

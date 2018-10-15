@@ -1,6 +1,7 @@
 package com.cat.config;
 
 import com.cat.interceptor.RequestContextInterceptor;
+import com.cat.interceptor.RoleInterceptor;
 import com.mo9.nest.auth.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +16,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     private AuthInterceptor authInterceptor;
     @Autowired
     private RequestContextInterceptor contextInterceptor;
-
+    @Autowired
+    private RoleInterceptor roleInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor).addPathPatterns("/**");
         registry.addInterceptor(contextInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(roleInterceptor).addPathPatterns("/**");
+
     }
 
 }

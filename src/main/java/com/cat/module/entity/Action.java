@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.cat.annotation.ActionFeedbackConstraint;
 import com.cat.annotation.ContactTypeConstraint;
 import com.cat.module.enums.ActionFeedback;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,7 +39,7 @@ public class Action extends AuditingEntity {
     private Integer contactType;
 
     @Enumerated(EnumType.STRING)
-    @ActionFeedbackConstraint
+    @NotNull(message = "无效的行动码")
     private ActionFeedback actionFeedback;
 
     private String remark;
