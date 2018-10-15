@@ -25,15 +25,15 @@ public class ManualPaymentController extends BaseController{
     private ManualPaymentService manualPaymentService;
     @PostMapping("/repay_loan")
     public Results repayLoan(@RequestHeader("User-Id") String userId, @Validated @RequestBody ManualPayments manualPayments, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
-        }
         User user = userRepository.findOne(userId);
         if(user == null){
             return new Results(ResultConstant.SYSTEM_BUSY, "该用户不存在");
         }
         if(!Role.ADMIN.equals(user.getRole())){
             return new Results(ResultConstant.SYSTEM_BUSY, "该用户没有权限}");
+        }
+        if (bindingResult.hasErrors()) {
+            return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
         }
         try {
             manualPayments.setCreateBy(userId);
