@@ -11,11 +11,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskLogMapper;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.bean.Dict;
@@ -108,11 +106,9 @@ public class ScheduledTaskService extends BaseService{
 	
 	
 	@Transactional(readOnly = false)
-//	@Scheduled(cron = "0 10 0 * * ?")
-//	@ClustersSchedule
-	public void autoAssignAndNewOrder() {
-		this.autoAssign();
-		this.autoAssignNewOrder();
+	public void autoAssignAndNewOrder(String productType) {
+		this.autoAssign(productType);
+		this.autoAssignNewOrder(productType);
 	}
 	
 	
@@ -120,7 +116,7 @@ public class ScheduledTaskService extends BaseService{
 	 *  新自动分案
 	 */
 	@Transactional(readOnly = false)
-	public void autoAssign() {
+	public void autoAssign(String productType) {
 		switch (getDaysOfMonth(newDateTest())) {
 			/**
 			 *  小月月分案规则
@@ -129,19 +125,19 @@ public class ScheduledTaskService extends BaseService{
 				switch (getDays()) {
 				case 1:
 					/**  Q0,Q1-Q4分案   */
-					this.autoAssign_Q1_Q4();
+					this.autoAssign_Q1_Q4(productType);
 					/**  0-0提醒分案  */
 //					this.autoAssignCycle(TMisDunningTask.STATUS_DUNNING,C0,"> 0");
 					return;
 				case 16:
 					/**  Q0,Q1-Q4分案  */
-					this.autoAssign_Q1_Q4();
+					this.autoAssign_Q1_Q4(productType);
 					/**  0-0提醒分案  */
 //					this.autoAssignCycle(TMisDunningTask.STATUS_DUNNING,C0,"> 0");
 					return;
 				default:
 //					String sqlMap = "NOT BETWEEN "+ this.getCycleDict_Q0().get("begin") + " AND  " + this.getCycleDict_Q0().get("end");
-					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0,this.getCycleDict_Q0().get("begin"),this.getCycleDict_Q0().get("end"));
+					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0,this.getCycleDict_Q0().get("begin"),this.getCycleDict_Q0().get("end"),productType);
 					return;
 				}
 			/**
@@ -151,19 +147,19 @@ public class ScheduledTaskService extends BaseService{
 				switch (getDays()) {
 				case 1:
 					/**  Q0,Q2-Q4分案 */
-					this.autoAssign_Q1_Q4();
+					this.autoAssign_Q1_Q4(productType);
 					/**  0-0提醒分案 */
 //					this.autoAssignCycle(TMisDunningTask.STATUS_DUNNING,C0,"> 0");
 					return;
 				case 17:
 					/**  Q0,Q1-Q4分案 */
-					this.autoAssign_Q1_Q4();
+					this.autoAssign_Q1_Q4(productType);
 					/**  0-0提醒分案	*/
 //					this.autoAssignCycle(TMisDunningTask.STATUS_DUNNING,C0,"> 0");
 					return;
 				default:
 //					String sqlMap = "NOT BETWEEN "+ this.getCycleDict_Q0().get("begin") + " AND  " + this.getCycleDict_Q0().get("end");
-					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0,this.getCycleDict_Q0().get("begin"),this.getCycleDict_Q0().get("end"));
+					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0,this.getCycleDict_Q0().get("begin"),this.getCycleDict_Q0().get("end"),productType);
 					return;
 				}
 			/**
@@ -173,14 +169,14 @@ public class ScheduledTaskService extends BaseService{
 				switch (getDays()) {
 				case 1:
 					/**  Q0,Q2-Q4分案 */
-					this.autoAssign_Q1_Q4();
+					this.autoAssign_Q1_Q4(productType);
 					return;
 				case 14:
 					/**  Q0,Q1-Q4分案 */
-					this.autoAssign_Q1_Q4();
+					this.autoAssign_Q1_Q4(productType);
 					return;
 				default:
-					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0,this.getCycleDict_Q0().get("begin"),this.getCycleDict_Q0().get("end"));
+					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0,this.getCycleDict_Q0().get("begin"),this.getCycleDict_Q0().get("end"),productType);
 					return;
 				}
 			default:
@@ -192,7 +188,7 @@ public class ScheduledTaskService extends BaseService{
 	/**
 	 *  Q1-Q4分案 
 	 */
-	public void autoAssign_Q1_Q4(){
+	public void autoAssign_Q1_Q4(String productType){
 	    /**
 	     * 选择催收周期段type
 	     */
@@ -213,13 +209,13 @@ public class ScheduledTaskService extends BaseService{
 					 * 逾期分配
 					 */
 //					this.autoAssignCycle(TMisDunningTask.STATUS_DUNNING,dict.getLabel(),"NOT BETWEEN "+begin+" AND  "+end);
-					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),dict.getLabel(),begin,end);
+					this.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),dict.getLabel(),begin,end,productType);
 					
 				}else{
-					logger.warn(dict.getLabel() + "队列" +dict.getValue() + "周期异常,未分案"+ newDateTest());
+					logger.warn(productType+"产品" + dict.getLabel() + "队列" +dict.getValue() + "周期异常,未分案"+ newDateTest());
 				}
 			}else{
-				logger.info(dict.getLabel() +"队列" +dict.getValue() + "周期不做分案操作-"+ newDateTest());
+				logger.info(productType+"产品" + dict.getLabel() +"队列" +dict.getValue() + "周期不做分案操作-"+ newDateTest());
 			}
 		}
 	}
@@ -285,20 +281,20 @@ public class ScheduledTaskService extends BaseService{
 	 * 过期自动分案
 	 */
 	@Transactional(readOnly = false)
-	public void autoAssignCycle(String dunningtaskstatus, String dunningcycle,String begin,String end ) {
+	public void autoAssignCycle(String dunningtaskstatus, String dunningcycle,String begin,String end,String productType) {
 //		List<Dict> debtBizTypes = DictUtils.getDictList(DEBTBIZ_TYPE);
 		logger.info("队列：" + dunningcycle +  newDateTest());
 //		for(Dict debtBizType : debtBizTypes){
 //			String debtbiztypename = debtBizType.getLabel(); 	// 产品名称
 			
 			try {
-				logger.info("过期分案产品-" + "开始过期催收任务"+ newDateTest());
+				logger.info("过期分案"+productType+"产品-" + "开始过期催收任务"+ newDateTest());
 		//		List<TMisDunningPeople> dunningPeoples = tMisDunningPeopleDao.findPeopleByDunningcycle(C0);
 		// 		 ==========================================提醒队列逾期分配begin ==========================================
-				logger.info("过期分案产品-" +"newfindDelayTaskByDunningcycle-dunningtaskstatus"+ dunningtaskstatus+ "-dunningcycle" + dunningcycle + "-begin" + begin+ "-end" + end   + newDateTest());
+				logger.info("过期分案"+productType+"产品-" +"newfindDelayTaskByDunningcycle-dunningtaskstatus"+ dunningtaskstatus+ "-dunningcycle" + dunningcycle + "-begin" + begin+ "-end" + end + "-productType"+ productType  + newDateTest());
 				/** 周期中的过期任务读取出日志  */
-				List<TaskLog>  outDunningTaskLogs = tMisDunningTaskDao.newfindDelayTaskByDunningcycle(newDateTest(),dunningtaskstatus,dunningcycle,begin,end);
-				logger.info("过期分案产品-" +"newfindDelayTaskByDunningcycle-查询"+dunningcycle+"队列过期任务数" +outDunningTaskLogs.size()  + "条-"  + newDateTest());
+				List<TaskLog>  outDunningTaskLogs = tMisDunningTaskDao.newfindDelayTaskByDunningcycle(newDateTest(),dunningtaskstatus,dunningcycle,begin,end,productType);
+				logger.info("过期分案"+productType+"产品-" +"newfindDelayTaskByDunningcycle-查询"+dunningcycle+"队列过期任务数" +outDunningTaskLogs.size()  + "条-"  + newDateTest());
 				if(!outDunningTaskLogs.isEmpty()){
 			
 					Map<Long, TaskLog> inDunningTaskLogsMap = new HashMap<Long, TaskLog>();
@@ -319,10 +315,10 @@ public class ScheduledTaskService extends BaseService{
 						Dict dict = this.getCycleDict2(dunningTaskLog.getOverdueDays());
 						if(null == dict){
 							dunningTaskLog.setBehaviorStatus(BehaviorStatus.OUT_ERROR);
-							logger.warn("过期分案产品-" +  "行为状态out_error：逾期"+dunningTaskLog.getOverdueDays() +"天，无法对应周期队列，dealcode:" + dunningTaskLog.getOrderId() + "任务taskID:" + dunningTaskLog.getTaskId()+"不做分配");
+							logger.warn("过期分案"+productType+"产品-" +  "行为状态out_error：逾期"+dunningTaskLog.getOverdueDays() +"天，无法对应周期队列，dealcode:" + dunningTaskLog.getOrderId() + "任务taskID:" + dunningTaskLog.getTaskId()+"不做分配");
 							continue;
 						}
-						System.out.println("过期分案产品-dunningTaskLog.getOverduedays()-" + dunningTaskLog.getOverdueDays() + "dict:" + dict);
+						System.out.println("过期分案"+productType+"产品-dunningTaskLog.getOverduedays()-" + dunningTaskLog.getOverdueDays() + "dict:" + dict);
 						/**
 						 * 任务task修改
 						 */
@@ -350,7 +346,7 @@ public class ScheduledTaskService extends BaseService{
 					 * 保存移出任务Log
 					 */
 					tMisDunningTaskLogDao.batchInsertTaskLog(outDunningTaskLogs);
-					System.out.println("过期分案产品-tMisDunningTaskLogDao.batchInsertTaskLog-保存移出任务Log");
+					System.out.println("过期分案"+productType+"产品-tMisDunningTaskLogDao.batchInsertTaskLog-保存移出任务Log");
 					
 					/**  移入的任务Log集合   */
 					List<TaskLog> inDunningTaskLogs = new ArrayList<TaskLog>();
@@ -369,8 +365,8 @@ public class ScheduledTaskService extends BaseService{
 //						TmpMoveCycle tmpMoveCycle = this.getTmpMoveCycle(entry.getKey());
 //						System.out.println("过期分案产品-findPeopleSumcorpusamountByDunningcycle:参数entry.getKey()"+entry.getKey() 
 //						+ "tmpMoveCycle.getDatetimestart()" +tmpMoveCycle.getDatetimestart()+ "tmpMoveCycle.getDatetimeend()" +tmpMoveCycle.getDatetimeend() );
-						List<DivisionUserDto> dunningPeoples = taskRepository.findPeopleSumcorpusamountByDunningcycle(entry.getKey());
-						System.out.println("过期分案产品-findPeopleSumcorpusamountByDunningcycle:"+ dunningPeoples.size() + "个人员");
+						List<DivisionUserDto> dunningPeoples = taskRepository.findPeopleSumcorpusamountByDunningcycle(entry.getKey(),productType);
+						System.out.println("过期分案"+productType+"产品-findPeopleSumcorpusamountByDunningcycle:"+ dunningPeoples.size() + "个人员");
 						/**
 						 *  平均分配队列集合的催收人员
 						 */
@@ -389,7 +385,7 @@ public class ScheduledTaskService extends BaseService{
 	//						} else {
 	//							j = dunningPeoples.size() - 1 - i % dunningPeoples.size();
 	//						}
-							System.out.println("过期分案产品-" + "姓名"+dunningPeoples.get(j).getName()+ "-周期总金额" + dunningPeoples.get(j).getSumCorpusAmount()+"-分配金额"+dunningTask.getLoanAmount());
+							System.out.println("过期分案"+productType+"产品-" + "姓名"+dunningPeoples.get(j).getName()+ "-周期总金额" + dunningPeoples.get(j).getSumCorpusAmount()+"-分配金额"+dunningTask.getLoanAmount());
 							
 							
 							/**  任务催收人员添加    */
@@ -410,13 +406,13 @@ public class ScheduledTaskService extends BaseService{
 												dunningTask.getCollectorName(),
 												dunningTask.getCollectCycle(),
 												BehaviorStatus.IN_WARN));
-								logger.warn("过期分案产品-" + "行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
+								logger.warn("过期分案"+productType+"产品-" + "行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
 			//					continue;
 							}
 							
 							inDunningTaskLogs.add(inDunningTaskLogsMap.get(dunningTask.getId()));
 						}
-						System.out.println("过期分案产品-batchUpdateExpiredTask");
+						System.out.println("过期分案"+productType+"产品-batchUpdateExpiredTask");
 						/**
 						 * 批量更新每个队列的任务集合
 						 */
@@ -428,14 +424,14 @@ public class ScheduledTaskService extends BaseService{
 					tMisDunningTaskLogDao.batchInsertTaskLog(inDunningTaskLogs);
 		//		=====================================提醒队列逾期分配end===================================================
 				}else{
-					logger.info("过期分案产品-" +  dunningcycle + "队列没有过期任务！" + newDateTest());
+					logger.info("过期分案"+productType+"产品-" +  dunningcycle + "队列没有过期任务！" + newDateTest());
 				}
 			} catch (Exception e) {
-				logger.error("过期分案产品-" +  dunningcycle + "队列分配任务失败,全部事务回滚");
-				logger.error("错误信息"+e.getMessage());
+				logger.error("过期分案"+productType+"产品-" +  dunningcycle + "队列分配任务失败,全部事务回滚");
+				logger.error("错误"+productType+"信息"+e.getMessage());
 				throw new RuntimeException(e);
 			} finally {
-				logger.info("过期分案产品-" + dunningcycle + "队列任务结束" + newDateTest());
+				logger.info("过期分案"+productType+"产品-" + dunningcycle + "队列任务结束" + newDateTest());
 			}
 //		}
 	}
@@ -444,22 +440,22 @@ public class ScheduledTaskService extends BaseService{
 	 *  新增未生成催收任务(task)的订单
 	 */
 	@Transactional(readOnly = false)
-	public void autoAssignNewOrder() {
+	public void autoAssignNewOrder(String productType) {
 //		List<Dict> debtBizTypes = DictUtils.getDictList(DEBTBIZ_TYPE);
 //		logger.info("产品-" + debtBizTypes + "个,新增案件"+ newDateTest());
 //		for(Dict debtBizType : debtBizTypes){
 //			String debtbiztypename = debtBizType.getLabel(); 	// 产品名称
 			
 			try {
-				logger.info("开始新增催收任务"+ newDateTest());
+				logger.info("产品"+productType+"开始"+productType+"新增催收任务"+ newDateTest());
 				/**
 				 * 根据逾期天数查询未生成任务task的订单
 				 */
 				String begin_Q0 = this.getCycleDict_Q0().get("begin");
-				logger.info("newfingDelayOrderByNotTask_day-begin_Q0"+ begin_Q0  + newDateTest());
-				List<TaskLog>  newDunningTaskLogs = tMisDunningTaskDao.newfingDelayOrderByNotTask(newDateTest(),begin_Q0);
+				logger.info("产品"+productType+"newfingDelayOrderByNotTask_day-begin_Q0"+ begin_Q0  + newDateTest());
+				List<TaskLog>  newDunningTaskLogs = tMisDunningTaskDao.newfingDelayOrderByNotTask(newDateTest(),begin_Q0,productType);
 				
-				logger.info("newfingDelayOrderByNotTask-查询新的逾期周期订单并生成任务" +newDunningTaskLogs.size()  + "条-"  + newDateTest());
+				logger.info("产品"+productType+"newfingDelayOrderByNotTask-查询新的逾期周期订单并生成任务" +newDunningTaskLogs.size()  + "条-"  + newDateTest());
 	//			Map<String, List<TMisDunningPeople>> cyclePeoplemMap = this.getDunningcyclePeopleLists();
 				
 				if(!newDunningTaskLogs.isEmpty()){
@@ -487,10 +483,10 @@ public class ScheduledTaskService extends BaseService{
 						 */
 						Dict dict = this.getCycleDict2(dunningTaskLog.getOverdueDays());
 						if(null == dict){
-							logger.warn( "行为状态out_error：逾期"+dunningTaskLog.getOverdueDays() +"天，无法对应周期队列，dealcode:" + dunningTaskLog.getOrderId() + "任务taskID:" + dunningTaskLog.getTaskId()+"不做分配");
+							logger.warn( "产品"+productType+"行为状态out_error：逾期"+dunningTaskLog.getOverdueDays() +"天，无法对应周期队列，dealcode:" + dunningTaskLog.getOrderId() + "任务taskID:" + dunningTaskLog.getTaskId()+"不做分配");
 							continue;
 						}
-						logger.info("逾期天数:"+dunningTaskLog.getOverdueDays()+ "对应队列："+ dict.getLabel()  + newDateTest());
+						logger.info("产品"+productType+"逾期天数:"+dunningTaskLog.getOverdueDays()+ "对应队列："+ dict.getLabel()  + newDateTest());
 						
 //						/**  * auto Q0 队列 begin  */
 //						if(autoQ0.equals("true") && C0.equals(dict.getLabel()) && atuoQ0DealcodeMap.containsKey(dunningTaskLog.getOrderId())){
@@ -554,13 +550,13 @@ public class ScheduledTaskService extends BaseService{
 						 * 根据周期查询催收人员按金额排序
 						 */
 //						TmpMoveCycle tmpMoveCycle = this.getTmpMoveCycle(entry.getKey());
-						List<DivisionUserDto> dunningPeoples = taskRepository.findPeopleSumcorpusamountByDunningcycle(entry.getKey());
+						List<DivisionUserDto> dunningPeoples = taskRepository.findPeopleSumcorpusamountByDunningcycle(entry.getKey(),productType);
 						
 						/**
 						 * 平均分配队列集合的催收人员
 						 */
 						List<Task> tasks = entry.getValue();
-						logger.info( "共"+ mapCycleTaskNum.entrySet().size()+"个队列，正在分配"+entry.getKey().toString()+"队列"+tasks.size()+"条，此队列有"+dunningPeoples.size()+"个催收员" + newDateTest());
+						logger.info("产品"+productType+ "共"+ mapCycleTaskNum.entrySet().size()+"个队列，正在分配"+entry.getKey().toString()+"队列"+tasks.size()+"条，此队列有"+dunningPeoples.size()+"个催收员" + newDateTest());
 						
 	//					int j = 0;
 						for(int i= 0 ; i < tasks.size() ; i++ ){  
@@ -572,7 +568,7 @@ public class ScheduledTaskService extends BaseService{
 	//						} else {
 	//							j = dunningPeoples.size() - 1 - i % dunningPeoples.size();
 	//						}
-							System.out.println("姓名"+dunningPeoples.get(j).getName()+ "-周期总金额" + dunningPeoples.get(j).getSumCorpusAmount()+"-分配金额"+dunningTask.getLoanAmount());
+							System.out.println("产品"+productType+"姓名"+dunningPeoples.get(j).getName()+ "-周期总金额" + dunningPeoples.get(j).getSumCorpusAmount()+"-分配金额"+dunningTask.getLoanAmount());
 							
 							/**  任务催收人员添加    */
 							dunningTask.setCollectorId(dunningPeoples.get(j).getId().toString());
@@ -595,28 +591,28 @@ public class ScheduledTaskService extends BaseService{
 												dunningTask.getCollectCycle(),
 												BehaviorStatus.IN_WARN)
 										);
-								logger.warn( "行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
+								logger.warn( "产品"+productType+"行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
 							}
 							inDunningTaskLogs.add(inDunningTaskLogsMap.get(dunningTask.getId()));
 						}
 						/**  批量保存每个队列的任务集合    */
 						tMisDunningTaskDao.batchinsertTask(tasks);
-						logger.info( "分配"+entry.getKey().toString()+"队列"+tasks.size()+"条，平均分配成功" + newDateTest());
+						logger.info("产品"+productType+ "分配"+entry.getKey().toString()+"队列"+tasks.size()+"条，平均分配成功" + newDateTest());
 					}
 					/** 
 					 * 保存移入任务Log
 					 */
 					tMisDunningTaskLogDao.batchInsertTaskLog(inDunningTaskLogs);
-					logger.info("任务日志记录完毕" + newDateTest());
+					logger.info("产品"+productType+"任务日志记录完毕" + newDateTest());
 				}else{
-					logger.info("newfingDelayOrderByNotTask-没有新的逾期周期订单任务" + newDateTest());
+					logger.info("产品"+productType+"newfingDelayOrderByNotTask-没有新的逾期周期订单任务" + newDateTest());
 				}
 			} catch (Exception e) {
-				logger.error("新增未生成催收任务(task)的订单失败,全部事务回滚",e);
-				logger.error("错误信息"+e);
+				logger.error("产品"+productType+"新增未生成催收任务(task)的订单失败,全部事务回滚",e);
+				logger.error("产品"+productType+"错误信息"+e);
 				throw new RuntimeException(e);
 			} finally {
-				logger.info("新增未生成催收任务(task)的订单任务结束" + newDateTest());
+				logger.info("产品"+productType+"新增未生成催收任务(task)的订单任务结束" + newDateTest());
 			}
 //		}
 	}
