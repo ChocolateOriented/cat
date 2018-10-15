@@ -27,8 +27,8 @@ public class UserTester {
 	
 	@Test
 	public void testSearch() {
-		List<DivisionUserDto> users = taskRepository.findPeopleSumcorpusamountByDunningcycle("Q1");
-		System.out.println(users);
+//		List<DivisionUserDto> users = taskRepository.findPeopleSumcorpusamountByDunningcycle("Q1");
+//		System.out.println(users);
 
 	}
 

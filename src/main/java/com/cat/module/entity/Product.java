@@ -1,10 +1,12 @@
 package com.cat.module.entity;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
  * Created by jxli on 2018/10/15.
  */
+@Entity
 public class Product extends AuditingEntity{
   @Id
   private String code;
