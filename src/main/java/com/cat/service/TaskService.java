@@ -301,7 +301,7 @@ public class TaskService extends BaseService {
 	
 	
 	/**
-	 *  各产品多规则自动分案
+	 *  各产品多规则自动分案任务
 	 */
 	@Transactional(readOnly = false)
 	@Scheduled(cron = "0 10 0 * * ?")

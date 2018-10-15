@@ -104,7 +104,10 @@ public class ScheduledTaskService extends BaseService{
 //		return (int)Math.floor(timeSub/dayTimes);
 //	}
 	
-	
+	/**
+	 * 按月规则分案
+	 * @param productType
+	 */
 	@Transactional(readOnly = false)
 	public void autoAssignAndNewOrder(String productType) {
 		this.autoAssign(productType);
@@ -388,7 +391,7 @@ public class ScheduledTaskService extends BaseService{
 							System.out.println("过期分案"+productType+"产品-" + "姓名"+dunningPeoples.get(j).getName()+ "-周期总金额" + dunningPeoples.get(j).getSumCorpusAmount()+"-分配金额"+dunningTask.getLoanAmount());
 							
 							
-							/**  任务催收人员添加    */
+							/**  任务催收人员添加    */ 
 							dunningTask.setCollectorId(dunningPeoples.get(j).getId().toString());
 							dunningTask.setCollectorName(dunningPeoples.get(j).getName());
 			//				dunningTask.setDunningtaskstatus(dunningtaskstatus);
