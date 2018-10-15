@@ -29,15 +29,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/cat/v1/customer")
 public class CustomerController extends BaseController{
+
     @Autowired
     private DisposeOrderAndCustomerInfoService disposeCustomerInfoService;
     @Autowired
     private CustomerService customerService;
 	@Autowired 
 	private	UserRepository userRepository;
-	@Autowired
-    private PostponeHistoryService postponeHistoryService;
 
+    /**
+     * 获取订单信息和用户信息
+     * @param orderId
+     * @return
+     */
     @GetMapping("get_customer_and_order_info")
     public Results getCustomerInfo(@RequestParam("orderId") String orderId) {
         try {
@@ -53,6 +57,11 @@ public class CustomerController extends BaseController{
         }
     }
 
+    /**
+     * 获取延期历史记录
+     * @param orderId
+     * @return
+     */
     @GetMapping("get_postpone_history")
     public Results getPostponeHistory(@RequestParam("orderId") String orderId) {
         List<PostponeHistoryVo> voList = disposeCustomerInfoService.getPostponeHistory(orderId);

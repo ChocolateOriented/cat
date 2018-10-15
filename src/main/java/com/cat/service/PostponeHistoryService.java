@@ -21,7 +21,12 @@ public class PostponeHistoryService {
         postponeHistoryMapper.insert(postponeHistory);
     }
 
-    public List<PostponeHistoryVo> fetchpostponeHistoryByOrderId(String orderId) {
+    /**
+     * 根据订单号获取延期历史记录
+     * @param orderId
+     * @return
+     */
+    public List<PostponeHistoryVo> fetchPostponeHistoryByOrderId(String orderId) {
         List<PostponeHistoryVo> voList = new ArrayList<>();
         List<PostponeHistory> postponeHistoryList = postponeHistoryMapper.selectHistoriesByOrderId(orderId);
         if (postponeHistoryList != null && !postponeHistoryList.isEmpty()) {

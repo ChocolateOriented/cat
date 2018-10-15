@@ -20,8 +20,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/cat/v1/payment")
 public class ManualPaymentController extends BaseController{
+
     @Autowired
     private ManualPaymentService manualPaymentService;
+
+    /**
+     * 手动还款
+     * @param userId
+     * @param manualPayments
+     * @param bindingResult
+     * @return
+     */
     @PostMapping("/repay_loan")
     @RoleAuth(include = {Role.ADMIN})
     public Results repayLoan(@RequestHeader("User-Id") String userId, @Validated @RequestBody ManualPayments manualPayments, BindingResult bindingResult) {
@@ -40,4 +49,5 @@ public class ManualPaymentController extends BaseController{
             return new Results(ResultConstant.INNER_ERROR);
         }
     }
+
 }

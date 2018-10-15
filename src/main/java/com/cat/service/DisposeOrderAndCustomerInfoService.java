@@ -13,9 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +24,7 @@ import java.util.List;
  */
 @Service
 public class DisposeOrderAndCustomerInfoService extends BaseService {
+
     @Autowired
     private CustomerService customerService;
 
@@ -71,6 +70,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (!OrderStatus.PAYMENT.name().equals(task.getOrderStatus())) {
             return;
         }
+
         //保存用户基本信息
         CustomerBaseInfo customerBaseInfo = customerAllInfo.getCustomerBaseInfo();
         CustomerBaseInfo dbCustomerInfo = customerService.fetchCustomerByCustomerId(customerBaseInfo.getCustomerId());
@@ -91,27 +91,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             bankService.insertBank(bank);
         }
 
-        //保存用户联系人信息
-//        List<Contact> contactList = customerAllInfo.getContactList();
-//        List<Contact> dbContactList = contactService.fetchContactsByCustomerId(customerBaseInfo.getCustomerId());
-//        if (dbContactList == null || dbContactList.isEmpty()) {
-//            contactList.forEach(x->x.setId(this.generateId()));
-//            contactService.insertAll(contactList);
-//        } else {
-//            List<Contact> diffContacts = new ArrayList<>();
-//            for (Contact contact : contactList) {
-//                if (!dbContactList.contains(contact)) {
-//                    contact.setId(this.generateId());
-//                    diffContacts.add(contact);
-//                }
-//            }
-//            if (!diffContacts.isEmpty()) {
-//                contactService.insertAll(diffContacts);
-//            }
-//        }
-
         //保存任务信息
-
         Task dbTask = taskService.findByOrderId(task.getOrderId());
         if (dbTask != null) {
             throw new RuntimeException("此订单已存在,task:"+task);
@@ -141,6 +121,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             throw new RuntimeException("订单已还清");
         }
         TaskLog taskLog = null;
+
         //还款类型是延期还款,并且没有还清时间
         if (REPAY_POSTPONE.equals(repaymentMessage.getPayType()) && repaymentMessage.getPayoffTime() == null) {
             //如果是延期还款
@@ -151,13 +132,13 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask = emptyCollectionInfo(dbTask);
             //增加延期还款记录
             addPostponeHistory(repaymentMessage);
-
         } else if (repaymentMessage.getPayoffTime() != null){ //还清时间不为null说明已还清
             //还清
             dbTask = coverToTask(dbTask, repaymentMessage, repaymentMessage.getPayType());
             //日志表:
             taskLog = covertToTaskLog(dbTask, repaymentMessage, repaymentMessage.getPayType());
         }
+
         taskService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
         logger.info("延期或还款成功,orderId:{}", dbTask.getOrderId());
@@ -314,7 +295,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (task == null) {
             return null;
         }
-        List<PostponeHistoryVo> voList = postponeHistoryService.fetchpostponeHistoryByOrderId(orderId);
+        List<PostponeHistoryVo> voList = postponeHistoryService.fetchPostponeHistoryByOrderId(orderId);
         return voList;
     }
 }
