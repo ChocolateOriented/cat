@@ -50,6 +50,8 @@ public class ScheduledTaskService extends BaseService{
 	
 	public static final String DEBTBIZ_TYPE = "DebtBizType";  // 产品类别
 	
+	public static final String RULES_TYPE = "dunningCycleOld";  // 规则类别
+	
 	private static Logger logger = Logger.getLogger(ScheduledTaskService.class);
 	
 
@@ -110,6 +112,7 @@ public class ScheduledTaskService extends BaseService{
 	 */
 	@Transactional(readOnly = false)
 	public void autoAssignAndNewOrder(String productType) {
+		logger.info("autoAssign月分案规则"+ RULES_TYPE + new Date());
 		this.autoAssign(productType);
 		this.autoAssignNewOrder(productType);
 	}
@@ -408,6 +411,7 @@ public class ScheduledTaskService extends BaseService{
 												dunningTask.getCollectorId(),
 												dunningTask.getCollectorName(),
 												dunningTask.getCollectCycle(),
+												dunningTask.getCollectRulesType(),
 												BehaviorStatus.IN_WARN));
 								logger.warn("过期分案"+productType+"产品-" + "行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
 			//					continue;
@@ -584,6 +588,7 @@ public class ScheduledTaskService extends BaseService{
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorId(dunningTask.getCollectorId());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorName(dunningTask.getCollectorName());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectCycle(dunningTask.getCollectCycle());
+								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectRulesType(dunningTask.getCollectRulesType());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCreateTime(newDateTest());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCreateBy(AUTO_ADMIN);
 							}else{
@@ -592,6 +597,7 @@ public class ScheduledTaskService extends BaseService{
 												dunningTask.getCollectorId(),
 												dunningTask.getCollectorName(),
 												dunningTask.getCollectCycle(),
+												dunningTask.getCollectRulesType(),
 												BehaviorStatus.IN_WARN)
 										);
 								logger.warn( "产品"+productType+"行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
@@ -806,6 +812,7 @@ public class ScheduledTaskService extends BaseService{
 //		task.setOrderId(taskLog.getOrderId());
 //		task.setLoanAmount(taskLog.getLoanAmount());
 		task.setCollectCycle(dict.getLabel());
+		task.setCollectRulesType(RULES_TYPE);
 		int min = !("").equals(dict.getValue().split("_")[0]) ?  Integer.parseInt(dict.getValue().split("_")[0]) : 0 ;
 		int max = !("").equals(dict.getValue().split("_")[1]) ?  Integer.parseInt(dict.getValue().split("_")[1]) : 0 ;
 		task.setCollectPeriodBegin(min);

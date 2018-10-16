@@ -23,6 +23,7 @@ public class TaskLog extends BaseEntity {
 	private String collectorId;		// 催收人id
 	private String collectorName;		// 催收人姓名
 	private String collectCycle;		// 催收周期(队列)
+	private String collectRulesType;		// 催收分案策略规则
 		
 	private String orderStatus;		// 订单状态
 	private Date payoffTime;		// 还清时间
@@ -59,14 +60,26 @@ public class TaskLog extends BaseEntity {
 
 	
 	public TaskLog(String orderId, String collectorId, String collectorName, String collectCycle,
-			BehaviorStatus behaviorStatus) {
+			String collectRulesType,BehaviorStatus behaviorStatus) {
 		super();
 		this.orderId = orderId;
 		this.collectorId = collectorId;
 		this.collectorName = collectorName;
 		this.collectCycle = collectCycle;
+		this.collectRulesType = collectRulesType;
 		this.behaviorStatus = behaviorStatus;
 	}
+	
+
+	public String getCollectRulesType() {
+		return collectRulesType;
+	}
+
+
+	public void setCollectRulesType(String collectRulesType) {
+		this.collectRulesType = collectRulesType;
+	}
+
 
 	/**
 	 *  获取当前逾期天数,计算逾期天数，不满一天按一天计算

@@ -243,6 +243,7 @@
 					collector_name = #{item.collectorName},
 					collect_period_begin = #{item.collectPeriodBegin},
 					collect_period_end = #{item.collectPeriodEnd},
+<!-- 					collect_rules_type = #{item.collectRulesType}, -->
 					collect_cycle = #{item.collectCycle}
 <!-- 					nextfollowdate = null -->
 				</set>
@@ -262,6 +263,7 @@
 					collect_period_begin = #{item.collectPeriodBegin},
 					collect_period_end = #{item.collectPeriodEnd},
 					collect_cycle = #{item.collectCycle},
+					collect_rules_type = #{item.collectRulesType},
 					collect_task_status = #{item.collectTaskStatus}
 				</set>
 				WHERE id = #{item.id}
@@ -306,6 +308,7 @@
 					t.collect_tel_remark  AS  collectTelRemark,
 					t.collect_time  AS  collectTime,
 					t.collect_cycle  AS  collectCycle,
+					t.collect_rules_type AS collectRulesType,
 					t.remark  AS  remark,
 					t.ispayoff AS ispayoff,
 					t.id AS taskId
@@ -357,6 +360,7 @@
 			t.collect_tel_remark  AS  collectTelRemark,
 			t.collect_time  AS  collectTime,
 			t.collect_cycle  AS  collectCycle,
+			t.collect_rules_type AS collectRulesType,
 			t.remark  AS  remark,
 			t.ispayoff AS ispayoff,
 			t.id AS taskId
