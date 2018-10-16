@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.cat.module.entity.TaskLog;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.annotation.ClustersSchedule;
+import com.cat.mapper.TaskLogMapper;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.bean.Dict;
 import com.cat.module.dto.AddressBook;
@@ -23,10 +26,12 @@ import com.cat.module.entity.Contact;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.Task;
 import com.cat.module.entity.User;
+import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.Role;
 import com.cat.repository.OrganizationRepository;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
+import com.cat.util.DateUtils;
 import com.cat.util.DictUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -42,6 +47,8 @@ public class TaskService extends BaseService {
 	private TaskRepository taskRepository;
 	@Autowired
 	private OrganizationRepository organizationRepository;
+	@Autowired
+	private TaskLogMapper taskLogMapper;
 	@Autowired
 	private	ScheduledTaskByFixedService scheduledTaskByFixedService;
 	@Autowired
@@ -132,6 +139,7 @@ public class TaskService extends BaseService {
 	 * @param userId
 	 * @return
 	 */
+	@Transactional(readOnly = false)
 	public BaseResponse assign(AssignDto assignDto, String userId) {
 		User user = userRepository.findOne(userId);
 		if(user == null){
@@ -165,14 +173,46 @@ public class TaskService extends BaseService {
 			logger.warn("手动分案失败,催收员选择有误");
 			return new BaseResponse(-1, "分案失败,催收员选择有误");
 		}
-		this.assignOperation(listOrders, listCollects);
+		this.assignOperation(listOrders, listCollects,user.getName());
 		return BaseResponse.success();
 	}
-	
-	private void assignOperation(List<Task> listOrders,List<User> listCollects) {
-		
+	//手动分案
+	private void assignOperation(List<Task> listOrders,List<User> listCollects,String createBy) {
+		List<TaskLog> taskLogs = new ArrayList<TaskLog>();
+		int taskNum = listOrders.size();
+		int collectorNum = listCollects.size();
+		logger.info("开始手动分案,案件总共{}条,分给{}个催收员",taskNum,collectorNum);
+		for (int i = 0; i < listOrders.size(); i++) {
+			Task task = listOrders.get(i);
+			task.setUpdateBy(createBy);
+			
+			int overdueDay =DateUtils.getOverdueDay(task.getRepaymentTime());
+			
+			//案件从旧催收员名下移出的tasklog
+			TaskLog taskLogOut = new TaskLog(task);
+			taskLogOut.setOverdueDays(overdueDay);
+			taskLogOut.setId(this.generateId());
+			taskLogOut.setBehaviorStatus(BehaviorStatus.OUT);
+			taskLogs.add(taskLogOut);
+			
+			//更新task的催收员信息
+			User user =  listCollects.get(i % collectorNum);
+			task.setCollectorId(user.getId());
+			task.setCollectorName(user.getName());
+			
+			//案件进入新催收员名下的tasklog
+			TaskLog taskLogIN = new TaskLog(task);
+			taskLogOut.setOverdueDays(overdueDay);
+			taskLogIN.setId(this.generateId());
+			taskLogIN.setBehaviorStatus(BehaviorStatus.IN);
+			taskLogs.add(taskLogIN);
+			
+		}
+		taskLogMapper.batchInsertTaskLog(taskLogs);
+		taskMapper.batchUpdateAssignTask(listOrders);
+		logger.info("手动分案结束啦!!!");
 	}
-	
+
 	public void insert(Task task) {
 		taskMapper.insert(task);
 	}

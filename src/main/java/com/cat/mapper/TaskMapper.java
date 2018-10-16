@@ -14,6 +14,7 @@ import org.apache.ibatis.annotations.Param;
 import com.cat.module.entity.TaskLog;
 import com.cat.module.entity.Relief;
 import com.cat.module.entity.User;
+import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.entity.Task;
 
 /**
@@ -91,4 +92,7 @@ public interface TaskMapper  {
 	public List<Task> findAndValidateTaskList(AssignDto assignDto);
 
 	public List<User> findAndValidateUserList(AssignDto assignDto);
+
+	public void batchUpdateAssignTask(List<Task> list);
+
 }
