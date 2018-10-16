@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,9 +70,8 @@ public class TaskController extends BaseController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="assign")
-	public BaseResponse assign(AssignDto assignDto,HttpServletRequest request){
-		String userId = request.getHeader("User-Id");
+	@PostMapping(value="assign")
+	public BaseResponse assign(@RequestBody AssignDto assignDto,@RequestHeader("User-Id")String  userId){
 		BaseResponse baseResponse = taskService.assign(assignDto,userId);
 		return baseResponse;
 	}

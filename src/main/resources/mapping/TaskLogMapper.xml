@@ -73,7 +73,9 @@
         task_id,
         overdue_days,
         platformext,
-        creditamount
+        creditamount,
+        create_by,
+        update_by
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -107,6 +109,8 @@
             , #{item.overdueDays}
             , #{item.platformext}
             , #{item.creditamount}
+            , #{item.createBy}
+            , #{item.updateBy}
             )
         </foreach>
     </insert>
