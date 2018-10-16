@@ -34,7 +34,7 @@ public class UserTester {
 
 	@Test
 	public void sendResetPasswordToken() throws Exception {
-		accountService.sendResetPasswordToken("jxli@mo9.com");
+		accountService.sendResetPasswordEmail("jxli@mo9.com");
 	}
 
 

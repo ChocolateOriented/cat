@@ -5,9 +5,9 @@ spring:
   datasource:
     default:
       name: datasource
-      url: jdbc:mysql://127.0.0.1:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true&allowMultiQueries=true
+      url: jdbc:mysql://192.168.3.17:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true&allowMultiQueries=true
       username: root
-      password: root
+      password: rootroot
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
     risk:
@@ -89,7 +89,7 @@ nest:
   group: CatGroup
   mode: ALONE
   exclude:
-    urls: /cat/v1/account/login, /cat/v1/account/register,/cat/v1/account/send_validate_code
+    urls: /cat/v1/account/*
 
 feign:
   httpclient:
@@ -105,6 +105,8 @@ feignClient:
     secret:  rtsDDcogZcPCu!NYkfgfjQq6O;~2Brtr
     secret2: '0123456789'
     primaryKey: TWlBfbVtgmJb6tlYeWuTl2N26xtKT5SX
+  cat-front-end:
+    url: https://bkcln.mo9.com/raptoradmin/
 
 logging:
   level:
