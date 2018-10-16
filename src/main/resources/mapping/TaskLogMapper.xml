@@ -4,6 +4,8 @@
     <resultMap id="BaseResultMap" type="com.cat.module.entity.TaskLog">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+        <result column="product_type" property="productType"/>
+        <result column="order_type" property="orderType"/>
         <result column="collector_id" jdbcType="VARCHAR" property="collectorId" />
         <result column="collector_name" jdbcType="VARCHAR" property="collectorName" />
         <result column="collect_cycle" jdbcType="VARCHAR" property="collectCycle" />
@@ -44,6 +46,8 @@
         INSERT INTO t_task_log(
         id,
         order_id,
+        product_type,
+        order_type,
         collector_id,
         collector_name,
         collect_cycle,
@@ -69,12 +73,16 @@
         task_id,
         overdue_days,
         platformext,
-        creditamount
+        creditamount,
+        create_by,
+        update_by
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.id}
             , #{item.orderId}
+            , #{item.productType}
+            , #{item.orderType}
             , #{item.collectorId}
             , #{item.collectorName}
             , #{item.collectCycle}
@@ -101,11 +109,13 @@
             , #{item.overdueDays}
             , #{item.platformext}
             , #{item.creditamount}
+            , #{item.createBy}
+            , #{item.updateBy}
             )
         </foreach>
     </insert>
     <insert id="insert" parameterType="com.cat.module.entity.TaskLog">
-        insert into t_task_log (id, order_id, collector_id,
+        insert into t_task_log (id, order_id, product_type,order_type, collector_id,
         collector_name, collect_cycle, order_status,
         payoff_time, loan_term, customer_id,
         customer_name, mobile, repayment_time,
@@ -117,7 +127,7 @@
         creditamount, create_by,
         update_by, remark
         )
-        values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{collectorId,jdbcType=VARCHAR},
+        values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},#{productType},#{orderType}, #{collectorId,jdbcType=VARCHAR},
         #{collectorName,jdbcType=VARCHAR}, #{collectCycle,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR},
         #{payoffTime,jdbcType=TIMESTAMP}, #{loanTerm,jdbcType=INTEGER}, #{customerId,jdbcType=VARCHAR},
         #{customerName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{repaymentTime,jdbcType=TIMESTAMP},
@@ -133,6 +143,8 @@
     <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.TaskLog">
         update t_task_log
         set order_id = #{orderId,jdbcType=VARCHAR},
+        product_type = #{productType},
+        order_type = #{orderType},
         collector_id = #{collectorId,jdbcType=VARCHAR},
         collector_name = #{collectorName,jdbcType=VARCHAR},
         collect_cycle = #{collectCycle,jdbcType=VARCHAR},
@@ -165,7 +177,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select id, order_id, collector_id, collector_name, collect_cycle, order_status, payoff_time,
+        select id, order_id,product_type,order_type, collector_id, collector_name, collect_cycle, order_status, payoff_time,
         loan_term, customer_id, customer_name, mobile, repayment_time, loan_amount, lent_amount,
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
@@ -175,7 +187,7 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, order_id, collector_id, collector_name, collect_cycle, order_status, payoff_time,
+        select id, order_id,product_type,order_type, collector_id, collector_name, collect_cycle, order_status, payoff_time,
         loan_term, customer_id, customer_name, mobile, repayment_time, loan_amount, lent_amount,
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,

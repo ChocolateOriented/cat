@@ -35,6 +35,8 @@ public class User extends AuditingEntity {
 
   private Boolean autoDivision;//是否自动分案
 
+  private Long productCode;
+
   public String getEmail() {
     return email;
   }
@@ -120,4 +122,11 @@ public class User extends AuditingEntity {
     this.autoDivision = autoDivision;
   }
 
+  public Long getProductCode() {
+    return productCode;
+  }
+
+  public void setProductCode(Long productCode) {
+    this.productCode = productCode;
+  }
 }

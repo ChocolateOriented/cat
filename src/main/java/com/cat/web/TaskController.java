@@ -10,14 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.module.dto.AssignDto;
 import com.cat.module.dto.BaseResponse;
+import com.cat.module.dto.CollectDto;
 import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
+import com.cat.module.entity.Organization;
+import com.cat.module.entity.User;
 import com.cat.service.ScheduledTaskService;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
@@ -53,8 +58,8 @@ public class TaskController extends BaseController {
 	 */
 	@GetMapping(value="list_collector_info")
 	public BaseResponse listCollectorInfo(){
-		EntitiesResponse<TaskDto> response = new EntitiesResponse<>();
-		List<TaskDto>  list = taskService.findUserList();
+		EntitiesResponse<User> response = new EntitiesResponse<>();
+		List<User>  list = taskService.findUserList();
 		response.setEntitese(list);
 		return response;
 	}
@@ -65,10 +70,10 @@ public class TaskController extends BaseController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="assign")
-	public BaseResponse assign(@RequestBody List<String> orderIds,String userId){
-	boolean bol = taskService.assign(orderIds,userId);
-		return bol ? BaseResponse.success() : BaseResponse.fail();
+	@PostMapping(value="assign")
+	public BaseResponse assign(@RequestBody AssignDto assignDto,@RequestHeader("User-Id")String  userId){
+		BaseResponse baseResponse = taskService.assign(assignDto,userId);
+		return baseResponse;
 	}
 	
 	/**
@@ -92,16 +97,16 @@ public class TaskController extends BaseController {
 	}
 	@RequestMapping(value="auto_assign")
 	public void autoAssign(){
-		logger.info("开始自动分案");
-		scheduledTaskService.autoAssign();
-		logger.info("自动分案结束");
+		logger.info("手动开始自动分案");
+		taskService.autoAssign();
+		logger.info("手动自动分案结束");
 	}
-	@RequestMapping(value="auto_assign_new_order")
-	public void autoAssignNewOrder(){
-		logger.info("开始新增未生成催收任务(task)的订单");
-		scheduledTaskService.autoAssignNewOrder();
-		logger.info("新增未生成催收任务(task)的订单结束");
-	}
+//	@RequestMapping(value="auto_assign_new_order")
+//	public void autoAssignNewOrder(){
+//		logger.info("开始新增未生成催收任务(task)的订单");
+//		scheduledTaskService.autoAssignNewOrder();
+//		logger.info("新增未生成催收任务(task)的订单结束");
+//	}
 	@RequestMapping(value="syn_address_book")
 	public void synAddressBook(){
 		logger.info("手动同步通讯录");
@@ -111,6 +116,30 @@ public class TaskController extends BaseController {
 
 	@PostMapping(value="reload_address_book")
 	public void reloadAddressBook(@RequestBody List<String> customerIds){
+		//手动补拿通讯录
 		taskService.reloadAddressBook(customerIds);
 	}
+	/**
+	 * 手动分案获取所有机构
+	 * @return
+	 */
+	@GetMapping(value="list_organization")
+	public BaseResponse listOrganization(){
+		EntitiesResponse<Organization> response = new EntitiesResponse<>();
+		List<Organization>  list = taskService.findOrganizationList();
+		response.setEntitese(list);
+		return response;
+	}
+	/**
+	 * 手动分案查询催收人员
+	 * @return
+	 */
+	@GetMapping(value="list_collector")
+	public BaseResponse listCollector(CollectDto collectDto){
+		EntitiesResponse<CollectDto> response = new EntitiesResponse<>();
+		List<CollectDto>  list = taskService.findCollectList(collectDto);
+		response.setEntitese(list);
+		return response;
+	}
+	
 }

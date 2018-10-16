@@ -1,5 +1,7 @@
 package com.cat.module.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,7 +18,7 @@ public class RepaymentMessage implements Serializable {
     /**
      * 用户code
      */
-    private String userCode;
+    private String customerId;
     /**
      * 还款类型
      */
@@ -56,7 +58,7 @@ public class RepaymentMessage implements Serializable {
     /**
      * 还款银行卡
      */
-    private String bankCard;
+    private String bankNo;
     /**
      * 银行预留手机
      */
@@ -64,13 +66,13 @@ public class RepaymentMessage implements Serializable {
     /**
      * 用户真实姓名
      */
-    private String userName;
+    private String customerName;
     /**
      * 身份证号
      */
     private String idCard;
     /**
-     * 放款流水号, 比如 mo9WDAFERANBPKCHOOA
+     * 放款流水号
      */
     private String dealCode;
     /**
@@ -91,6 +93,45 @@ public class RepaymentMessage implements Serializable {
      * @return
      */
     private BigDecimal totalReliefAmount;
+
+    /**
+     * 产品类型
+     */
+    private String productType;
+
+
+    public String getCustomerId() {
+        return customerId;
+    }
+    @JSONField(name = "userCode")
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getBankNo() {
+        return bankNo;
+    }
+    @JSONField(name = "bankCard")
+    public void setBankNo(String bankNo) {
+        this.bankNo = bankNo;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    @JSONField(name = "userName")
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
 
     public BigDecimal getTotalReliefAmount() {
         return totalReliefAmount;
@@ -122,14 +163,6 @@ public class RepaymentMessage implements Serializable {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public String getUserCode() {
-        return userCode;
-    }
-
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
     }
 
     public String getPayType() {
@@ -196,28 +229,12 @@ public class RepaymentMessage implements Serializable {
         this.clientVersion = clientVersion;
     }
 
-    public String getBankCard() {
-        return bankCard;
-    }
-
-    public void setBankCard(String bankCard) {
-        this.bankCard = bankCard;
-    }
-
     public String getBankMobile() {
         return bankMobile;
     }
 
     public void setBankMobile(String bankMobile) {
         this.bankMobile = bankMobile;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getIdCard() {

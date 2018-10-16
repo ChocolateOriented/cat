@@ -147,6 +147,9 @@
     <select id="findList" resultType="com.cat.module.dto.TaskDto">
     
         SELECT
+        t.product_type AS "productType",
+        t.collect_cycle AS "collectCycle",
+        t.loan_amount AS "principal",
         t.collect_time AS "collectTime",
         t.customer_id AS "customerId",
         t.customer_name AS "name",
@@ -176,6 +179,12 @@
         LEFT JOIN t_organization o ON u.organization_id = o.id
         
         <where>
+            <if test="productType != null and productType != ''">
+                AND t.product_type = #{productType}
+            </if>
+            <if test="collectCycle != null and collectCycle != ''">
+                AND t.collect_cycle = #{collectCycle}
+            </if>
             <if test="name != null and name != ''">
                 AND t.customer_name LIKE concat('%',#{name},'%')
             </if>
@@ -304,6 +313,7 @@
 			 <where>
 					t.collect_cycle =  #{collectCycle} 
 					AND  t.collect_task_status = #{collectTaskStatus}
+					AND  t.product_type = #{productType}
 					AND DATEDIFF(#{newDateTest}, t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
 			 </where>
 			ORDER BY loan_amount DESC
@@ -353,6 +363,7 @@
 		FROM t_task AS t
 		where
 			(t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE')
+			AND  t.product_type = #{productType}
 			AND DATEDIFF(#{newDateTest}, t.repayment_time) >= #{day}
 		ORDER BY loan_amount DESC
 	</select>
@@ -448,16 +459,85 @@
 <!-- 	</select> -->
     
     <update id="updateReliefAmount">
-     update t_task  set
+     update t_task set
      	update_time = now(),
-	    update_by = #{userId},
+	    update_by = #{collectorName},
 	    relief_amount = #{reliefAmount}
-     where  order_id = #{orderId}
-      
+     where order_id = #{orderId}
     </update>
     
     <select id="findCustomeId" resultType="java.lang.String">
       select customer_id from t_task where  order_status='PAYMENT'
+    </select>
+    <select id="findCollectList" resultType="com.cat.module.dto.CollectDto">
+        SELECT
+		id as  collectorId,
+		name as collectorName
+		FROM
+			`t_user`
+		<where>
+		<if test="collectCycle != null and collectCycle != '' ">
+			and	collect_cycle LIKE concat('%',#{collectCycle},'%')
+		</if>
+		<if test="productType != null and productType != '' ">
+			and	product_type = #{productType}
+		</if>
+		<if test="organization != null">
+			and organization_id in
+			<foreach collection="organization" item="item"  open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test="isAutoAssign != null and isAutoAssign != '' ">
+			and auto_division = #{isAutoAssign}
+		</if>
+		and `status` = 'NORMAL'
+		and role = 'COLLECTOR' 
+		</where>
     
     </select>
+    
+    <select id="findAndValidateTaskList" resultMap="BaseResultMap">
+        SELECT <include refid="baseSql"/>
+        FROM  `t_task` 
+        WHERE 
+        `order_id` in
+        <foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+        	#{item}
+        </foreach>
+        and collect_cycle = #{collectCycle}
+        and product_type = #{productType}
+        and order_status = 'PAYMENT'
+    </select>
+    
+    <select id="findAndValidateUserList" resultType="com.cat.module.entity.User">
+        SELECT
+			id ,
+			name
+		FROM
+			`t_user`
+		WHERE
+        	`id` in
+        <foreach collection="collectIds" item="item" open="(" close=")" separator=",">
+        	#{item}
+        </foreach>
+        and collect_cycle LIKE concat('%',#{collectCycle},'%')
+        and product_type = #{productType}
+		and `status` = 'NORMAL'
+		and role = 'COLLECTOR' 
+    
+    </select>
+    <update id="batchUpdateAssignTask" >
+     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			UPDATE t_task 
+			<set>
+			    update_time = now(),
+			    update_by = #{item.updateBy},
+				collector_id = #{item.collectorId},
+				collector_name = #{item.collectorName},
+			</set>
+			WHERE id = #{item.id}
+	 </foreach>
+    </update>
+    
 </mapper>
