@@ -8,13 +8,12 @@ import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.CollectTaskStatus;
 import com.cat.module.enums.OrderStatus;
 import com.cat.module.vo.OrderInfo;
+import com.cat.module.vo.PostponeHistoryVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import java.util.List;
  */
 @Service
 public class DisposeOrderAndCustomerInfoService extends BaseService {
+
     @Autowired
     private CustomerService customerService;
 
@@ -35,7 +35,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
     private TaskService taskService;
 
     @Autowired
-    private ContactService contactService;
+    private PostponeHistoryService postponeHistoryService;
 
     @Autowired
     private TaskLogService taskLogService;
@@ -51,8 +51,10 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (task == null) {
             return null;
         }
+
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
         CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
+
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
         return orderInfo;
     }
@@ -68,6 +70,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (!OrderStatus.PAYMENT.name().equals(task.getOrderStatus())) {
             return;
         }
+
         //保存用户基本信息
         CustomerBaseInfo customerBaseInfo = customerAllInfo.getCustomerBaseInfo();
         CustomerBaseInfo dbCustomerInfo = customerService.fetchCustomerByCustomerId(customerBaseInfo.getCustomerId());
@@ -88,27 +91,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             bankService.insertBank(bank);
         }
 
-        //保存用户联系人信息
-//        List<Contact> contactList = customerAllInfo.getContactList();
-//        List<Contact> dbContactList = contactService.fetchContactsByCustomerId(customerBaseInfo.getCustomerId());
-//        if (dbContactList == null || dbContactList.isEmpty()) {
-//            contactList.forEach(x->x.setId(this.generateId()));
-//            contactService.insertAll(contactList);
-//        } else {
-//            List<Contact> diffContacts = new ArrayList<>();
-//            for (Contact contact : contactList) {
-//                if (!dbContactList.contains(contact)) {
-//                    contact.setId(this.generateId());
-//                    diffContacts.add(contact);
-//                }
-//            }
-//            if (!diffContacts.isEmpty()) {
-//                contactService.insertAll(diffContacts);
-//            }
-//        }
-
         //保存任务信息
-
         Task dbTask = taskService.findByOrderId(task.getOrderId());
         if (dbTask != null) {
             throw new RuntimeException("此订单已存在,task:"+task);
@@ -138,6 +121,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             throw new RuntimeException("订单已还清");
         }
         TaskLog taskLog = null;
+
         //还款类型是延期还款,并且没有还清时间
         if (REPAY_POSTPONE.equals(repaymentMessage.getPayType()) && repaymentMessage.getPayoffTime() == null) {
             //如果是延期还款
@@ -146,15 +130,29 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             taskLog = covertToTaskLog(dbTask, repaymentMessage, REPAY_POSTPONE);
             //清空催收人信息
             dbTask = emptyCollectionInfo(dbTask);
+            //增加延期还款记录
+            addPostponeHistory(repaymentMessage);
         } else if (repaymentMessage.getPayoffTime() != null){ //还清时间不为null说明已还清
             //还清
             dbTask = coverToTask(dbTask, repaymentMessage, repaymentMessage.getPayType());
             //日志表:
             taskLog = covertToTaskLog(dbTask, repaymentMessage, repaymentMessage.getPayType());
         }
+
         taskService.updateTaskStatus(dbTask);
         taskLogService.insert(taskLog);
         logger.info("延期或还款成功,orderId:{}", dbTask.getOrderId());
+    }
+
+    /**
+     * 添加延期还款记录
+     * @param repaymentMessage
+     */
+    private void addPostponeHistory(RepaymentMessage repaymentMessage) {
+        PostponeHistory postponeHistory = new PostponeHistory();
+        BeanUtils.copyProperties(repaymentMessage, postponeHistory);
+        postponeHistory.setId(generateId());
+        postponeHistoryService.insert(postponeHistory);
     }
 
     /**
@@ -290,5 +288,14 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 
 //        orderInfo.setMobileLocation();todo 手机号归属地
         return orderInfo;
+    }
+
+    public List<PostponeHistoryVo> getPostponeHistory(String orderId) {
+        Task task = taskService.findByOrderId(orderId);
+        if (task == null) {
+            return null;
+        }
+        List<PostponeHistoryVo> voList = postponeHistoryService.fetchPostponeHistoryByOrderId(orderId);
+        return voList;
     }
 }

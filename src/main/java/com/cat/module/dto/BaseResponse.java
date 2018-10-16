@@ -43,6 +43,11 @@ public class BaseResponse implements Serializable {
 		this.message = message;
 	}
 
+	@Override
+	public String toString() {
+		return "[code=" + code + ", message=" + message + "]";
+	}
+
 	@JsonIgnore
 	public boolean isSuccess() {
 		return code != null && code == 0;

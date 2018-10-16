@@ -1,7 +1,6 @@
 package com.cat.module.bean;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class CallLogBean implements Serializable {
 

@@ -313,6 +313,7 @@
 			 <where>
 					t.collect_cycle =  #{collectCycle} 
 					AND  t.collect_task_status = #{collectTaskStatus}
+					AND  t.product_type = #{productType}
 					AND DATEDIFF(#{newDateTest}, t.repayment_time) NOT BETWEEN #{begin} AND  #{end}
 			 </where>
 			ORDER BY loan_amount DESC
@@ -362,6 +363,7 @@
 		FROM t_task AS t
 		where
 			(t.collect_task_status = 'UNOPEND_TASK' or t.collect_task_status = 'TASK_POSTPONE')
+			AND  t.product_type = #{productType}
 			AND DATEDIFF(#{newDateTest}, t.repayment_time) >= #{day}
 		ORDER BY loan_amount DESC
 	</select>
@@ -457,17 +459,15 @@
 <!-- 	</select> -->
     
     <update id="updateReliefAmount">
-     update t_task  set
+     update t_task set
      	update_time = now(),
-	    update_by = #{userId},
+	    update_by = #{collectorName},
 	    relief_amount = #{reliefAmount}
-     where  order_id = #{orderId}
-      
+     where order_id = #{orderId}
     </update>
     
     <select id="findCustomeId" resultType="java.lang.String">
       select customer_id from t_task where  order_status='PAYMENT'
-    
     </select>
     <select id="findCollectList" resultType="com.cat.module.dto.CollectDto">
         SELECT

@@ -3,8 +3,6 @@
  */
 package com.cat.mapper;
 
-
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +12,7 @@ import com.cat.module.dto.TaskDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
+import com.cat.module.entity.Relief;
 import com.cat.module.entity.User;
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.entity.Task;
@@ -38,14 +37,21 @@ public interface TaskMapper  {
 	 * @param dunningcycle
 	 * @return
 	 */
-	public List<TaskLog> newfindDelayTaskByDunningcycle(@Param("newDateTest")Date newDateTest,@Param("collectTaskStatus")String collectTaskStatus,@Param("collectCycle")String collectCycle,@Param("begin")String begin,@Param("end")String end);
+	public List<TaskLog> newfindDelayTaskByDunningcycle
+	(@Param("newDateTest")Date newDateTest,
+			@Param("collectTaskStatus")String collectTaskStatus,
+			@Param("collectCycle")String collectCycle,
+			@Param("begin")String begin,
+			@Param("end")String end,
+			@Param("productType")String productType);
 
 	/**
 	 * 根据逾期天数查询未生成任务task的订单
 	 * @param day
 	 * @return
 	 */
-	public List<TaskLog> newfingDelayOrderByNotTask(@Param("newDateTest")Date newDateTest,@Param("day")String day);
+	public List<TaskLog> newfingDelayOrderByNotTask(@Param("newDateTest")Date newDateTest,@Param("day")String day,@Param("productType")String productType);
+
 	
 	
 	/**
@@ -77,12 +83,11 @@ public interface TaskMapper  {
 
 	void updateByPrimaryKey(Task dbTask);
 
-	public void updateReliefAmount(@Param("orderId")String orderId, @Param("reliefAmount")BigDecimal reliefAmount, @Param("userId")String userId);
+	public void updateReliefAmount(Relief relief);
 
 	public List<String> findCustomeId();
 
 	public List<CollectDto> findCollectList(CollectDto collectDto);
-
 
 	public List<Task> findAndValidateTaskList(AssignDto assignDto);
 

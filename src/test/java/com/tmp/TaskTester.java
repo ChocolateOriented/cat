@@ -31,8 +31,8 @@ public class TaskTester {
 	
 	@Test
 	public void testSearch() {
-		List<DivisionUserDto> users = taskRepository.findPeopleSumcorpusamountByDunningcycle("Q1");
-		System.out.println(users);
+//		List<DivisionUserDto> users = taskRepository.findPeopleSumcorpusamountByDunningcycle("Q1");
+//		System.out.println(users);
 
 	}
 	public static final String  C0 = "Q0";      //  提醒0-0
@@ -46,7 +46,7 @@ public class TaskTester {
 
 	@Test
 	public void testInsert() {
-		service.autoAssign();
+//		service.autoAssign();
 //		service.autoAssignCycle(CollectTaskStatus.TASK_IN_PROGRESS.toString(),C0, "-1", "0");
 //		service.autoAssignNewOrder();
 	}

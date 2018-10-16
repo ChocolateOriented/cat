@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.cat.module.entity.Contact;
-import com.cat.module.entity.Organization;
-import com.cat.module.entity.Task;
 import com.cat.module.entity.TaskLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +15,16 @@ import com.alibaba.fastjson.JSON;
 import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskLogMapper;
 import com.cat.mapper.TaskMapper;
+import com.cat.module.bean.Dict;
 import com.cat.module.dto.AddressBook;
 import com.cat.module.dto.AssignDto;
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.CollectDto;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
+import com.cat.module.entity.Contact;
+import com.cat.module.entity.Organization;
+import com.cat.module.entity.Task;
 import com.cat.module.entity.User;
 import com.cat.module.enums.BehaviorStatus;
 import com.cat.module.enums.Role;
@@ -31,6 +32,7 @@ import com.cat.repository.OrganizationRepository;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
 import com.cat.util.DateUtils;
+import com.cat.util.DictUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 @Service
@@ -47,6 +49,10 @@ public class TaskService extends BaseService {
 	private OrganizationRepository organizationRepository;
 	@Autowired
 	private TaskLogMapper taskLogMapper;
+	@Autowired
+	private	ScheduledTaskByFixedService scheduledTaskByFixedService;
+	@Autowired
+	private	ScheduledTaskService scheduledTaskService ;
 
 	/**
 	 * 获取任务列表
@@ -328,6 +334,25 @@ public class TaskService extends BaseService {
 	public List<CollectDto> findCollectList(CollectDto collectDto) {
 		
 		return taskMapper.findCollectList(collectDto);
+	}
+	
+	
+	public static final String PRODUCT_TYPE = "productType"; 
+	
+	
+	/**
+	 *  各产品多规则自动分案任务
+	 */
+	@Transactional(readOnly = false)
+	@Scheduled(cron = "0 10 0 * * ?")
+	@ClustersSchedule
+	public void autoAssign() {
+		List<Dict> dicts = DictUtils.getDictList(PRODUCT_TYPE);
+		for(Dict dict : dicts){
+			logger.info("定时分案产品"+dict.getValue()+"-" + "开始"+ new Date());
+			scheduledTaskByFixedService.autoFixedAssign(dict.getValue());
+			logger.info("定时分案产品"+dict.getValue()+"-" + "结束"+ new Date());
+		}
 	}
 
 }
