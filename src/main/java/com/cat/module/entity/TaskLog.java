@@ -23,6 +23,7 @@ public class TaskLog extends BaseEntity {
 	private String collectorId;		// 催收人id
 	private String collectorName;		// 催收人姓名
 	private String collectCycle;		// 催收周期(队列)
+	private String collectRulesType;		// 催收分案策略规则
 		
 	private String orderStatus;		// 订单状态
 	private Date payoffTime;		// 还清时间
@@ -59,14 +60,26 @@ public class TaskLog extends BaseEntity {
 
 	
 	public TaskLog(String orderId, String collectorId, String collectorName, String collectCycle,
-			BehaviorStatus behaviorStatus) {
+			String collectRulesType,BehaviorStatus behaviorStatus) {
 		super();
 		this.orderId = orderId;
 		this.collectorId = collectorId;
 		this.collectorName = collectorName;
 		this.collectCycle = collectCycle;
+		this.collectRulesType = collectRulesType;
 		this.behaviorStatus = behaviorStatus;
 	}
+	
+
+	public String getCollectRulesType() {
+		return collectRulesType;
+	}
+
+
+	public void setCollectRulesType(String collectRulesType) {
+		this.collectRulesType = collectRulesType;
+	}
+
 
 	/**
 	 *  获取当前逾期天数,计算逾期天数，不满一天按一天计算
@@ -379,30 +392,29 @@ public class TaskLog extends BaseEntity {
 		this.productType = productType;
 	}
 	public TaskLog(Task task){
-		TaskLog taskLog = new TaskLog();
-		taskLog.setOrderId(task.getOrderId());
-		taskLog.setCollectorId(task.getCollectorId());
-		taskLog.setCollectorName(task.getCollectorName());
-		taskLog.setCollectCycle(task.getCollectCycle());
-		taskLog.setOrderStatus(task.getOrderStatus());
-		taskLog.setLoanTerm(task.getLoanTerm());
-		taskLog.setCustomerId(task.getCustomerId());
-		taskLog.setCustomerName(task.getCustomerName());
-		taskLog.setMobile(task.getMobile());
-		taskLog.setRepaymentTime(task.getRepaymentTime());
-		taskLog.setLoanAmount(task.getLoanAmount());
-		taskLog.setInterestMode(task.getInterestMode());
-		taskLog.setInterestValue(task.getInterestValue());
-		taskLog.setPenaltyMode(task.getPenaltyMode());
-		taskLog.setPenaltyValue(task.getPenaltyValue());
-		taskLog.setReliefAmount(task.getReliefAmount());
-		taskLog.setChargeValue(task.getChargeValue());
-		taskLog.setCollectTaskStatus(task.getCollectTaskStatus());
-		taskLog.setTaskId(task.getId());
-		taskLog.setProductType(task.getProductType());
-		taskLog.setOrderType(task.getOrderType());
-		taskLog.setCreateBy(task.getUpdateBy());
-		taskLog.setUpdateBy(task.getUpdateBy());
+		this.setOrderId(task.getOrderId());
+		this.setCollectorId(task.getCollectorId());
+		this.setCollectorName(task.getCollectorName());
+		this.setCollectCycle(task.getCollectCycle());
+		this.setOrderStatus(task.getOrderStatus());
+		this.setLoanTerm(task.getLoanTerm());
+		this.setCustomerId(task.getCustomerId());
+		this.setCustomerName(task.getCustomerName());
+		this.setMobile(task.getMobile());
+		this.setRepaymentTime(task.getRepaymentTime());
+		this.setLoanAmount(task.getLoanAmount());
+		this.setInterestMode(task.getInterestMode());
+		this.setInterestValue(task.getInterestValue());
+		this.setPenaltyMode(task.getPenaltyMode());
+		this.setPenaltyValue(task.getPenaltyValue());
+		this.setReliefAmount(task.getReliefAmount());
+		this.setChargeValue(task.getChargeValue());
+		this.setCollectTaskStatus(task.getCollectTaskStatus());
+		this.setTaskId(task.getId());
+		this.setProductType(task.getProductType());
+		this.setOrderType(task.getOrderType());
+		this.setCreateBy(task.getUpdateBy());
+		this.setUpdateBy(task.getUpdateBy());
 	}
 	
 }

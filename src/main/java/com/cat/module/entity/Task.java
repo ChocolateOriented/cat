@@ -67,6 +67,7 @@ public class Task  extends BaseEntity {
 	private String  actionFeedback;//行动码
 	private Date  collectTime;//操作时间
 	private String  collectCycle;//催收队列
+	private String collectRulesType;		// 催收分案策略规则
 	private String  remark;//e
 	
 	private boolean ispayoff;		// 任务所对应的订单是否还清
@@ -314,6 +315,12 @@ public class Task  extends BaseEntity {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
+	public String getCollectRulesType() {
+		return collectRulesType;
+	}
+	public void setCollectRulesType(String collectRulesType) {
+		this.collectRulesType = collectRulesType;
+	}
 	/**
 	 *  获取当前逾期天数
 	 * @return
@@ -324,6 +331,7 @@ public class Task  extends BaseEntity {
 		return ScheduledTaskService.GetOverdueDay(repaymentTime);
 //		return (int)((toDate(now).getTime() - toDate(repaymentTime).getTime()) / (24 * 60 * 60 * 1000));
 	}*/
+
 
 	/**
 	 * 应催金额:本金+利息+逾期费-减免金额   利息:interestValue固定的值

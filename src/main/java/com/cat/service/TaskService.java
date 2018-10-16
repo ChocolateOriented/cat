@@ -202,7 +202,7 @@ public class TaskService extends BaseService {
 			
 			//案件进入新催收员名下的tasklog
 			TaskLog taskLogIN = new TaskLog(task);
-			taskLogOut.setOverdueDays(overdueDay);
+			taskLogIN.setOverdueDays(overdueDay);
 			taskLogIN.setId(this.generateId());
 			taskLogIN.setBehaviorStatus(BehaviorStatus.IN);
 			taskLogs.add(taskLogIN);
@@ -349,9 +349,13 @@ public class TaskService extends BaseService {
 	public void autoAssign() {
 		List<Dict> dicts = DictUtils.getDictList(PRODUCT_TYPE);
 		for(Dict dict : dicts){
-			logger.info("定时分案产品"+dict.getValue()+"-" + "开始"+ new Date());
-			scheduledTaskByFixedService.autoFixedAssign(dict.getValue());
-			logger.info("定时分案产品"+dict.getValue()+"-" + "结束"+ new Date());
+			if(dict.getRemarks().equals("open")){
+				logger.info("定时分案产品"+dict.getValue()+"-" + "开始"+ new Date());
+				scheduledTaskByFixedService.autoFixedAssign(dict.getValue());
+				logger.info("定时分案产品"+dict.getValue()+"-" + "结束"+ new Date());
+			}else{
+				logger.info("定时分案产品"+dict.getValue()+"-" + "未开启"+ new Date());
+			}
 		}
 	}
 
