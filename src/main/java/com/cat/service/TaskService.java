@@ -202,7 +202,7 @@ public class TaskService extends BaseService {
 			
 			//案件进入新催收员名下的tasklog
 			TaskLog taskLogIN = new TaskLog(task);
-			taskLogOut.setOverdueDays(overdueDay);
+			taskLogIN.setOverdueDays(overdueDay);
 			taskLogIN.setId(this.generateId());
 			taskLogIN.setBehaviorStatus(BehaviorStatus.IN);
 			taskLogs.add(taskLogIN);
