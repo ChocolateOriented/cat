@@ -181,6 +181,7 @@ public class AccountService extends BaseService {
     messageDto.setTemplateCode(resetPasswordTemplateCode);
     messageDto.getReceivers().add(email);
     Map<String, String> values = messageDto.getVariableValues();
+    //TODO
     String url= "https://www.baidu.com?token="+token+"&email="+email;
     values.put("url", url);
     values.put("name", sameUser.getName());
