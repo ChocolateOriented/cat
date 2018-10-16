@@ -534,7 +534,7 @@
 			    update_time = now(),
 			    update_by = #{item.updateBy},
 				collector_id = #{item.collectorId},
-				collector_name = #{item.collectorName},
+				collector_name = #{item.collectorName}
 			</set>
 			WHERE id = #{item.id}
 	 </foreach>
