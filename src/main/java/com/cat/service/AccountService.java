@@ -212,5 +212,6 @@ public class AccountService extends BaseService {
     }
 
     user.setPassword(EncryptionUtils.password(PASSWORD_SALT,password));
+    userRepository.save(user);
   }
 }
