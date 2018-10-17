@@ -183,6 +183,7 @@ public class AccountService extends BaseService {
     messageDto.setSystemCode(systemCode);
     messageDto.setTemplateCode(resetPasswordTemplateCode);
     messageDto.getReceivers().add(email);
+
     Map<String, String> values = messageDto.getVariableValues();
     String url= frontEndUrl+"#/reset_password?token="+token+"&email="+email;
     values.put("url", url);
