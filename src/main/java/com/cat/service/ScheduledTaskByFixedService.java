@@ -380,7 +380,7 @@ public class ScheduledTaskByFixedService extends BaseService{
 	 */
 	public Map<String, String> getCycleDict_Q0(){
 		Map<String, String> map = new HashMap<String, String>();
-		String value =  DictUtils.getDictValue("Q0", "dunningCycle1", "-1_0");
+		String value =  DictUtils.getDictValue("Q0", RULES_TYPE, "-1_0");
 		String begin = value.split("_")[0];
 		String end = value.split("_")[1];
 		map.put("begin", begin);
