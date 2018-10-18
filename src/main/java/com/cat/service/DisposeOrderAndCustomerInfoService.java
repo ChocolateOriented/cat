@@ -175,6 +175,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             //添加延期金额
             BigDecimal oldAmount = dbTask.getPostponeTotalAmount();
             dbTask.setPostponeTotalAmount((oldAmount == null ? BigDecimal.ZERO : oldAmount).add(repaymentMessage.getRepayAmount()));
+            //清空减免金额
+            dbTask.setReliefAmount(BigDecimal.ZERO);
         } else if (repaymentMessage.getPayoffTime() != null){
             //payoffTime还清时间
             dbTask.setPayoffTime(repaymentMessage.getPayoffTime());
@@ -186,8 +188,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             dbTask.setOrderStatus(OrderStatus.PAYOFF.name());
             dbTask.setIspayoff(true);
         }
-        //减免总金额
-        dbTask.setReliefAmount(repaymentMessage.getTotalReliefAmount());
+
         //产品类型
         dbTask.setProductType(repaymentMessage.getProductType());
         return dbTask;
