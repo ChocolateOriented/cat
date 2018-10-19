@@ -3,6 +3,7 @@ package com.cat.service;
 import com.alibaba.fastjson.JSON;
 import com.cat.manager.MessageSender;
 import com.cat.module.dto.RegisterDto;
+import com.cat.module.dto.ResetPasswordDto;
 import com.cat.module.dto.SuonaMessageDto;
 import com.cat.module.dto.result.Results;
 import com.cat.module.entity.Organization;
@@ -44,9 +45,14 @@ public class AccountService extends BaseService {
   private String systemCode;
   @Value("${feignClient.suona.captchaTemplateCode}")
   private String captchaTemplateCode;
+  @Value("${feignClient.suona.resetPasswordTemplateCode}")
+  private String resetPasswordTemplateCode;
+  @Value("${feignClient.cat-front-end.url}")
+  private String frontEndUrl;
 
   private static final String PASSWORD_SALT = "356a192b7913b04c54574d1";
   private static final String CACHE_VALIDATE_CODE_PREFIX = "validateCode";
+  private static final String CACHE_RESET_PASSWORD_TOKEN_PREFIX = "resetPasswordToken";
 
   @Transactional
   public void registerByEmail(RegisterDto registerDto, HttpServletRequest request) {
@@ -64,6 +70,11 @@ public class AccountService extends BaseService {
     if (sameUser!=null){
       throw new RuntimeException("邮箱已被注册");
     }
+    sameUser = userRepository.findTopByName(name);
+    if (sameUser!=null){
+      throw new RuntimeException("昵称已被占用");
+    }
+
 
     User user = new User();
     user.setName(name);
@@ -143,7 +154,6 @@ public class AccountService extends BaseService {
     messageDto.getReceivers().add(email);
     Map<String, String> values = messageDto.getVariableValues();
     values.put("pinCode", validateCode);
-    values.put("sign", "验证码");
     Results results = messageSender.send(messageDto);
     logger.debug(results.toString());
     if (!results.isSuccess()) {
@@ -159,4 +169,49 @@ public class AccountService extends BaseService {
     return false;
   }
 
+  public void sendResetPasswordEmail(String email) {
+    User user = userRepository.findTopByEmail(email);
+    if (user==null){
+      throw new RuntimeException("该邮箱未注册");
+    }
+
+    String token = RandomStringUtils.randomAlphanumeric(24);
+    RedisUtil.set(CACHE_RESET_PASSWORD_TOKEN_PREFIX + email, token, 10*60);
+
+    SuonaMessageDto messageDto = new SuonaMessageDto();
+    messageDto.setMessageId(super.generateId()+"");
+    messageDto.setSystemCode(systemCode);
+    messageDto.setTemplateCode(resetPasswordTemplateCode);
+    messageDto.getReceivers().add(email);
+
+    Map<String, String> values = messageDto.getVariableValues();
+    String url= frontEndUrl+"#/reset_password?token="+token+"&email="+email;
+    values.put("url", url);
+    values.put("name", user.getName());
+
+    Results results = messageSender.send(messageDto);
+    logger.debug(results.toString());
+    if (!results.isSuccess()) {
+      throw new RuntimeException("发重置密码邮件失败");
+    }
+  }
+
+  public void resetPassword(ResetPasswordDto resetPasswordDto) {
+    String email = resetPasswordDto.getEmail();
+    String receiveToken = resetPasswordDto.getToken();
+    String password = resetPasswordDto.getPassword();
+
+    User user = userRepository.findTopByEmail(email);
+    if (user==null){
+      throw new RuntimeException("该邮箱未注册");
+    }
+
+    String cachedToken = RedisUtil.get(CACHE_RESET_PASSWORD_TOKEN_PREFIX + email);
+    if (!Objects.equals(cachedToken, receiveToken)) {
+      throw new RuntimeException("无效令牌");
+    }
+
+    user.setPassword(EncryptionUtils.password(PASSWORD_SALT,password));
+    userRepository.save(user);
+  }
 }

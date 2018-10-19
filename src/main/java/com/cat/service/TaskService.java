@@ -142,15 +142,6 @@ public class TaskService extends BaseService {
 	@Transactional(readOnly = false)
 	public BaseResponse assign(AssignDto assignDto, String userId) {
 		User user = userRepository.findOne(userId);
-		if(user == null){
-			logger.warn("该用户不存在,userID={}",userId);
-			return new BaseResponse(-1, "分案失败,您没有权限");
-		}
-		if(user.getRole()  != Role.ADMIN){
-			logger.warn("该用户不是admin角色,userID={}",userId);
-			return new BaseResponse(-1, "分案失败,您没有权限");
-		}
-		
 		if(assignDto == null ){
 			logger.warn("手动分案失败,参数为null");
 			return new BaseResponse(-1, "分案失败,必要参数为空");
@@ -202,7 +193,7 @@ public class TaskService extends BaseService {
 			
 			//案件进入新催收员名下的tasklog
 			TaskLog taskLogIN = new TaskLog(task);
-			taskLogOut.setOverdueDays(overdueDay);
+			taskLogIN.setOverdueDays(overdueDay);
 			taskLogIN.setId(this.generateId());
 			taskLogIN.setBehaviorStatus(BehaviorStatus.IN);
 			taskLogs.add(taskLogIN);
@@ -349,9 +340,13 @@ public class TaskService extends BaseService {
 	public void autoAssign() {
 		List<Dict> dicts = DictUtils.getDictList(PRODUCT_TYPE);
 		for(Dict dict : dicts){
-			logger.info("定时分案产品"+dict.getValue()+"-" + "开始"+ new Date());
-			scheduledTaskByFixedService.autoFixedAssign(dict.getValue());
-			logger.info("定时分案产品"+dict.getValue()+"-" + "结束"+ new Date());
+			if(dict.getRemarks().equals("open")){
+				logger.info("定时分案产品"+dict.getValue()+"-" + "开始"+ new Date());
+				scheduledTaskByFixedService.autoFixedAssign(dict.getValue());
+				logger.info("定时分案产品"+dict.getValue()+"-" + "结束"+ new Date());
+			}else{
+				logger.info("定时分案产品"+dict.getValue()+"-" + "未开启"+ new Date());
+			}
 		}
 	}
 

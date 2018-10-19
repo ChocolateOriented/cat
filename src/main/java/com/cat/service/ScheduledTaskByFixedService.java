@@ -218,6 +218,7 @@ public class ScheduledTaskByFixedService extends BaseService{
 												dunningTask.getCollectorId(),
 												dunningTask.getCollectorName(),
 												dunningTask.getCollectCycle(),
+												dunningTask.getCollectRulesType(),
 												BehaviorStatus.IN_WARN));
 								logger.warn("过期分案"+productType+"产品-" + "行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
 			//					continue;
@@ -334,6 +335,7 @@ public class ScheduledTaskByFixedService extends BaseService{
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorId(dunningTask.getCollectorId());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectorName(dunningTask.getCollectorName());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectCycle(dunningTask.getCollectCycle());
+								inDunningTaskLogsMap.get(dunningTask.getId()).setCollectRulesType(dunningTask.getCollectRulesType());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCreateTime(newDateTest());
 								inDunningTaskLogsMap.get(dunningTask.getId()).setCreateBy(AUTO_ADMIN);
 							}else{
@@ -342,6 +344,7 @@ public class ScheduledTaskByFixedService extends BaseService{
 												dunningTask.getCollectorId(),
 												dunningTask.getCollectorName(),
 												dunningTask.getCollectCycle(),
+												dunningTask.getCollectRulesType(),
 												BehaviorStatus.IN_WARN)
 										);
 								logger.warn( "产品"+productType+"行为状态in_warn：任务taskID:" +dunningTask.getId() + "移入" + dunningTask.getCollectCycle() + "队列" +dunningTask.getCollectorName() +"数据缺失" );
@@ -377,7 +380,7 @@ public class ScheduledTaskByFixedService extends BaseService{
 	 */
 	public Map<String, String> getCycleDict_Q0(){
 		Map<String, String> map = new HashMap<String, String>();
-		String value =  DictUtils.getDictValue("Q0", "dunningCycle1", "-1_0");
+		String value =  DictUtils.getDictValue("Q0", RULES_TYPE, "-1_0");
 		String begin = value.split("_")[0];
 		String end = value.split("_")[1];
 		map.put("begin", begin);
@@ -431,6 +434,7 @@ public class ScheduledTaskByFixedService extends BaseService{
 //		task.setId(IdGen.uuid());
 		task.setId(taskLog.getTaskId());
 		task.setCollectCycle(dict.getLabel());
+		task.setCollectRulesType(RULES_TYPE);
 		int min = !("").equals(dict.getValue().split("_")[0]) ?  Integer.parseInt(dict.getValue().split("_")[0]) : 0 ;
 		int max = !("").equals(dict.getValue().split("_")[1]) ?  Integer.parseInt(dict.getValue().split("_")[1]) : 0 ;
 		task.setCollectPeriodBegin(min);

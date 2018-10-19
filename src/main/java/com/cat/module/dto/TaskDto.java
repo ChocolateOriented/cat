@@ -147,14 +147,14 @@ public class TaskDto implements Serializable{
 		this.overdueDaysEnd = overdueDaysEnd;
 	}
 	public String getPayoffTimeStart() {
-		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		return this.payoffTimeStart == null ? null : sd.format(new Date(this.payoffTimeStart));
 	}
 	public void setPayoffTimeStart(Long payoffTimeStart) {
 		this.payoffTimeStart = payoffTimeStart;
 	}
 	public String getPayoffTimeEnd() {
-		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		return this.payoffTimeEnd == null ? null : sd.format(new Date(this.payoffTimeEnd)) ;
 	}
 	public void setPayoffTimeEnd(Long payoffTimeEnd) {
@@ -179,14 +179,14 @@ public class TaskDto implements Serializable{
 		this.collectTime = collectTime;
 	}
 	public String getCollectTimeStart() {
-		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		return this.collectTimeStart == null ? null : sd.format(new Date(this.collectTimeStart));
 	}
 	public void setCollectTimeStart(Long collectTimeStart) {
 		this.collectTimeStart = collectTimeStart;
 	}
 	public String getCollectTimeEnd() {
-		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		return this.collectTimeEnd == null ? null : sd.format(new Date(this.collectTimeEnd));
 	}
 	public void setCollectTimeEnd(Long collectTimeEnd) {

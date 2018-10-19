@@ -2,6 +2,7 @@ package com.cat.web;
 
 import com.cat.module.dto.EmailDto;
 import com.cat.module.dto.LoginDto;
+import com.cat.module.dto.ResetPasswordDto;
 import com.cat.module.vo.LoginVo;
 import com.cat.module.dto.RegisterDto;
 import com.cat.module.dto.result.ResultConstant;
@@ -71,5 +72,38 @@ public class AccountController extends BaseController {
       return new Results(ResultConstant.INNER_ERROR,"发送验证码失败");
     }
     return Results.ok("验证码已发送至邮箱");
+  }
+
+
+  @PostMapping("send_reset_password_email")
+  public Results sendResetPasswordEmail(@Validated @RequestBody EmailDto
+      emailDto, BindingResult bindingResult){
+    if (bindingResult.hasErrors()) {
+      return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
+    }
+
+    try {
+      accountService.sendResetPasswordEmail(emailDto.getEmail());
+    }catch (Exception e){
+      logger.info("发送重置密码邮件失败"+emailDto.getEmail(),e);
+      return new Results(ResultConstant.INNER_ERROR,"发送重置密码邮件失败");
+    }
+    return Results.ok();
+  }
+
+  @PostMapping("reset_password")
+  public Results resetPassword(@Validated @RequestBody ResetPasswordDto resetPasswordDto,
+      BindingResult bindingResult){
+    if (bindingResult.hasErrors()) {
+      return new Results(ResultConstant.EMPTY_PARAM, getFieldErrorsMessages(bindingResult));
+    }
+
+    try {
+      accountService.resetPassword(resetPasswordDto);
+    }catch (Exception e){
+      logger.info("重置密码失败"+resetPasswordDto,e);
+      return new Results(ResultConstant.INNER_ERROR,"重置密码失败:"+e.getMessage());
+    }
+    return Results.ok();
   }
 }

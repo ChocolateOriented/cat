@@ -21,6 +21,7 @@ public class Dict  {
 	private Integer sort;	// 排序
 	private String parentId;//父Id
 	private String delFlag = "0";
+	private String remarks;//备注
 
 	public Dict() {
 		super();
@@ -103,5 +104,17 @@ public class Dict  {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
+
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	
+	
 	
 }

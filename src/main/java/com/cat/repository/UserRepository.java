@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<User,String> {
 
   User findTopByEmail(String email);
+
+  User findTopByName(String name);
 }

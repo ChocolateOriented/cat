@@ -51,6 +51,7 @@
         collector_id,
         collector_name,
         collect_cycle,
+        collect_rules_type,
         order_status,
         payoff_time,
         loan_term,
@@ -86,6 +87,7 @@
             , #{item.collectorId}
             , #{item.collectorName}
             , #{item.collectCycle}
+            , #{item.collectRulesType}
             , #{item.orderStatus}
             , #{item.payoffTime}
             , #{item.loanTerm}
