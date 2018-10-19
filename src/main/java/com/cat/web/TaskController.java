@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.annotation.RoleAuth;
 import com.cat.module.dto.AssignDto;
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.CollectDto;
@@ -23,6 +24,7 @@ import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.User;
+import com.cat.module.enums.Role;
 import com.cat.service.ScheduledTaskService;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
@@ -71,6 +73,7 @@ public class TaskController extends BaseController {
 	 * @return
 	 */
 	@PostMapping(value="assign")
+	@RoleAuth(include = Role.ADMIN)
 	public BaseResponse assign(@RequestBody AssignDto assignDto,@RequestHeader("User-Id")String  userId){
 		BaseResponse baseResponse = taskService.assign(assignDto,userId);
 		return baseResponse;

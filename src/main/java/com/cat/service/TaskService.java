@@ -142,15 +142,6 @@ public class TaskService extends BaseService {
 	@Transactional(readOnly = false)
 	public BaseResponse assign(AssignDto assignDto, String userId) {
 		User user = userRepository.findOne(userId);
-		if(user == null){
-			logger.warn("该用户不存在,userID={}",userId);
-			return new BaseResponse(-1, "分案失败,您没有权限");
-		}
-		if(user.getRole()  != Role.ADMIN){
-			logger.warn("该用户不是admin角色,userID={}",userId);
-			return new BaseResponse(-1, "分案失败,您没有权限");
-		}
-		
 		if(assignDto == null ){
 			logger.warn("手动分案失败,参数为null");
 			return new BaseResponse(-1, "分案失败,必要参数为空");
