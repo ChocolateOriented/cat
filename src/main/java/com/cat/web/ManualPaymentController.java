@@ -49,5 +49,4 @@ public class ManualPaymentController extends BaseController{
             return new Results(ResultConstant.INNER_ERROR);
         }
     }
-
 }
