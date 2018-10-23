@@ -177,7 +177,7 @@ public class TaskService extends BaseService {
 			Task task = listOrders.get(i);
 			task.setUpdateBy(createBy);
 			
-			int overdueDay =DateUtils.getOverdueDay(task.getRepaymentTime());
+			int overdueDay =DateUtils.getOverdueDay(new Date(), task.getRepaymentTime());
 			
 			//案件从旧催收员名下移出的tasklog
 			TaskLog taskLogOut = new TaskLog(task);

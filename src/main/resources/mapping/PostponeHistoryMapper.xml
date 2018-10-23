@@ -5,25 +5,18 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
-    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="postpone_count" jdbcType="INTEGER" property="postponeCount" />
-    <result column="pay_order_id" jdbcType="VARCHAR" property="payOrderId" />
     <result column="repay_amount" jdbcType="DECIMAL" property="repayAmount" />
     <result column="repayment_time" jdbcType="TIMESTAMP" property="repaymentTime" />
-    <result column="channel_repay_mumber" jdbcType="DECIMAL" property="channelRepayMumber" />
     <result column="channel" jdbcType="VARCHAR" property="channel" />
-    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
-    <result column="client_version" jdbcType="VARCHAR" property="clientVersion" />
     <result column="bank_no" jdbcType="VARCHAR" property="bankNo" />
-    <result column="bank_mobile" jdbcType="VARCHAR" property="bankMobile" />
-    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
-    <result column="idCard" jdbcType="VARCHAR" property="idcard" />
-    <result column="deal_code" jdbcType="VARCHAR" property="dealCode" />
+    <result column="collector_name" property="collectorName"/>
+    <result column="collector_id" property="collectorId"/>
     <result column="postpone_days" jdbcType="VARCHAR" property="postponeDays" />
-    <result column="is_entry_done" jdbcType="VARCHAR" property="isEntryDone" />
-    <result column="payoff_time" jdbcType="TIMESTAMP" property="payoffTime" />
-    <result column="total_relief_amount" jdbcType="DECIMAL" property="totalReliefAmount" />
     <result column="product_type" jdbcType="VARCHAR" property="productType" />
+    <result column="relief_amount" property="reliefAmount"/>
+    <result column="postpone_time" property="postponeTime"/>
+    <result column="last_payment_time" property="lastPaymentTime"/>
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
@@ -33,71 +26,81 @@
   </delete>
   <insert id="insert" parameterType="com.cat.module.entity.PostponeHistory">
     insert into t_postpone_history (id, order_id, customer_id, 
-      pay_type, postpone_count, pay_order_id, 
-      repay_amount, repayment_time, channel_repay_mumber, 
-      channel, client_id, client_version, 
-      bank_no, bank_mobile, customer_name, 
-      idCard, deal_code, postpone_days, 
-      is_entry_done, payoff_time, total_relief_amount, 
-      product_type, created_time, updated_time
+      postpone_count,
+      repay_amount, repayment_time,
+      channel,
+      bank_no,
+      collector_name,
+      collector_id,
+      postpone_days,
+      product_type,relief_amount,postpone_time, last_payment_time, created_time, updated_time
       )
     values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, 
-      #{payType,jdbcType=VARCHAR}, #{postponeCount,jdbcType=INTEGER}, #{payOrderId,jdbcType=VARCHAR}, 
-      #{repayAmount,jdbcType=DECIMAL}, #{repaymentTime,jdbcType=TIMESTAMP}, #{channelRepayMumber,jdbcType=DECIMAL}, 
-      #{channel,jdbcType=VARCHAR}, #{clientId,jdbcType=VARCHAR}, #{clientVersion,jdbcType=VARCHAR}, 
-      #{bankNo,jdbcType=VARCHAR}, #{bankMobile,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
-      #{idcard,jdbcType=VARCHAR}, #{dealCode,jdbcType=VARCHAR}, #{postponeDays,jdbcType=VARCHAR}, 
-      #{isEntryDone,jdbcType=VARCHAR}, #{payoffTime,jdbcType=TIMESTAMP}, #{totalReliefAmount,jdbcType=DECIMAL}, 
-      #{productType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      #{postponeCount,jdbcType=INTEGER},
+      #{repayAmount,jdbcType=DECIMAL}, #{repaymentTime,jdbcType=TIMESTAMP},
+      #{channel,jdbcType=VARCHAR},
+      #{bankNo,jdbcType=VARCHAR},
+      #{collectorName},
+      #{collectorId},
+      #{postponeDays,jdbcType=VARCHAR},
+      #{productType,jdbcType=VARCHAR},#{reliefAmount}, #{postponeTime},#{lastPaymentTime}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.PostponeHistory">
     update t_postpone_history
     set order_id = #{orderId,jdbcType=VARCHAR},
       customer_id = #{customerId,jdbcType=VARCHAR},
-      pay_type = #{payType,jdbcType=VARCHAR},
       postpone_count = #{postponeCount,jdbcType=INTEGER},
-      pay_order_id = #{payOrderId,jdbcType=VARCHAR},
       repay_amount = #{repayAmount,jdbcType=DECIMAL},
       repayment_time = #{repaymentTime,jdbcType=TIMESTAMP},
-      channel_repay_mumber = #{channelRepayMumber,jdbcType=DECIMAL},
       channel = #{channel,jdbcType=VARCHAR},
-      client_id = #{clientId,jdbcType=VARCHAR},
-      client_version = #{clientVersion,jdbcType=VARCHAR},
       bank_no = #{bankNo,jdbcType=VARCHAR},
-      bank_mobile = #{bankMobile,jdbcType=VARCHAR},
-      customer_name = #{customerName,jdbcType=VARCHAR},
-      idCard = #{idcard,jdbcType=VARCHAR},
-      deal_code = #{dealCode,jdbcType=VARCHAR},
+      collector_name = #{collectorName},
+      collector_id = #{collectorId},
       postpone_days = #{postponeDays,jdbcType=VARCHAR},
-      is_entry_done = #{isEntryDone,jdbcType=VARCHAR},
-      payoff_time = #{payoffTime,jdbcType=TIMESTAMP},
-      total_relief_amount = #{totalReliefAmount,jdbcType=DECIMAL},
       product_type = #{productType,jdbcType=VARCHAR},
+      relief_amount = #{reliefAmount},
+      postpone_time =  #{postponeTime},
+      last_payment_time =#{lastPaymentTime},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select id, order_id, customer_id, pay_type, postpone_count, pay_order_id, repay_amount, 
-    repayment_time, channel_repay_mumber, channel, client_id, client_version, bank_no, 
-    bank_mobile, customer_name, idCard, deal_code, postpone_days, is_entry_done, payoff_time, 
-    total_relief_amount, product_type, created_time, updated_time
+    select id, order_id, customer_id,
+      postpone_count,
+      repay_amount, repayment_time,
+      channel,
+      bank_no,
+      collector_name,
+      collector_id,
+      postpone_days,
+      product_type,relief_amount,postpone_time, last_payment_time, created_time, updated_time
     from t_postpone_history
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, order_id, customer_id, pay_type, postpone_count, pay_order_id, repay_amount, 
-    repayment_time, channel_repay_mumber, channel, client_id, client_version, bank_no, 
-    bank_mobile, customer_name, idCard, deal_code, postpone_days, is_entry_done, payoff_time, 
-    total_relief_amount, product_type, created_time, updated_time
+    select id, order_id, customer_id,
+      postpone_count,
+      repay_amount, repayment_time,
+      channel,
+      bank_no,
+      collector_name,
+      collector_id,
+      postpone_days,
+      product_type,relief_amount,postpone_time, last_payment_time, created_time, updated_time
     from t_postpone_history
   </select>
   <select id="selectHistoriesByOrderId" resultMap="BaseResultMap">
-    select id, order_id, customer_id, pay_type, postpone_count, pay_order_id, repay_amount,
-    repayment_time, channel_repay_mumber, channel, client_id, client_version, bank_no,
-    bank_mobile, customer_name, idCard, deal_code, postpone_days, is_entry_done, payoff_time,
-    total_relief_amount, product_type, created_time, updated_time
+    select id, order_id, customer_id,
+      postpone_count,
+      repay_amount, repayment_time,
+      channel,
+      bank_no,
+      collector_name,
+      collector_id,
+      postpone_days,
+      product_type,relief_amount,postpone_time, last_payment_time, created_time, updated_time
     from t_postpone_history
     WHERE order_id = #{orderId}
     ORDER BY created_time DESC;

@@ -350,7 +350,7 @@ public class Task  extends BaseEntity {
 	 * @return
 	 */
 	public BigDecimal getOverDueAmount() {
-		int betweenDays = DateUtils.getOverdueDay(repaymentTime);
+		int betweenDays = DateUtils.getOverdueDay(new Date(), repaymentTime);
 		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays));
 		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
 	}

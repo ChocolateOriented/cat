@@ -80,17 +80,6 @@ public class TaskLog extends BaseEntity {
 		this.collectRulesType = collectRulesType;
 	}
 
-
-	/**
-	 *  获取当前逾期天数,计算逾期天数，不满一天按一天计算
-	 * @return
-	 */
-	public int calculateOverdueDays()
-	{
-		return DateUtils.getOverdueDay(repaymentTime);
-	}
-
-
 	public String getRemark() {
 		return remark;
 	}
