@@ -126,6 +126,9 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
 
         //还款类型是延期还款,并且没有还清时间
         if (REPAY_POSTPONE.equals(repaymentMessage.getPayType()) && repaymentMessage.getPayoffTime() == null) {
+            if (repaymentMessage.getRepaymentTime().equals(dbTask.getRepaymentTime())) {
+                throw new RuntimeException("延期订单重复推送");
+            }
             //增加延期还款记录
             addPostponeHistory(dbTask,repaymentMessage);
             //如果是延期还款
