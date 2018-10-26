@@ -54,7 +54,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         }
 
         Bank bank = bankService.findBankByBankNoAndType(task.getBankNo(),BankType.LEND);
-        CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(bank.getCustomerId());
+        CustomerBaseInfo customerBaseInfo = customerService.fetchCustomerByCustomerId(task.getCustomerId());
 
         OrderInfo orderInfo = convertToOrderInfo(task, bank, customerBaseInfo);
         return orderInfo;
