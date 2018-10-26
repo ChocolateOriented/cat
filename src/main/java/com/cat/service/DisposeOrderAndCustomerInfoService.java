@@ -278,6 +278,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         }
 
         if (task != null) {
+            orderInfo.setOrderStatus(task.getOrderStatus());
             orderInfo.setOrderId(task.getOrderId());
             orderInfo.setName(task.getCustomerName());
             orderInfo.setCustomerTotalAmount(task.getRepayAmount());
