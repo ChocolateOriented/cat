@@ -266,18 +266,18 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         if (bank != null) {
             orderInfo.setIdCard(bank.getIdCard());
             orderInfo.setBankName(bank.getBankName());
-            orderInfo.setBankNo(bank.getBankCard());
-            orderInfo.setCustomerId(bank.getCustomerId());
         }
 
         if (customerBaseInfo != null) {
-            orderInfo.setMobile(customerBaseInfo.getMobile());
             orderInfo.setGender(customerBaseInfo.getGender());
             orderInfo.setIdCardAddress(customerBaseInfo.getIdCardAddress());
             orderInfo.setBlacklist(customerBaseInfo.getBlacklist());
         }
 
         if (task != null) {
+            orderInfo.setCustomerId(task.getCustomerId());
+            orderInfo.setMobile(task.getMobile());
+            orderInfo.setBankNo(task.getBankNo());
             orderInfo.setOrderStatus(task.getOrderStatus());
             orderInfo.setOrderId(task.getOrderId());
             orderInfo.setName(task.getCustomerName());
