@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.cat.module.dto.*;
 import com.cat.module.entity.TaskLog;
 
+import com.cat.module.vo.DayRepaymentOrderVo;
+import com.cat.module.vo.DayTaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,12 +19,6 @@ import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskLogMapper;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.bean.Dict;
-import com.cat.module.dto.AddressBook;
-import com.cat.module.dto.AssignDto;
-import com.cat.module.dto.BaseResponse;
-import com.cat.module.dto.CollectDto;
-import com.cat.module.dto.PageResponse;
-import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Contact;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.Task;
@@ -350,4 +347,38 @@ public class TaskService extends BaseService {
 		}
 	}
 
+	/**
+	 * 获取催收员每天任务次数
+	 * @param collectorId
+	 * @return
+	 */
+	public List<CurrentOrderDto> getTaskCount(String collectorId) {
+		return taskLogMapper.getDayTaskCount(collectorId);
+	}
+
+	public Integer getShouldPayOrder(String collectorId, String status) {
+		return taskLogMapper.getShouldPayOrder(collectorId, status);
+	}
+
+	public PageInfo<DayRepaymentOrderVo> getDayOrderPage(String collectorId, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<TaskLog> list = taskLogMapper.getListOfDayOrder(collectorId);
+		List<DayRepaymentOrderVo> DayRepaymentOrderVo = convertToDayRepaymentOrderVoList(list);
+		PageInfo<DayRepaymentOrderVo> pageInfo = new PageInfo<>(DayRepaymentOrderVo);
+		return pageInfo;
+	}
+
+	private List<DayRepaymentOrderVo> convertToDayRepaymentOrderVoList(List<TaskLog> list) {
+		List<DayRepaymentOrderVo> dayRepaymentOrderVos = new ArrayList<>();
+		list.forEach(item -> {
+			DayRepaymentOrderVo dayRepaymentOrderVo = new DayRepaymentOrderVo();
+			dayRepaymentOrderVo.setOrderId(item.getOrderId());
+			dayRepaymentOrderVo.setOrderStatus(item.getOrderStatus());
+			dayRepaymentOrderVo.setOverdueDays(item.getOverdueDays() == null ? 0 : item.getOverdueDays());
+			dayRepaymentOrderVo.setRepaymentAmount(item.getRepaymentAmount());
+			dayRepaymentOrderVo.setRepaymentTime(item.getRepaymentTime());
+			dayRepaymentOrderVos.add(dayRepaymentOrderVo);
+		});
+		return dayRepaymentOrderVos;
+	}
 }

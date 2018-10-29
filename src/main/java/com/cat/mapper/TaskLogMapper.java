@@ -5,6 +5,7 @@ package com.cat.mapper;
 
 import java.util.List;
 
+import com.cat.module.dto.CurrentOrderDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
@@ -17,7 +18,7 @@ public interface TaskLogMapper  {
 	
 	/**
 	 * 批量保存任务日志Log
-	 * @param TaskLog
+	 * @param
 	 * @return
 	 */
 	public int batchInsertTaskLog(@Param("list")List<TaskLog> list);
@@ -31,4 +32,20 @@ public interface TaskLogMapper  {
 	List<TaskLog> selectAll();
 
 	int updateByPrimaryKey(TaskLog record);
+
+	/**
+	 * 获取催收员每天任务次数和总金额
+	 * @param collectorId
+	 * @return
+	 */
+	List<CurrentOrderDto> getDayTaskCount(String collectorId);
+
+	Integer getShouldPayOrder(@Param("collectorId") String collectorId, @Param("orderStatus")String orderStatus);
+
+	/**
+	 * 查出催收员当天行为状态为'POSTPONE', 'FINISHED'的所有订单
+	 * @param collectorId
+	 * @return
+	 */
+	List<TaskLog> getListOfDayOrder(String collectorId);
 }

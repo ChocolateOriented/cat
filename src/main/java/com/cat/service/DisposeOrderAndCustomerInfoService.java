@@ -157,8 +157,8 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
         BeanUtils.copyProperties(repaymentMessage, postponeHistory);
         postponeHistory.setId(generateId());
         postponeHistory.setLastPaymentTime(task.getRepaymentTime());
-        postponeHistory.setCollectorId(task.getCustomerId());
-        postponeHistory.setCollectorName(task.getCustomerName());
+        postponeHistory.setCollectorId(task.getCollectorId());
+        postponeHistory.setCollectorName(task.getCollectorName());
         postponeHistoryService.insert(postponeHistory);
     }
 

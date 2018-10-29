@@ -197,4 +197,31 @@
         remark
         from t_task_log
     </select>
+    <select id="getDayTaskCount" resultType="com.cat.module.dto.CurrentOrderDto">
+        SELECT collector_id AS collectorId,
+        behavior_status AS behaviorStatus,
+        IFNULL(count(*),0) AS `count`,
+        IFNULL(SUM(repayment_amount),0) AS sumRepaymentAmount
+        FROM t_task_log
+        WHERE  collector_id = #{collectorId} AND TO_DAYS(create_time) = TO_DAYS(NOW())
+        GROUP BY behavior_status
+    </select>
+    <select id="getShouldPayOrder" resultType="INTEGER">
+        SELECT count(*)
+        FROM t_task
+        WHERE collector_id = #{collectorId} AND order_status = #{orderStatus};
+    </select>
+    <select id="getListOfDayOrder" resultMap="BaseResultMap">
+        select id, order_id,product_type,order_type, collector_id, collector_name, collect_cycle, order_status, payoff_time,
+        loan_term, customer_id, customer_name, mobile, repayment_time, loan_amount, lent_amount,
+        interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
+        repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
+        overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
+        remark
+        from t_task_log
+        WHERE collector_id = #{collectorId}
+        AND TO_DAYS(create_time) = TO_DAYS(NOW())
+        AND behavior_status IN ('POSTPONE', 'FINISHED')
+        ORDER BY create_time DESC
+    </select>
 </mapper>
