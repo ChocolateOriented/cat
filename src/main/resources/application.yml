@@ -107,6 +107,8 @@ feignClient:
     primaryKey: TWlBfbVtgmJb6tlYeWuTl2N26xtKT5SX
   cat-front-end:
     url: https://bkcln.mo9.com/raptoradmin/
+  cti:
+    url: https://cti.mo9.com:8443
 
 logging:
   level:
