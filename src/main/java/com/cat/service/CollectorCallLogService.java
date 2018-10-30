@@ -61,7 +61,7 @@ public class CollectorCallLogService extends BaseService {
 	 * 初始化cti拨号加拨规则
 	 */
 	@PostConstruct
-	public void init() {
+	private void init() {
 		int length = agentPattern.length;
 		
 		if (length != preDial.length || length != nonlocalPre.length) {
@@ -121,7 +121,7 @@ public class CollectorCallLogService extends BaseService {
 	 * @param tel
 	 * @return
 	 */
-	public String trimInvalidTelNumber(String tel) {
+	private String trimInvalidTelNumber(String tel) {
 		String newTel = tel.replaceAll("\\D", "");
 		if (newTel.startsWith("86")) {
 			newTel = newTel.substring(2);
@@ -261,7 +261,7 @@ public class CollectorCallLogService extends BaseService {
 		try {
 			PageResponse<CallInfo> first = ctiManager.queryCallInfo(command, callType);
 			if (first == null) {
-				logger.info("获取通话信息失败");
+				logger.info("获取{}通话信息失败", callType.getDesc());
 				return callInfos;
 			}
 			
@@ -277,7 +277,7 @@ public class CollectorCallLogService extends BaseService {
 			if (total % 10 > 0) {
 				totalPage++;
 			}
-			logger.info("获取通话信息页数{}", totalPage);
+			logger.info("获取{}通话信息页数{}",callType.getDesc(), totalPage);
 			
 			for (int i = 2; i <= totalPage; i++) {
 				command.setPage(String.valueOf(i));
@@ -294,7 +294,7 @@ public class CollectorCallLogService extends BaseService {
 				callInfos.addAll(nextEntities);
 			}
 		} catch (Exception e) {
-			logger.info("获取通话信息失败,失败信息:", e);
+			logger.info("获取"+ callType.getDesc() + "通话信息失败,失败信息:", e);
 		}
 		return callInfos;
 	}
@@ -344,7 +344,7 @@ public class CollectorCallLogService extends BaseService {
 				collectorCallLogRepository.save(callLog);
 			}
 		} catch (Exception e) {
-			logger.info("保存同步通话信息失败,失败信息:", e);
+			logger.info("保存" + callType.getDesc() + "同步通话信息失败,失败信息:", e);
 		}
 	}
 
@@ -354,6 +354,11 @@ public class CollectorCallLogService extends BaseService {
 	 * @param callInfo
 	 */
 	private void updateCallOutInfo(String customNo, CallInfo callInfo) {
+		//排除旧mis系统的通话信息
+		if (!StringUtils.isNumeric(customNo)) {
+			return;
+		}
+		
 		CollectorCallLog current = collectorCallLogRepository.findOne(Long.parseLong(customNo));
 		if (current == null) {
 			return;

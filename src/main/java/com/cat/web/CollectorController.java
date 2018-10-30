@@ -2,16 +2,12 @@ package com.cat.web;
 
 import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.result.Results;
-import com.cat.module.vo.ActionVo;
 import com.cat.module.vo.DayRepaymentOrderVo;
 import com.cat.module.vo.DayTaskVo;
 import com.cat.service.CollectorService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by cyuan on 2018/10/26.

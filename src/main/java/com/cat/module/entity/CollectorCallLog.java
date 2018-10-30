@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import com.cat.module.dto.cti.CallInfo;
 import com.cat.module.dto.cti.CallinInfo;
-import com.cat.module.enums.AgentStatus;
 import com.cat.module.enums.CallResult;
 import com.cat.module.enums.CallType;
 
@@ -52,8 +51,6 @@ public class CollectorCallLog extends AuditingEntity {
 	private Integer callResult;
 
 	private String ctiUuid;
-
-	private AgentStatus status;
 
 	private String orderId;
 
@@ -195,14 +192,6 @@ public class CollectorCallLog extends AuditingEntity {
 
 	public void setCtiUuid(String ctiUuid) {
 		this.ctiUuid = ctiUuid;
-	}
-
-	public AgentStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(AgentStatus status) {
-		this.status = status;
 	}
 
 	public String getOrderId() {

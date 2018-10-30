@@ -18,7 +18,12 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
   @Override
   public String getCurrentAuditor() {
-    String userId = CommonRequestContext.getInstance().getCurrentUserId();
+	CommonRequestContext instance = CommonRequestContext.getInstance();
+	if (instance == null) {
+		return "sys";
+	}
+	
+    String userId = instance.getCurrentUserId();
     if (StringUtils.isBlank(userId)) {
       return "sys";
     }
