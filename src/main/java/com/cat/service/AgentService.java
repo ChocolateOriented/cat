@@ -18,6 +18,7 @@ import com.cat.manager.CtiManager;
 import com.cat.mapper.AgentMapper;
 import com.cat.module.dto.PageResponse;
 import com.cat.module.entity.Agent;
+import com.cat.module.entity.AgentLoginLog;
 import com.cat.module.entity.AgentStatistic;
 import com.cat.module.enums.AgentStatus;
 import com.cat.module.vo.AgentStatisticVo;
@@ -52,13 +53,13 @@ public class AgentService extends BaseService {
 		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(currentAgent.getCollectorId());
 		Date date = new Date();
 		if(agentStatistic == null && newStatus != AgentStatus.LOGGED_OUT){
-			agentStatistic = new AgentStatistic();
-			agentStatistic.setId(this.generateId());
-			agentStatistic.setAgent(currentAgent.getAgent());
-			agentStatistic.setFirstLoginTime(date);
-			agentStatistic.setLastLoginTime(date);
-			agentStatistic.setAccumulativeTime(0);
-			agentMapper.insertAgentStatistic(agentStatistic);
+			AgentStatistic	statistic = new AgentStatistic();
+			statistic.setId(this.generateId());
+			statistic.setAgent(currentAgent.getAgent());
+			statistic.setFirstLoginTime(date);
+			statistic.setLastLoginTime(date);
+			statistic.setAccumulativeTime(0);
+			agentMapper.insertAgentStatistic(statistic);
 		}
 		AgentStatus currentStatus = currentAgent.getStatus();
 		if(agentStatistic != null ){
@@ -80,8 +81,13 @@ public class AgentService extends BaseService {
 		}
 		currentAgent.setStatus(newStatus);
 		agentMapper.updateAgentById(currentAgent);
-		currentAgent.setId(this.generateId());
-		agentMapper.insertAgentLog(currentAgent);
+		
+		AgentLoginLog agentLoginLog = new AgentLoginLog();
+		agentLoginLog.setId(this.generateId());
+		agentLoginLog.setAgent(currentAgent.getAgent());
+		agentLoginLog.setCollectorId(currentAgent.getCollectorId());
+		agentLoginLog.setStatus(newStatus);
+		agentMapper.insertAgentLog(agentLoginLog);
 	}
 
 	public PageResponse<CollectorCallLogVo> list(CollectorCallLogVo collectorCallLogVo, Integer pageNum,
