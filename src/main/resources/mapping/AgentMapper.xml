@@ -15,6 +15,13 @@
     where
     	id = #{id}
 </update>
+<update id="updateAgentStatusById">
+	update t_agent set
+	 status = #{status},
+	 update_time = now()
+    where
+    	id = #{id}
+</update>
 
 <insert id="insertAgentLog">
 	insert into t_agent_login_log (

@@ -56,6 +56,7 @@ public class AgentService extends BaseService {
 			AgentStatistic	statistic = new AgentStatistic();
 			statistic.setId(this.generateId());
 			statistic.setAgent(currentAgent.getAgent());
+			statistic.setCollectorId(currentAgent.getCollectorId());
 			statistic.setFirstLoginTime(date);
 			statistic.setLastLoginTime(date);
 			statistic.setAccumulativeTime(0);
@@ -70,17 +71,17 @@ public class AgentService extends BaseService {
 				int lineTime = (int) ((date.getTime()-agentStatistic.getLastLoginTime().getTime())/1000 + agentStatistic.getAccumulativeTime());
 				agentStatistic.setAccumulativeTime(lineTime);
 				agentStatistic.setLastLoginTime(null);
-				
+				agentMapper.updateAgentStatisticById(agentStatistic);
 			}
 			//离线变在线
 			if((newStatus == AgentStatus.AVAILABLE || newStatus == AgentStatus.ON_BREAK) 
 					&& currentStatus == AgentStatus.LOGGED_OUT ){
 				agentStatistic.setLastLoginTime(date);
+				agentMapper.updateAgentStatisticById(agentStatistic);
 			}
-			agentMapper.updateAgentStatisticById(agentStatistic);
 		}
-		currentAgent.setStatus(newStatus);
-		agentMapper.updateAgentById(currentAgent);
+		
+		agentMapper.updateAgentStatusById(newStatus,currentAgent.getId());
 		
 		AgentLoginLog agentLoginLog = new AgentLoginLog();
 		agentLoginLog.setId(this.generateId());
