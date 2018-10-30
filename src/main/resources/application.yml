@@ -107,9 +107,17 @@ feignClient:
     primaryKey: TWlBfbVtgmJb6tlYeWuTl2N26xtKT5SX
   cat-front-end:
     url: https://bkcln.mo9.com/raptoradmin/
+  cti:
+    url: https://cti.mo9.com:8443
 
 logging:
   level:
     root: info
     org.springframework.amqp: info
     com.cat.manager.MessageSender: debug
+
+cti:
+  dialRule:
+    agentPattern: '6123|5456,619[0-2]'
+    preDial: '9,8'
+    nonlocalPre: '0,'
