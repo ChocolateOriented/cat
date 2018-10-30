@@ -1,6 +1,7 @@
 package com.cat.web;
 
 import com.cat.module.dto.PageResponse;
+import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
 import com.cat.module.vo.ActionVo;
 import com.cat.module.vo.DayRepaymentOrderVo;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/cat/v1/collector")
-public class CollectorController {
+public class CollectorController extends BaseController{
 
     @Autowired
     private CollectorService collectorService;
@@ -27,8 +28,13 @@ public class CollectorController {
      */
     @GetMapping(value = "get_day_task_info")
     public Results getDayTaskInfo(@RequestHeader("User-Id") String collectorId) {
-        DayTaskVo dayTaskVo = collectorService.getDayTaskInfo(collectorId);
-        return Results.ok().putData("entities", dayTaskVo);
+        try {
+            DayTaskVo dayTaskVo = collectorService.getDayTaskInfo(collectorId);
+            return Results.ok().putData("entities", dayTaskVo);
+        } catch (Exception e) {
+            logger.info("获取单日催收员催收情况接口异常", e);
+            return new Results(ResultConstant.INNER_ERROR, "请稍后重试");
+        }
     }
 
     @GetMapping("list_day_repayment_order")
