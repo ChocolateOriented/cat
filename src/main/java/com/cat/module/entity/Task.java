@@ -356,6 +356,16 @@ public class Task  extends BaseEntity {
 	}
 
 	/**
+	 * 延期金额=延期费+利息+逾期费-减免金额
+	 * @return
+	 */
+	public BigDecimal getPostponeAmount() {
+		postponeUnitCharge = postponeUnitCharge == null ? BigDecimal.ZERO : postponeUnitCharge;
+		interestValue = interestValue == null ? BigDecimal.ZERO : interestValue;
+		return postponeUnitCharge.add(interestValue).add(getOverDueAmount()).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
+	}
+
+	/**
 	 * 订单金额:本金+利息
 	 * @return
 	 */

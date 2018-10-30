@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +49,11 @@ public class ManualPaymentService extends BaseService {
             logger.info("没有此订单,订单号:{}", manualPayments.getOrderId());
             throw new ServiceException("未找到此订单");
         }
+
+        if (!checkRepayment(manualPayments, task)) {
+            logger.info("输入金额不正确");
+            throw new ServiceException("请输入正确的金额");
+        }
         Map<String, String> repayInfo = covertToRepayInfo(manualPayments, task);
 
         //调用接口
@@ -67,6 +73,27 @@ public class ManualPaymentService extends BaseService {
         //如果返回成功保存到数据库
         manualPaymentsMapper.insert(manualPayments);
         logger.info("保存手动还款数据成功:{}", manualPayments);
+    }
+
+    private boolean checkRepayment(ManualPayments manualPayments, Task task) {
+        if ("PAYOFF".equals(manualPayments.getPaymentStatus())) {
+            //手动还款金额>1000并且应催金额和手动还款金额匹配
+            if (manualPayments.getActualPaymentAmount().compareTo(new BigDecimal(1000)) > 0
+                    && manualPayments.getActualPaymentAmount().equals(task.getRepayAmount())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if ("POSTPONE".equals(manualPayments.getPaymentStatus())) {
+            //手动还款金额>250并且应催金额和手动还款金额匹配
+            if (manualPayments.getActualPaymentAmount().compareTo(new BigDecimal(250)) > 0
+                    && manualPayments.getActualPaymentAmount().equals(task.getPostponeAmount())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
