@@ -25,7 +25,7 @@ public class AgentStatistic {
 
 	private Date lastLogoutTime;
 
-	private Integer accumulative_time;
+	private Integer accumulativeTime;
 
 	public Long getId() {
 		return id;
@@ -83,12 +83,12 @@ public class AgentStatistic {
 		this.lastLogoutTime = lastLogoutTime;
 	}
 
-	public Integer getAccumulative_time() {
-		return accumulative_time;
+	public Integer getAccumulativeTime() {
+		return accumulativeTime;
 	}
 
-	public void setAccumulative_time(Integer accumulative_time) {
-		this.accumulative_time = accumulative_time;
+	public void setAccumulativeTime(Integer accumulativeTime) {
+		this.accumulativeTime = accumulativeTime;
 	}
 
 }

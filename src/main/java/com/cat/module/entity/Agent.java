@@ -28,6 +28,13 @@ public class Agent extends AuditingEntity {
 	@Enumerated(EnumType.STRING)
 	private AgentStatus status;
 
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getAgent() {
 		return agent;
 	}

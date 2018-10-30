@@ -1,5 +1,6 @@
 package com.cat.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,16 +63,27 @@ public class ReliefService extends BaseService {
 	 */
 	private void requestRelief(Relief relief) throws ApiException {
 		HashMap<String, String> params = new HashMap<String, String>();
-        params.put("number", relief.getReliefAmount().toString());
-        params.put("bundleId", relief.getOrderId());
-        params.put("creator", relief.getCollectorName());
-        params.put("reason", relief.getReliefReason() == null ? "无" : relief.getReliefReason().getDesc());
+		if("0".equals( relief.getReliefAmount().toString())){
+			params.put("bundleId", relief.getOrderId());
+			params.put("operator", relief.getCollectorName());
+		}else{
+			
+			params.put("number", relief.getReliefAmount().toString());
+			params.put("bundleId", relief.getOrderId());
+			params.put("creator", relief.getCollectorName());
+			params.put("reason", relief.getReliefReason() == null ? "无" : relief.getReliefReason().getDesc());
+		}
         
         String sign = Md5Encrypt.sign(params, secret);
         params.put("sign", sign);
         
         String jsonString = JSON.toJSONString(params);
-		BaseResponse response = raptorManager.send(jsonString);
+		BaseResponse response = null;
+        if("0".equals( relief.getReliefAmount().toString())){ 
+        	response = raptorManager.cancel(jsonString);
+        }else{
+        	response = raptorManager.send(jsonString);
+        }
 		if (response == null || !response.isSuccess()) {
 			throw new ApiException(response == null ? "请求减免失败" : response.toString());
 		}
@@ -100,5 +112,4 @@ public class ReliefService extends BaseService {
 		}
 		return codes;
 	}
-
 }

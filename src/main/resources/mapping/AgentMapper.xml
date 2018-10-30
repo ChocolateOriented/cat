@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.mapper.AgentMapper">
+
+<update id="updateAgentById">
+	update t_agent set
+	 agent = #{agent},
+	 extension = #{extension},
+	 queue = #{queue},
+	 direct = #{direct},
+	 collector_id = #{collectorId},
+	 status = #{status},
+	 update_by = #{updateBy},
+	 update_time = now()
+    where
+    	id = #{id}
+</update>
+
+<insert id="insertAgentLog">
+	insert into t_agent_login_log values (
+		#{id},
+		#{agent},
+		#{collectorId},
+		#{status}
+	)
+</insert>
+
+<select id="findByCollectorIdAndDate" resultType="com.cat.module.entity.AgentStatistic">
+	select 
+	 id,
+	 date,
+	 agent,
+	 collector_id as  collectorId,
+	 first_login_time as firstLoginTime,
+	 last_login_time as lastLoginTime,
+	 last_logout_time as lastLogoutTime,
+	 accumulative_time as accumulativeTime
+	from t_agent_statistic
+	where collector_id = #{collectorId} and date = curdate()
+
+</select>
+
+<insert id="insertAgentStatistic">
+	insert into t_agent_statistic values(
+	  #{id},
+	  curdate(),
+	  #{agent},
+	  #{collectorId},
+	  #{firstLoginTime},
+	  #{lastLoginTime},
+	  #{lastLogoutTime},
+	  #{accumulativeTime}
+	)
+	
+</insert>
+
+<update id="updateAgentStatistic">
+	update t_agent_statistic set 
+	  last_login_time = #{lastLoginTime},
+	  last_logout_time = #{lastLogoutTime},
+	  accumulative_time = #{accumulativeTime}
+	where
+	  id = #{id}
+</update>
+
+<select id="findCollectorCallLogList" resultType="com.cat.module.vo.CollectorCallLogVo">
+	select 
+		dial_time as dialTime,
+		target_name as targetName,
+		target_tel as targetTel,
+		location as location,
+		call_type as callType,
+		call_result as callResult,
+		order_id as orderId
+	from t_collector_call_log 
+	<where>
+	 <if test="collectorId != null and collectorId != ''">
+         AND collector_id = #{collectorId}
+     </if>
+	 <if test="targetName != null and targetName != ''">
+         AND target_name = #{targetName}
+     </if>
+	 <if test="targetTel != null and targetTel != ''">
+         AND target_tel = #{targetTel}
+     </if>
+	 <if test="callType != null and callType != ''">
+         AND call_type = #{callType}
+     </if>
+	 <if test="callResult != null">
+         AND call_result = #{callResult}
+     </if>
+     <if test="dialTimeStart != null and dialTimeEnd != null ">
+         AND dial_time BETWEEN #{dialTimeStart} AND #{dialTimeEnd}
+     </if>
+	</where>
+
+</select>
+</mapper>

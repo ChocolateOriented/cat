@@ -3,18 +3,26 @@ package com.cat.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.annotation.RoleAuth;
 import com.cat.exception.ServiceException;
 import com.cat.module.dto.BaseResponse;
+import com.cat.module.dto.CommonResponse;
+import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.entity.Agent;
 import com.cat.module.entity.CollectorCallLog;
 import com.cat.module.enums.AgentStatus;
+import com.cat.module.enums.Role;
+import com.cat.module.vo.AgentStatisticVo;
+import com.cat.module.vo.CollectorCallLogVo;
 import com.cat.service.AgentService;
 import com.cat.service.CollectorCallLogService;
 
@@ -95,4 +103,41 @@ public class AgentController extends BaseController {
 		
 		return BaseResponse.success();
 	}
+	/**
+	 * 获取催收员通话记录
+	 * @param collectorCallLogVo
+	 * @param pageNum
+	 * @param pageSize
+	 * @param userId
+	 * @return
+	 */
+	@RoleAuth(include = Role.COLLECTOR)
+	@GetMapping(value="/list_collector_call_log")
+	public BaseResponse list(CollectorCallLogVo collectorCallLogVo, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize,@RequestHeader("User-Id") String userId){
+		PageResponse<CollectorCallLogVo> pageResponse =  agentService.list(collectorCallLogVo,pageNum,pageSize,userId);
+		return pageResponse;
+	} 
+	/**
+	 * 获取坐席信息
+	 * @param userId
+	 * @return
+	 */
+	@RoleAuth(include = Role.COLLECTOR)
+	@GetMapping(value="/get_agent_info")
+	public BaseResponse getAgentInfo(@RequestHeader("User-Id") String userId){
+		Agent agent =  agentService.findTopByCollectorId(userId);
+		return new CommonResponse<Agent>(agent);
+	} 
+	/**
+	 * 获取坐席统计信息
+	 * @param userId
+	 * @return
+	 */
+	@RoleAuth(include = Role.COLLECTOR)
+	@GetMapping(value="/get_agent_statistic")
+	public BaseResponse getAgentStatistic(@RequestHeader("User-Id") String userId){
+		AgentStatisticVo agentStatisticVo =  agentService.getAgentStatistic(userId);
+		return new CommonResponse<AgentStatisticVo>(agentStatisticVo);
+	} 
 }
