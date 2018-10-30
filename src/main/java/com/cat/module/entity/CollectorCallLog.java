@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.cat.module.dto.cti.CallInfo;
+import com.cat.module.dto.cti.CallinInfo;
 import com.cat.module.enums.AgentStatus;
 import com.cat.module.enums.CallResult;
 import com.cat.module.enums.CallType;
@@ -30,6 +32,8 @@ public class CollectorCallLog extends AuditingEntity {
 	private String targetTel;
 
 	private String targetName;
+
+	private String location;
 
 	private String customerNo;
 
@@ -107,6 +111,14 @@ public class CollectorCallLog extends AuditingEntity {
 
 	public void setTargetName(String targetName) {
 		this.targetName = targetName;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public String getCustomerNo() {
@@ -201,4 +213,23 @@ public class CollectorCallLog extends AuditingEntity {
 		this.orderId = orderId;
 	}
 
+	public static CollectorCallLog buildFrom(CallInfo callInfo) {
+		CollectorCallLog callLog = new CollectorCallLog();
+		callLog.agent = callInfo.getAgent();
+		callLog.callType = callInfo instanceof CallinInfo ? CallType.IN : CallType.OUT;
+		callLog.extension = callInfo.getExtension();
+		callLog.customerNo = callInfo.getCustomNo();
+		callLog.targetTel = callInfo.getTarget();
+		callLog.ctiUuid = callInfo.getCtiUuid();
+		callLog.dialTime = callInfo.getDialTime();
+		callLog.ringTime = callInfo.getRingTime();
+		callLog.callStartTime = callInfo.getCallStartTime();
+		callLog.callEndTime = callInfo.getCallEndTime();
+		callLog.finishTime = callInfo.getFinishTime();
+		
+		int durationTime = callLog.callStartTime == null || callLog.callEndTime == null ? 0
+				: (int) (callLog.callEndTime.getTime() - callLog.callStartTime.getTime()) / 1000;
+		callLog.durationTime = durationTime;
+		return callLog;
+	}
 }

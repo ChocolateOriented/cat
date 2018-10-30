@@ -1,6 +1,7 @@
 package com.cat.module.dto.cti;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -56,6 +57,7 @@ public class CalloutInfo extends CallInfo implements Serializable {
 		this.agentState = agentState;
 	}
 
+	@Override
 	public String getTarget() {
 		return target;
 	}
@@ -116,28 +118,38 @@ public class CalloutInfo extends CallInfo implements Serializable {
 	}
 
 	@Override
-	public long getDialTime() {
-		return channelCreateTime == null ? 0 : channelCreateTime;
+	public Date getDialTime() {
+		return channelCreateTime == null ? null : new Date(channelCreateTime * 1000);
 	}
 
 	@Override
-	public long getRingTime() {
-		return channelCreateTime == null ? 0 : channelCreateTime;
+	public Date getRingTime() {
+		return channelCreateTime == null ? null : new Date(channelCreateTime * 1000);
 	}
 
 	@Override
-	public long getCallStartTime() {
-		return channelAnswerTime == null ? 0 : channelAnswerTime;
+	public Date getCallStartTime() {
+		return channelAnswerTime == null ? null : new Date(channelAnswerTime * 1000);
 	}
 
 	@Override
-	public long getCallEndTime() {
-		return channelAnswerTime == null ? 0 : channelAnswerTime;
+	public Date getCallEndTime() {
+		return channelAnswerTime == null ? null : new Date(channelAnswerTime * 1000);
 	}
 
 	@Override
-	public long getFinishTime() {
-		return channelHangupTime == null ? 0 : channelHangupTime;
+	public Date getFinishTime() {
+		return channelHangupTime == null ? null : new Date(channelHangupTime * 1000);
+	}
+
+	@Override
+	public String getCtiUuid() {
+		return euuid;
+	}
+
+	@Override
+	public String getCustomNo() {
+		return customerno;
 	}
 
 }

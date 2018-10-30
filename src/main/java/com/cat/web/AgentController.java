@@ -28,6 +28,13 @@ public class AgentController extends BaseController {
 	@Autowired
 	private CollectorCallLogService collectorCallLogService;
 
+	/**
+	 * 发起呼叫
+	 * @param userId
+	 * @param callLog
+	 * @param bindingResul
+	 * @return
+	 */
 	@PostMapping(value = "/originate_call")
 	public BaseResponse originateCall(@RequestHeader("User-Id") String userId, @RequestBody @Validated CollectorCallLog callLog,
 			BindingResult bindingResul) {
@@ -58,6 +65,12 @@ public class AgentController extends BaseController {
 		return BaseResponse.success();
 	}
 
+	/**
+	 * 变更坐席状态
+	 * @param userId
+	 * @param changeAgent
+	 * @return
+	 */
 	@PostMapping(value = "/change_agent_status")
 	public BaseResponse changeAgentStatus(@RequestHeader("User-Id") String userId, @RequestBody Agent changeAgent) {
 		if (changeAgent.getStatus() == null) {

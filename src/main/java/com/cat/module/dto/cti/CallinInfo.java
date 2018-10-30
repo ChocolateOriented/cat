@@ -1,6 +1,7 @@
 package com.cat.module.dto.cti;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -149,28 +150,43 @@ public class CallinInfo extends CallInfo implements Serializable {
 	}
 
 	@Override
-	public long getDialTime() {
-		return inQueueTime == null ? 0 : inQueueTime;
+	public String getTarget() {
+		return caller;
 	}
 
 	@Override
-	public long getRingTime() {
-		return agentOfferTime == null ? 0 : agentOfferTime;
+	public Date getDialTime() {
+		return inQueueTime == null ? null : new Date(inQueueTime * 1000);
 	}
 
 	@Override
-	public long getCallStartTime() {
-		return agentStartTime == null ? 0 : agentStartTime;
+	public Date getRingTime() {
+		return agentOfferTime == null ? null : new Date(agentOfferTime * 1000);
 	}
 
 	@Override
-	public long getCallEndTime() {
-		return agentEndTime == null ? 0 : agentEndTime;
+	public Date getCallStartTime() {
+		return agentStartTime == null ? null : new Date(agentStartTime * 1000);
 	}
 
 	@Override
-	public long getFinishTime() {
-		return outQueueTime == null ? 0 : outQueueTime;
+	public Date getCallEndTime() {
+		return agentEndTime == null ? null : new Date(agentEndTime * 1000);
+	}
+
+	@Override
+	public Date getFinishTime() {
+		return outQueueTime == null ? null : new Date(outQueueTime * 1000);
+	}
+
+	@Override
+	public String getCtiUuid() {
+		return sessionid;
+	}
+
+	@Override
+	public String getCustomNo() {
+		return null;
 	}
 
 }

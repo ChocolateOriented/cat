@@ -13,11 +13,13 @@ import org.springframework.stereotype.Component;
 import com.cat.exception.ApiException;
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.PageResponse;
+import com.cat.module.dto.cti.CallInfo;
 import com.cat.module.dto.cti.CallinInfo;
 import com.cat.module.dto.cti.CalloutInfo;
 import com.cat.module.dto.cti.cmd.CallInfoQueryCommand;
 import com.cat.module.dto.cti.cmd.RequestCommand;
 import com.cat.module.enums.AgentStatus;
+import com.cat.module.enums.CallType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -101,5 +103,40 @@ public class CtiManager {
 	public PageResponse<CalloutInfo> queryCalloutInfo(CallInfoQueryCommand queryCommand) throws IOException, ApiException {
 		queryCommand.setCmd(RequestCommand.CALLOUT_INFO);
 		return queryComand(queryCommand.toParamMap(), new TypeReference<PageResponse<CalloutInfo>>() {});
+	}
+
+	@SuppressWarnings("unchecked")
+	public PageResponse<CallInfo> queryCallInfo(CallInfoQueryCommand queryCommand, CallType callType) throws IOException, ApiException {
+		PageResponse<?> resp;
+		if (callType == CallType.IN) {
+			resp = queryCallinInfo(queryCommand);
+		} else {
+			resp = queryCalloutInfo(queryCommand);
+		}
+		return (PageResponse<CallInfo>) resp;
+	}
+
+	/**
+	 * 过滤CTI呼叫信息加拨号码
+	 * @param targetTel
+	 * @return
+	 */
+	public static String trimCtiCallInfoTel(String targetTel) {
+		if (targetTel == null) {
+			return targetTel;
+		}
+
+		if (targetTel.startsWith("179690")) {
+			return targetTel.substring(6);
+		}
+
+		if (targetTel.startsWith("17969")) {
+			return targetTel.substring(5);
+		}
+
+		if (targetTel.startsWith("01") && !targetTel.startsWith("010") || targetTel.startsWith("00")) {
+			return targetTel.substring(1);
+		}
+		return targetTel;
 	}
 }

@@ -124,6 +124,10 @@ public class PageResponse<T> extends BaseResponse {
 			this.total = total;
 		}
 
+		public boolean isEmpty() {
+			return total == 0 || entities == null || entities.isEmpty();
+		}
+
 		/**
 		 * equals {@link Page#setEntities(List)}
 		 * <p>just use for jackson unserialize</p>

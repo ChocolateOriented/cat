@@ -115,3 +115,9 @@ logging:
     root: info
     org.springframework.amqp: info
     com.cat.manager.MessageSender: debug
+
+cti:
+  dialRule:
+    agentPattern: '6123|5456,619[0-2]'
+    preDial: '9,8'
+    nonlocalPre: '0,'
