@@ -3,6 +3,7 @@ package com.cat.module.dto;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BaseResponse implements Serializable {
 
@@ -19,6 +20,7 @@ public class BaseResponse implements Serializable {
 	public BaseResponse(Integer code) {
 		super();
 		this.code = code;
+		this.message = "";
 	}
 
 	public BaseResponse(Integer code, String message) {
@@ -40,6 +42,16 @@ public class BaseResponse implements Serializable {
 	}
 
 	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	@JsonProperty("error_code")
+	public void setErrorCode(Integer code) {
+		this.code = code;
+	}
+
+	@JsonProperty("error_msg")
+	public void setErrorMessage(String message) {
 		this.message = message;
 	}
 
