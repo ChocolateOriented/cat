@@ -1,12 +1,17 @@
 package com.cat.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Null;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cat.annotation.ClustersSchedule;
 import com.cat.exception.ApiException;
 import com.cat.exception.ServiceException;
 import com.cat.manager.CtiManager;
@@ -90,10 +95,16 @@ public class AgentService extends BaseService {
 	}
 
 	public AgentStatisticVo getAgentStatistic(String userId) {
-		AgentStatisticVo agentStatisticVo = new AgentStatisticVo();
 		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(userId);
 		if(agentStatistic == null){
-			return agentStatisticVo;
+			return null;
+		}
+		AgentStatisticVo agentStatisticVo = agentMapper.findCountCallLog(userId);
+		agentStatisticVo =	agentStatisticVo == null ? new AgentStatisticVo() :agentStatisticVo;
+		if(agentStatisticVo.getCallOutNum() == null){
+			agentStatisticVo.setCallOutConnectRate("0%");
+		}else{
+			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum() /agentStatisticVo.getCallOutNum()+"%");
 		}
 		agentStatisticVo.setLoginTime(agentStatistic.getFirstLoginTime());
 		Date lastLoginTime = agentStatistic.getLastLoginTime();
@@ -105,5 +116,23 @@ public class AgentService extends BaseService {
 		}
 		return agentStatisticVo;
 	}
-
+	@Scheduled(cron = "23 23 23 * * ?")
+	@ClustersSchedule
+	public void syncCallInfo5Minutely() {
+		logger.info("开始定时同步坐席状态变为离线");
+		List<Agent> agentList = agentMapper.findOnlineAgent();
+		if(agentList.isEmpty()){
+			logger.info("今日无定时同步坐席状态变为离线");
+			return;
+		}
+		for (Agent agent : agentList) {
+			try {
+				this.changAgentStatus(agent,AgentStatus.LOGGED_OUT);
+			} catch (ServiceException e) {
+				logger.error("定时同步坐席状态变为离线失败",e);
+			}
+			
+		}
+		logger.info("定时同步坐席状态变为离线,今日完成");
+	}
 }

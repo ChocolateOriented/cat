@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cat.module.entity.Agent;
 import com.cat.module.entity.AgentStatistic;
+import com.cat.module.vo.AgentStatisticVo;
 import com.cat.module.vo.CollectorCallLogVo;
 
 public interface AgentMapper {
@@ -19,5 +20,9 @@ public interface AgentMapper {
 	void updateAgentStatisticById(AgentStatistic agentStatistic);
 
 	List<CollectorCallLogVo> findCollectorCallLogList(CollectorCallLogVo collectorCallLogVo);
+
+	AgentStatisticVo findCountCallLog(String userId);
+
+	List<Agent> findOnlineAgent();
 	
 }

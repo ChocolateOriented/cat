@@ -95,4 +95,26 @@
 	</where>
 
 </select>
+
+<select id="findCountCallLog">
+	SELECT 
+	count(id) as callOutNum,
+	count(call_result = 0 or null) as callOutConnectNum
+	FROM `t_collector_call_log`
+	WHERE 
+	collector_id = #{collectorId}
+	and date_format(dial_time,'%Y-%m-%d') = curdate()
+	and call_type = 'out'
+
+</select>
+
+<select id="findOnlineAgent" resultType="com.cat.module.entity.Agent">
+  select 
+  	  id,
+	  agent,
+	  status,
+	  collector_id as collectorId
+  from t_agent
+  where status = 'LOGGED_OUT'
+</select>
 </mapper>

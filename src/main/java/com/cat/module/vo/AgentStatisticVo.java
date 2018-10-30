@@ -11,9 +11,9 @@ public class AgentStatisticVo {
 	
 	private Integer  callOutNum;//呼出总量
 	
-	private Integer  connectNum;//接通总量
+	private Integer  callOutConnectNum;//接通总量
 	
-	private String  connectRate;//接通率	
+	private String  callOutConnectRate;//接通率	
 
 	public Long getLoginTime() {
 		return  loginTime == null ? null : loginTime.getTime();
@@ -45,20 +45,20 @@ public class AgentStatisticVo {
 		this.callOutNum = callOutNum;
 	}
 
-	public Integer getConnectNum() {
-		return connectNum;
+	public Integer getCallOutConnectNum() {
+		return callOutConnectNum;
 	}
 
-	public void setConnectNum(Integer connectNum) {
-		this.connectNum = connectNum;
+	public void setCallOutConnectNum(Integer callOutConnectNum) {
+		this.callOutConnectNum = callOutConnectNum;
 	}
 
-	public String getConnectRate() {
-		return connectRate;
+	public String getCallOutConnectRate() {
+		return callOutConnectRate;
 	}
 
-	public void setConnectRate(String connectRate) {
-		this.connectRate = connectRate;
+	public void setCallOutConnectRate(String callOutConnectRate) {
+		this.callOutConnectRate = callOutConnectRate;
 	}
 
 
