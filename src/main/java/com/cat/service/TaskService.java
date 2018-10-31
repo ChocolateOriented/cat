@@ -379,7 +379,7 @@ public class TaskService extends BaseService {
 		list.forEach(item -> {
 			DayRepaymentOrderVo dayRepaymentOrderVo = new DayRepaymentOrderVo();
 			dayRepaymentOrderVo.setOrderId(item.getOrderId());
-			dayRepaymentOrderVo.setOrderStatus(item.getOrderStatus());
+			dayRepaymentOrderVo.setOrderStatus(item.getBehaviorStatus().name());
 			dayRepaymentOrderVo.setOverdueDays(item.getOverdueDays() == null ? 0 : item.getOverdueDays());
 			dayRepaymentOrderVo.setRepaymentAmount(item.getRepaymentAmount());
 			dayRepaymentOrderVo.setRepaymentTime(item.getRepaymentTime());
