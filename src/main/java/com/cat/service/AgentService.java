@@ -133,10 +133,6 @@ public class AgentService extends BaseService {
 	 * @return
 	 */
 	public AgentStatisticVo getAgentStatistic(String userId) {
-		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(userId);
-		if (agentStatistic == null) {
-			return null;
-		}
 		AgentStatisticVo agentStatisticVo = agentMapper.findCountCallLog(userId);
 		agentStatisticVo = agentStatisticVo == null ? new AgentStatisticVo() : agentStatisticVo;
 		
@@ -146,14 +142,17 @@ public class AgentService extends BaseService {
 			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum() * 100 / agentStatisticVo.getCallOutNum());
 		}
 		
-		agentStatisticVo.setLoginTime(agentStatistic.getFirstLoginTime());
-		Date lastLoginTime = agentStatistic.getLastLoginTime();
-		
-		if (lastLoginTime == null) {
-			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime());
-		} else {
-			Integer time = (int) ((System.currentTimeMillis() - lastLoginTime.getTime()) / 1000);
-			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime() + time);
+		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(userId);
+		if (agentStatistic != null) {
+			agentStatisticVo.setLoginTime(agentStatistic.getFirstLoginTime());
+			Date lastLoginTime = agentStatistic.getLastLoginTime();
+			
+			if (lastLoginTime == null) {
+				agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime());
+			} else {
+				Integer time = (int) ((System.currentTimeMillis() - lastLoginTime.getTime()) / 1000);
+				agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime() + time);
+			}
 		}
 		return agentStatisticVo;
 	}
