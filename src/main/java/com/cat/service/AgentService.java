@@ -136,7 +136,7 @@ public class AgentService extends BaseService {
 		AgentStatisticVo agentStatisticVo = agentMapper.findCountCallLog(userId);
 		agentStatisticVo = agentStatisticVo == null ? new AgentStatisticVo() : agentStatisticVo;
 		
-		if (agentStatisticVo.getCallOutNum() == null) {
+		if (agentStatisticVo.getCallOutNum() == null || agentStatisticVo.getCallOutNum() == 0) {
 			agentStatisticVo.setCallOutConnectRate(0);
 		} else {
 			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum() * 100 / agentStatisticVo.getCallOutNum());
