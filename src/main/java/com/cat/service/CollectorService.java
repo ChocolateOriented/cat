@@ -63,8 +63,14 @@ public class CollectorService {
         CurrentOrderDto finishedOrder = getStatusOrder(currentOrder, BehaviorStatus.FINISHED.name());
         //延期的订单
         CurrentOrderDto postponeOrder = getStatusOrder(currentOrder, BehaviorStatus.POSTPONE.name());
-        //新增的订单
+        //所有新增的订单
         CurrentOrderDto inOrder = getStatusOrder(currentOrder, BehaviorStatus.IN.name());
+        //出去的订单
+        CurrentOrderDto outOrder = getStatusOrder(currentOrder, BehaviorStatus.OUT.name());
+        //真实新增的订单=所有新增的订单-移除的订单
+        inOrder.setSumRepaymentAmount(inOrder.getSumRepaymentAmount().subtract(outOrder.getSumRepaymentAmount()));
+        inOrder.setCount(inOrder.getCount() - outOrder.getCount());
+
 
         //获取应催订单
         Integer count = taskService.getShouldPayOrder(collectorId, OrderStatus.PAYMENT.name());
