@@ -119,27 +119,28 @@ public class CalloutInfo extends CallInfo implements Serializable {
 
 	@Override
 	public Date getDialTime() {
-		return channelCreateTime == null ? null : new Date(channelCreateTime * 1000);
+		return channelCreateTime == null || channelCreateTime == 0 ? null : new Date(channelCreateTime * 1000);
 	}
 
 	@Override
 	public Date getRingTime() {
-		return channelCreateTime == null ? null : new Date(channelCreateTime * 1000);
+		return channelCreateTime == null || channelCreateTime == 0 ? null : new Date(channelCreateTime * 1000);
 	}
 
 	@Override
 	public Date getCallStartTime() {
-		return channelAnswerTime == null ? null : new Date(channelAnswerTime * 1000);
+		return channelAnswerTime == null || channelAnswerTime == 0 ? null : new Date(channelAnswerTime * 1000);
 	}
 
 	@Override
 	public Date getCallEndTime() {
-		return channelAnswerTime == null ? null : new Date(channelAnswerTime * 1000);
+		return channelHangupTime == null || channelHangupTime == 0 || channelAnswerTime == null || channelAnswerTime == 0
+				? null : new Date(channelHangupTime * 1000);
 	}
 
 	@Override
 	public Date getFinishTime() {
-		return channelHangupTime == null ? null : new Date(channelHangupTime * 1000);
+		return channelHangupTime == null || channelHangupTime == 0 ? null : new Date(channelHangupTime * 1000);
 	}
 
 	@Override

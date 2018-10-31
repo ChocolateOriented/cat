@@ -4,16 +4,30 @@ import java.util.Date;
 
 public class AgentStatisticVo {
 
-	
-	private Date loginTime;//登录时间
-	
-	private Integer onlineTime;//在线时长
-	
-	private Integer  callOutNum;//呼出总量
-	
-	private Integer  callOutConnectNum;//接通总量
-	
-	private String  callOutConnectRate;//接通率	
+	/*
+	 * 登录时间
+	 */
+	private Date loginTime;
+
+	/**
+	 * 在线时长
+	 */
+	private Integer onlineTime;
+
+	/**
+	 * 呼出总量
+	 */
+	private Integer callOutNum;
+
+	/**
+	 * 接通总量
+	 */
+	private Integer callOutConnectNum;
+
+	/**
+	 * 接通率	
+	 */
+	private Integer callOutConnectRate;
 
 	public Long getLoginTime() {
 		return  loginTime == null ? null : loginTime.getTime();
@@ -53,13 +67,12 @@ public class AgentStatisticVo {
 		this.callOutConnectNum = callOutConnectNum;
 	}
 
-	public String getCallOutConnectRate() {
+	public Integer getCallOutConnectRate() {
 		return callOutConnectRate;
 	}
 
-	public void setCallOutConnectRate(String callOutConnectRate) {
+	public void setCallOutConnectRate(Integer callOutConnectRate) {
 		this.callOutConnectRate = callOutConnectRate;
 	}
-
 
 }

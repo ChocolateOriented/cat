@@ -156,27 +156,27 @@ public class CallinInfo extends CallInfo implements Serializable {
 
 	@Override
 	public Date getDialTime() {
-		return inQueueTime == null ? null : new Date(inQueueTime * 1000);
+		return inQueueTime == null || inQueueTime == 0 ? null : new Date(inQueueTime * 1000);
 	}
 
 	@Override
 	public Date getRingTime() {
-		return agentOfferTime == null ? null : new Date(agentOfferTime * 1000);
+		return agentOfferTime == null || agentOfferTime == 0 ? null : new Date(agentOfferTime * 1000);
 	}
 
 	@Override
 	public Date getCallStartTime() {
-		return agentStartTime == null ? null : new Date(agentStartTime * 1000);
+		return agentStartTime == null || agentStartTime == 0 ? null : new Date(agentStartTime * 1000);
 	}
 
 	@Override
 	public Date getCallEndTime() {
-		return agentEndTime == null ? null : new Date(agentEndTime * 1000);
+		return agentEndTime == null || agentEndTime == 0 ? null : new Date(agentEndTime * 1000);
 	}
 
 	@Override
 	public Date getFinishTime() {
-		return outQueueTime == null ? null : new Date(outQueueTime * 1000);
+		return outQueueTime == null || outQueueTime == 0 ? null : new Date(outQueueTime * 1000);
 	}
 
 	@Override
