@@ -110,6 +110,7 @@ public class CollectorCallLogService extends BaseService {
 		String location = mobileAddressService.getFullAddressByMobile(targetTel);
 		callLog.setLocation(location);
 		callLog.setCustomerNo(customerNo);
+		callLog.setDialTime(new Date());
 		collectorCallLogRepository.save(callLog);
 		
 		String dialTarget = prependDialTel(callLog.getAgent(), targetTel);
@@ -179,7 +180,7 @@ public class CollectorCallLogService extends BaseService {
 	}
 
 	/**
-	 * 没1小时同步CTI通话信息
+	 * 每1小时同步CTI通话信息
 	 */
 	@Scheduled(cron = "0 0 0/1 * * ?")
 	@ClustersSchedule
