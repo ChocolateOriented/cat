@@ -117,6 +117,7 @@ public class CtiManager {
 			params.put("customerno", customerNo);
 		}
 		
+		logger.debug("呼叫请求参数：{}", params);
 		return commonComand(params);
 	}
 

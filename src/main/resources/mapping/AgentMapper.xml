@@ -116,10 +116,10 @@
          AND dial_time BETWEEN #{dialTimeStart} AND #{dialTimeEnd}
      </if>
 	</where>
-
+	order by dial_time desc
 </select>
 
-<select id="findCountCallLog">
+<select id="findCountCallLog"  resultType="com.cat.module.vo.AgentStatisticVo">
 	SELECT 
 	count(id) as callOutNum,
 	count(call_result = 0 or null) as callOutConnectNum
@@ -138,6 +138,6 @@
 	  status,
 	  collector_id as collectorId
   from t_agent
-  where status = 'LOGGED_OUT'
+  where status = 'AVAILABLE'
 </select>
 </mapper>

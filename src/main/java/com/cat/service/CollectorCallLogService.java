@@ -110,6 +110,7 @@ public class CollectorCallLogService extends BaseService {
 		String location = mobileAddressService.getFullAddressByMobile(targetTel);
 		callLog.setLocation(location);
 		callLog.setCustomerNo(customerNo);
+		callLog.setDialTime(new Date());
 		collectorCallLogRepository.save(callLog);
 		
 		String dialTarget = prependDialTel(callLog.getAgent(), targetTel);
@@ -179,7 +180,7 @@ public class CollectorCallLogService extends BaseService {
 	}
 
 	/**
-	 * 没1小时同步CTI通话信息
+	 * 每1小时同步CTI通话信息
 	 */
 	@Scheduled(cron = "0 0 0/1 * * ?")
 	@ClustersSchedule
@@ -219,11 +220,22 @@ public class CollectorCallLogService extends BaseService {
 	}
 
 	/**
+	 * 手动同步通话记录
+	 * @param startTimeStamp
+	 * @param endTimestamp
+	 */
+	public void manualSyncCallInfo(long startTimeStamp, long endTimestamp) {
+		logger.info("手动同步电话通话信记录开始");
+		syncCallInfoByTime(new Date(startTimeStamp), new Date(endTimestamp));
+		logger.info("手动同步电话通话信记录结束");
+	}
+
+	/**
 	 * 根据时间段同步CTI通话信息
 	 * @param start
 	 * @param end
 	 */
-	public void syncCallInfoByTime(Date start, Date end) {
+	private void syncCallInfoByTime(Date start, Date end) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		String starttime = dateFormat.format(start);
 		String endtime = dateFormat.format(end);
@@ -246,11 +258,13 @@ public class CollectorCallLogService extends BaseService {
 			}
 			
 			logger.info("同步坐席{}", agent.getAgent());
-			command.setAgent(agent.getAgent());
-			command.setQueue(null);
+			command.setAgent(null);
+			command.setQueue(agent.getQueue());
 			List<CallInfo> queryCallinInfo = queryCallInfo(command, CallType.IN);
 			saveAgentCallInfo(queryCallinInfo, agent, CallType.IN);
 
+			command.setAgent(agent.getAgent());
+			command.setQueue(null);
 			List<CallInfo> queryCalloutInfo = queryCallInfo(command, CallType.OUT);
 			saveAgentCallInfo(queryCalloutInfo, agent, CallType.OUT);
 		}

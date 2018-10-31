@@ -29,6 +29,6 @@ public interface AgentMapper {
 
 	List<Agent> findOnlineAgent();
 
-	void updateAgentStatusById(@Param("status")AgentStatus status,@Param("id") Long id);
+	void updateAgentStatusById(@Param("status")AgentStatus status, @Param("id") Long id);
 	
 }

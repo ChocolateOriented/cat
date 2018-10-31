@@ -22,10 +22,10 @@ public class AgentScheduleService extends BaseService {
 	 */
 	@Scheduled(cron = "0 0 23 * * ?")
 	@ClustersSchedule
-	public void syncCallInfo5Minutely() {
+	public void changeAgentToLoggedOut() {
 		logger.info("开始定时同步坐席状态变为离线");
 		List<Agent> agentList = agentService.findOnlineAgent();
-		if(agentList.isEmpty()){
+		if (agentList.isEmpty()) {
 			logger.info("今日无定时同步坐席状态变为离线");
 			return;
 		}
