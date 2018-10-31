@@ -129,7 +129,7 @@ public class AgentService extends BaseService {
 		if (agentStatisticVo.getCallOutNum() == null){
 			agentStatisticVo.setCallOutConnectRate(0);
 		} else {
-			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum() / agentStatisticVo.getCallOutNum());
+			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum()*100 / agentStatisticVo.getCallOutNum());
 		}
 		
 		agentStatisticVo.setLoginTime(agentStatistic.getFirstLoginTime());
@@ -138,7 +138,7 @@ public class AgentService extends BaseService {
 		if (lastLoginTime == null) {
 			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime());
 		} else {
-			Integer time = (int) (new Date().getTime() - lastLoginTime.getTime());
+			Integer time = (int) ((new Date().getTime() - lastLoginTime.getTime())/1000);
 			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime()+time);
 		}
 		return agentStatisticVo;

@@ -43,7 +43,7 @@ public class AgentStatisticVo {
 		}
 		Integer hour = onlineTime /3600; 
 		Integer minute = onlineTime % 3600 / 60;
-		Integer second = onlineTime % 3600 / 60 %60 ;
+		Integer second = onlineTime % 3600 %60 ;
 		return hour+":"+minute+":"+second;
 	}
 
