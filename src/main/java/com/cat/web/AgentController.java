@@ -89,6 +89,10 @@ public class AgentController extends BaseController {
 			return new BaseResponse((int) ResultConstant.EMPTY_ENTITY.code, "当前用户未绑定坐席");
 		}
 		
+		if (!currentAgent.getAgent().equals(changeAgent.getAgent())) {
+			return new BaseResponse((int) ResultConstant.EMPTY_PARAM.code, "当前坐席已变更，请重新登录");
+		}
+		
 		if (currentAgent.getStatus() == changeAgent.getStatus()) {
 			return BaseResponse.success();
 		}

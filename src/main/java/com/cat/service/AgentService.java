@@ -51,6 +51,12 @@ public class AgentService extends BaseService {
 		return agentMapper.findOnlineAgent();
 	}
 
+	/**
+	 * 变更坐席状态
+	 * @param currentAgent
+	 * @param newStatus
+	 * @throws ServiceException
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void changAgentStatus(Agent currentAgent, AgentStatus newStatus) throws ServiceException {
 		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(currentAgent.getCollectorId());
@@ -79,8 +85,8 @@ public class AgentService extends BaseService {
 				agentMapper.updateAgentStatisticById(agentStatistic);
 			}
 			//离线变在线
-			if((newStatus == AgentStatus.AVAILABLE || newStatus == AgentStatus.ON_BREAK) 
-					&& currentStatus == AgentStatus.LOGGED_OUT ){
+			if ((newStatus == AgentStatus.AVAILABLE || newStatus == AgentStatus.ON_BREAK)
+					&& currentStatus == AgentStatus.LOGGED_OUT) {
 				agentStatistic.setLastLoginTime(date);
 				agentMapper.updateAgentStatisticById(agentStatistic);
 			}
@@ -103,6 +109,14 @@ public class AgentService extends BaseService {
 		}
 	}
 
+	/**
+	 * 查询催收员通话记录
+	 * @param collectorCallLogVo
+	 * @param pageNum
+	 * @param pageSize
+	 * @param userId
+	 * @return
+	 */
 	public PageResponse<CollectorCallLogVo> listCollectorCallLog(CollectorCallLogVo collectorCallLogVo, Integer pageNum,
 			Integer pageSize, String userId) {
 		//进行查询
@@ -124,12 +138,12 @@ public class AgentService extends BaseService {
 			return null;
 		}
 		AgentStatisticVo agentStatisticVo = agentMapper.findCountCallLog(userId);
-		agentStatisticVo =	agentStatisticVo == null ? new AgentStatisticVo() :agentStatisticVo;
+		agentStatisticVo = agentStatisticVo == null ? new AgentStatisticVo() : agentStatisticVo;
 		
-		if (agentStatisticVo.getCallOutNum() == null){
+		if (agentStatisticVo.getCallOutNum() == null) {
 			agentStatisticVo.setCallOutConnectRate(0);
 		} else {
-			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum()*100 / agentStatisticVo.getCallOutNum());
+			agentStatisticVo.setCallOutConnectRate(agentStatisticVo.getCallOutConnectNum() * 100 / agentStatisticVo.getCallOutNum());
 		}
 		
 		agentStatisticVo.setLoginTime(agentStatistic.getFirstLoginTime());
@@ -138,8 +152,8 @@ public class AgentService extends BaseService {
 		if (lastLoginTime == null) {
 			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime());
 		} else {
-			Integer time = (int) ((new Date().getTime() - lastLoginTime.getTime())/1000);
-			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime()+time);
+			Integer time = (int) ((System.currentTimeMillis() - lastLoginTime.getTime()) / 1000);
+			agentStatisticVo.setOnlineTime(agentStatistic.getAccumulativeTime() + time);
 		}
 		return agentStatisticVo;
 	}
