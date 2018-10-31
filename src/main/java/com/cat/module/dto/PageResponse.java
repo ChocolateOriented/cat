@@ -124,6 +124,7 @@ public class PageResponse<T> extends BaseResponse {
 			this.total = total;
 		}
 
+		@JsonIgnore
 		public boolean isEmpty() {
 			return total == 0 || entities == null || entities.isEmpty();
 		}

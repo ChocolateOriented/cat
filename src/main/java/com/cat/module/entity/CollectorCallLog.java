@@ -3,6 +3,8 @@ package com.cat.module.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -25,6 +27,7 @@ public class CollectorCallLog extends AuditingEntity {
 
 	private String collectorId;
 
+	@Enumerated(EnumType.STRING)
 	private CallType callType;
 
 	@NotNull(message = "呼叫号码不能为空")
@@ -202,23 +205,44 @@ public class CollectorCallLog extends AuditingEntity {
 		this.orderId = orderId;
 	}
 
-	public static CollectorCallLog buildFrom(CallInfo callInfo) {
+	public void supplementFromCallInfo(CallInfo callInfo) {
+		this.ctiUuid = callInfo.getCtiUuid();
+		this.dialTime = callInfo.getDialTime();
+		this.ringTime = callInfo.getRingTime();
+		this.callStartTime = callInfo.getCallStartTime();
+		this.callEndTime = callInfo.getCallEndTime();
+		this.finishTime = callInfo.getFinishTime();
+		
+		int durationTime = this.callStartTime == null || this.callEndTime == null ? 0
+				: (int) (this.callEndTime.getTime() - this.callStartTime.getTime()) / 1000;
+		this.durationTime = durationTime;
+		
+		if (this.callType == CallType.IN) {
+			if (this.callEndTime != null) {
+				this.callResult = CallResult.COLLECTOR_ANSWER.getValue();
+			} else if (this.ringTime != null) {
+				this.callResult = CallResult.COLLECTOR_UNANSWER.getValue();
+			} else {
+				this.callResult = CallResult.OUT_OF_QUEUE.getValue();
+			}
+		} else {
+			if (this.callEndTime != null) {
+				this.callResult = CallResult.CUSTOMER_ANSWER.getValue();
+			} else {
+				this.callResult = CallResult.CUSTOMER_UNANSWER.getValue();
+			}
+		}
+	}
+
+	public static CollectorCallLog buildFromCallInfo(CallInfo callInfo) {
 		CollectorCallLog callLog = new CollectorCallLog();
 		callLog.agent = callInfo.getAgent();
 		callLog.callType = callInfo instanceof CallinInfo ? CallType.IN : CallType.OUT;
 		callLog.extension = callInfo.getExtension();
 		callLog.customerNo = callInfo.getCustomNo();
 		callLog.targetTel = callInfo.getTarget();
-		callLog.ctiUuid = callInfo.getCtiUuid();
-		callLog.dialTime = callInfo.getDialTime();
-		callLog.ringTime = callInfo.getRingTime();
-		callLog.callStartTime = callInfo.getCallStartTime();
-		callLog.callEndTime = callInfo.getCallEndTime();
-		callLog.finishTime = callInfo.getFinishTime();
 		
-		int durationTime = callLog.callStartTime == null || callLog.callEndTime == null ? 0
-				: (int) (callLog.callEndTime.getTime() - callLog.callStartTime.getTime()) / 1000;
-		callLog.durationTime = durationTime;
+		callLog.supplementFromCallInfo(callInfo);
 		return callLog;
 	}
 }

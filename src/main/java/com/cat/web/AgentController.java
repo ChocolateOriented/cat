@@ -101,6 +101,7 @@ public class AgentController extends BaseController {
 		
 		return BaseResponse.success();
 	}
+
 	/**
 	 * 获取催收员通话记录
 	 * @param collectorCallLogVo
@@ -110,11 +111,12 @@ public class AgentController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value="/list_collector_call_log")
-	public BaseResponse list(CollectorCallLogVo collectorCallLogVo, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
-			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize,@RequestHeader("User-Id") String userId){
-		PageResponse<CollectorCallLogVo> pageResponse =  agentService.list(collectorCallLogVo,pageNum,pageSize,userId);
+	public BaseResponse listCollectorCallLog(CollectorCallLogVo collectorCallLogVo, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize, @RequestHeader("User-Id") String userId){
+		PageResponse<CollectorCallLogVo> pageResponse =  agentService.listCollectorCallLog(collectorCallLogVo, pageNum, pageSize, userId);
 		return pageResponse;
 	} 
+
 	/**
 	 * 获取坐席信息
 	 * @param userId
@@ -124,7 +126,8 @@ public class AgentController extends BaseController {
 	public BaseResponse getAgentInfo(@RequestHeader("User-Id") String userId){
 		Agent agent =  agentService.findTopByCollectorId(userId);
 		return new CommonResponse<Agent>(agent);
-	} 
+	}
+
 	/**
 	 * 获取坐席统计信息
 	 * @param userId

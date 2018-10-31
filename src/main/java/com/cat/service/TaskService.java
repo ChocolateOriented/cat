@@ -8,7 +8,6 @@ import com.cat.module.dto.*;
 import com.cat.module.entity.TaskLog;
 
 import com.cat.module.vo.DayRepaymentOrderVo;
-import com.cat.module.vo.DayTaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -48,8 +47,6 @@ public class TaskService extends BaseService {
 	private TaskLogMapper taskLogMapper;
 	@Autowired
 	private	ScheduledTaskByFixedService scheduledTaskByFixedService;
-	@Autowired
-	private	ScheduledTaskService scheduledTaskService ;
 
 	/**
 	 * 获取任务列表
@@ -101,6 +98,15 @@ public class TaskService extends BaseService {
 	 */
 	public Task findTaskByOrderId(String orderId) {
 		return taskRepository.findTopByOrderId(orderId);
+	}
+
+	/**
+	 * 根据手机号查询最新的一条订单任务
+	 * @param mobile
+	 * @return
+	 */
+	public Task findLastOrderTaskByMobile(String mobile) {
+		return taskRepository.findTopByMobileOrderByOrderIdDesc(mobile);
 	}
 
 	/**

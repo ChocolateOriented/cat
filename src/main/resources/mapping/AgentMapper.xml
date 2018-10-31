@@ -15,14 +15,27 @@
     where
     	id = #{id}
 </update>
+<update id="updateAgentStatusById">
+	update t_agent set
+	 status = #{status},
+	 update_time = now()
+    where
+    	id = #{id}
+</update>
 
 <insert id="insertAgentLog">
-	insert into t_agent_login_log values (
+	insert into t_agent_login_log (
+		id,
+		agent,
+		collector_id,
+		status
+		)
+		 values (
 		#{id},
 		#{agent},
 		#{collectorId},
 		#{status}
-	)
+		)
 </insert>
 
 <select id="findByCollectorIdAndDate" resultType="com.cat.module.entity.AgentStatistic">
@@ -41,20 +54,30 @@
 </select>
 
 <insert id="insertAgentStatistic">
-	insert into t_agent_statistic values(
-	  #{id},
-	  curdate(),
-	  #{agent},
-	  #{collectorId},
-	  #{firstLoginTime},
-	  #{lastLoginTime},
-	  #{lastLogoutTime},
-	  #{accumulativeTime}
-	)
+	insert into t_agent_statistic(
+		id,
+		date,
+		agent,
+		collector_id,
+		first_login_time,
+		last_login_time,
+		last_logout_time,
+		accumulative_time
+		)
+		 values(
+		  #{id},
+		  curdate(),
+		  #{agent},
+		  #{collectorId},
+		  #{firstLoginTime},
+		  #{lastLoginTime},
+		  #{lastLogoutTime},
+		  #{accumulativeTime}
+		)
 	
 </insert>
 
-<update id="updateAgentStatistic">
+<update id="updateAgentStatisticById">
 	update t_agent_statistic set 
 	  last_login_time = #{lastLoginTime},
 	  last_logout_time = #{lastLogoutTime},

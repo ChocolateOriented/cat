@@ -26,6 +26,7 @@ import com.cat.module.dto.cti.cmd.CallInfoQueryCommand;
 import com.cat.module.dto.cti.cmd.RequestCommand;
 import com.cat.module.entity.Agent;
 import com.cat.module.entity.CollectorCallLog;
+import com.cat.module.entity.Task;
 import com.cat.module.enums.CallType;
 import com.cat.repository.AgentRepository;
 import com.cat.repository.CollectorCallLogRepository;
@@ -42,6 +43,9 @@ public class CollectorCallLogService extends BaseService {
 
 	@Autowired
 	private CollectorCallLogRepository collectorCallLogRepository;
+
+	@Autowired
+	private TaskService taskService;
 
 	@Autowired
 	private CtiManager ctiManager;
@@ -102,14 +106,16 @@ public class CollectorCallLogService extends BaseService {
 		callLog.setId(generateId());
 		callLog.setCallType(CallType.OUT);
 		
+		String customerNo = String.valueOf(callLog.getId());
 		String location = mobileAddressService.getFullAddressByMobile(targetTel);
 		callLog.setLocation(location);
+		callLog.setCustomerNo(customerNo);
 		collectorCallLogRepository.save(callLog);
 		
 		String dialTarget = prependDialTel(callLog.getAgent(), targetTel);
 		
 		try {
-			ctiManager.originate(callLog.getAgent(), dialTarget, String.valueOf(callLog.getId()));
+			ctiManager.originate(callLog.getAgent(), dialTarget, customerNo);
 		} catch (ApiException e) {
 			logger.info("发起呼叫失败：", e);
 			throw new ServiceException("操作失败");
@@ -141,7 +147,8 @@ public class CollectorCallLogService extends BaseService {
 				continue;
 			}
 			
-			if (mobileAddressService.isMobile(tel) && !mobileAddressService.isLocalMobile(tel)) {
+			if (StringUtils.isNotEmpty(rule.nonlocalPre) && mobileAddressService.isMobile(tel)
+					&& !mobileAddressService.isLocalMobile(tel)) {
 				tel = rule.nonlocalPre + tel;
 			}
 			
@@ -277,7 +284,7 @@ public class CollectorCallLogService extends BaseService {
 			if (total % 10 > 0) {
 				totalPage++;
 			}
-			logger.info("获取{}通话信息页数{}",callType.getDesc(), totalPage);
+			logger.info("获取{}通话信息页数{}", callType.getDesc(), totalPage);
 			
 			for (int i = 2; i <= totalPage; i++) {
 				command.setPage(String.valueOf(i));
@@ -328,7 +335,7 @@ public class CollectorCallLogService extends BaseService {
 						break;
 				}
 				
-				CollectorCallLog callLog = CollectorCallLog.buildFrom(callInfo);
+				CollectorCallLog callLog = CollectorCallLog.buildFromCallInfo(callInfo);
 				
 				String targetTel = callLog.getTargetTel();
 				targetTel = CtiManager.trimCtiCallInfoTel(targetTel);
@@ -336,6 +343,12 @@ public class CollectorCallLogService extends BaseService {
 				
 				String location = mobileAddressService.getFullAddressByMobile(targetTel);
 				callLog.setLocation(location);
+				
+				Task task = taskService.findLastOrderTaskByMobile(targetTel);
+				if (task != null) {
+					callLog.setOrderId(task.getOrderId());
+					callLog.setTargetName(task.getCustomerName());
+				}
 				
 				callLog.setCollectorId(agent.getCollectorId());
 				callLog.setExtension(agent.getExtension());
@@ -368,16 +381,7 @@ public class CollectorCallLogService extends BaseService {
 			return;
 		}
 		
-		current.setCtiUuid(callInfo.getCtiUuid());
-		current.setDialTime(callInfo.getDialTime());
-		current.setRingTime(callInfo.getRingTime());
-		current.setCallStartTime(callInfo.getCallStartTime());
-		current.setCallEndTime(callInfo.getCallEndTime());
-		current.setFinishTime(callInfo.getFinishTime());
-		
-		int durationTime = current.getCallStartTime() == null || current.getCallEndTime() == null ? 0
-				: (int) (current.getCallEndTime().getTime() - current.getCallStartTime().getTime()) / 1000;
-		current.setDurationTime(durationTime);
+		current.supplementFromCallInfo(callInfo);
 		
 		collectorCallLogRepository.save(current);
 		

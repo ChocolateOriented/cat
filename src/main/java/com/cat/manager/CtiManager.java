@@ -33,6 +33,11 @@ public class CtiManager {
 	@Autowired
 	private CtiBaseManager ctiBaseManager;
 
+	/**
+	 * 根据参数拼接为 key1=value1&key2=value2...
+	 * @param params
+	 * @return
+	 */
 	private String buildFormEntity(Map<String, Object> params) {
 		StringBuilder builder = new StringBuilder();
 		for (Entry<String, Object> entry : params.entrySet()) {
@@ -46,6 +51,12 @@ public class CtiManager {
 		return builder.toString();
 	}
 
+	/**
+	 * 检查cti响应是否正常
+	 * @param response
+	 * @param formEntity
+	 * @throws ApiException
+	 */
 	private void checkResponse(BaseResponse response, String formEntity) throws ApiException {
 		if (response == null) {
 			logger.info("CTI接口失败, param:{}", formEntity);
@@ -58,6 +69,12 @@ public class CtiManager {
 		}
 	}
 
+	/**
+	 * CTI通用请求
+	 * @param params
+	 * @return
+	 * @throws ApiException
+	 */
 	public BaseResponse commonComand(Map<String, Object> params) throws ApiException {
 		String formEntity = buildFormEntity(params);
 		BaseResponse response = ctiBaseManager.commonComand(formEntity);
@@ -65,6 +82,14 @@ public class CtiManager {
 		return response;
 	}
 
+	/**
+	 * CTI查询请求
+	 * @param params
+	 * @param type
+	 * @return
+	 * @throws IOException
+	 * @throws ApiException
+	 */
 	public <T extends BaseResponse> T queryComand(Map<String, Object> params, TypeReference<T> type) throws IOException, ApiException {
 		String formEntity = buildFormEntity(params);
 		String strResp = ctiBaseManager.queryComand(formEntity);
@@ -73,6 +98,14 @@ public class CtiManager {
 		return response; 
 	}
 
+	/**
+	 * 发起呼叫
+	 * @param agent
+	 * @param targetTel
+	 * @param customerNo
+	 * @return
+	 * @throws ApiException
+	 */
 	public BaseResponse originate(String agent, String targetTel, String customerNo) throws ApiException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("cmd", RequestCommand.ORIGINATE);
@@ -87,6 +120,13 @@ public class CtiManager {
 		return commonComand(params);
 	}
 
+	/**
+	 * 变更坐席状态
+	 * @param agent
+	 * @param agentStatus
+	 * @return
+	 * @throws ApiException
+	 */
 	public BaseResponse changeAgentStatus(String agent, AgentStatus agentStatus) throws ApiException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("cmd", RequestCommand.AGENT_STATUS_CHANGE);
@@ -95,16 +135,38 @@ public class CtiManager {
 		return commonComand(params);
 	}
 
+	/**
+	 * 查询CTI呼入信息
+	 * @param queryCommand
+	 * @return
+	 * @throws IOException
+	 * @throws ApiException
+	 */
 	public PageResponse<CallinInfo> queryCallinInfo(CallInfoQueryCommand queryCommand) throws IOException, ApiException {
 		queryCommand.setCmd(RequestCommand.CALLIN_INFO);
 		return queryComand(queryCommand.toParamMap(), new TypeReference<PageResponse<CallinInfo>>() {});
 	}
 
+	/**
+	 * 查询CTI呼出信息
+	 * @param queryCommand
+	 * @return
+	 * @throws IOException
+	 * @throws ApiException
+	 */
 	public PageResponse<CalloutInfo> queryCalloutInfo(CallInfoQueryCommand queryCommand) throws IOException, ApiException {
 		queryCommand.setCmd(RequestCommand.CALLOUT_INFO);
 		return queryComand(queryCommand.toParamMap(), new TypeReference<PageResponse<CalloutInfo>>() {});
 	}
 
+	/**
+	 * 查询CTI呼叫信息
+	 * @param queryCommand
+	 * @param callType
+	 * @return
+	 * @throws IOException
+	 * @throws ApiException
+	 */
 	@SuppressWarnings("unchecked")
 	public PageResponse<CallInfo> queryCallInfo(CallInfoQueryCommand queryCommand, CallType callType) throws IOException, ApiException {
 		PageResponse<?> resp;
