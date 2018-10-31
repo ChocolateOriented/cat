@@ -26,7 +26,7 @@ public class CollectorController extends BaseController{
     public Results getDayTaskInfo(@RequestHeader("User-Id") String collectorId) {
         try {
             DayTaskVo dayTaskVo = collectorService.getDayTaskInfo(collectorId);
-            return Results.ok().putData("entities", dayTaskVo);
+            return Results.ok().putData(dayTaskVo);
         } catch (Exception e) {
             logger.info("获取单日催收员催收情况接口异常", e);
             return new Results(ResultConstant.INNER_ERROR, "请稍后重试");
