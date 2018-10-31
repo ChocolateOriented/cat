@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.annotation.RoleAuth;
 import com.cat.exception.ServiceException;
 import com.cat.module.dto.BaseResponse;
 import com.cat.module.dto.CommonResponse;
@@ -19,6 +20,7 @@ import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.entity.Agent;
 import com.cat.module.entity.CollectorCallLog;
 import com.cat.module.enums.AgentStatus;
+import com.cat.module.enums.Role;
 import com.cat.module.vo.AgentStatisticVo;
 import com.cat.module.vo.CollectorCallLogVo;
 import com.cat.service.AgentService;
@@ -68,6 +70,16 @@ public class AgentController extends BaseController {
 			return new BaseResponse((int) ResultConstant.INNER_ERROR.code, e.getMessage());
 		}
 		
+		return BaseResponse.success();
+	}
+
+	/**
+	 * 手动同步通话记录
+	 */
+	@PostMapping(value = "/manual_sync_call_log")
+	@RoleAuth(include = Role.ADMIN)
+	public BaseResponse manualSyncCollectorCallLog(long start, long end) {
+		collectorCallLogService.manualSyncCallInfo(start, end);
 		return BaseResponse.success();
 	}
 
