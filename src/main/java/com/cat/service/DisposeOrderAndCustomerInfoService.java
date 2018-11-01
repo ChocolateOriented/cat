@@ -241,7 +241,7 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             //还清后应催金额:0
             taskLog.setCreditamount(BigDecimal.ZERO);
             //逾期天数
-            taskLog.setOverdueDays(DateUtils.getOverdueDay(repaymentMessage.getPostponeTime(), repaymentMessage.getRepaymentTime()));
+            taskLog.setOverdueDays(DateUtils.getOverdueDay(repaymentMessage.getPayoffTime(), repaymentMessage.getRepaymentTime()));
         }
         taskLog.setCreateBy("manual_pay".equals(repaymentMessage.getChannel()) ? "manual_pay" : "auto_admin");
         //taskid
