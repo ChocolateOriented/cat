@@ -79,16 +79,16 @@ public class ManualPaymentService extends BaseService {
         BigDecimal actualPaymentAmount = manualPayments.getActualPaymentAmount().setScale(2, BigDecimal.ROUND_HALF_DOWN);
 
         if ("PAYOFF".equals(manualPayments.getPaymentStatus())) {
-            //手动还款金额>1000并且应催金额和手动还款金额匹配
-            if (manualPayments.getActualPaymentAmount().compareTo(new BigDecimal(1000)) > 0
+            //手动还款金额>本金并且应催金额和手动还款金额匹配
+            if (manualPayments.getActualPaymentAmount().compareTo(task.getLoanAmount()) >= 0
                     && actualPaymentAmount.equals(task.getRepayAmount())) {
                 return true;
             } else {
                 return false;
             }
         } else if ("POSTPONE".equals(manualPayments.getPaymentStatus())) {
-            //手动还款金额>250并且应催金额和手动还款金额匹配
-            if (manualPayments.getActualPaymentAmount().compareTo(new BigDecimal(250)) > 0
+            //手动还款金额>单位逾期费并且应催金额和手动还款金额匹配
+            if (manualPayments.getActualPaymentAmount().compareTo(task.getPostponeUnitCharge()) >= 0
                     && actualPaymentAmount.equals(task.getPostponeAmount())) {
                 return true;
             } else {
