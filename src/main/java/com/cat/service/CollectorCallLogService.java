@@ -142,7 +142,7 @@ public class CollectorCallLogService extends BaseService {
 	 * @param tel
 	 * @return
 	 */
-	public String prependDialTel(String agent, String tel) {
+	private String prependDialTel(String agent, String tel) {
 		DialRule dialRule = null;
 		
 		for (DialRule rule : dialRules) {
@@ -374,6 +374,7 @@ public class CollectorCallLogService extends BaseService {
 				}
 				
 				callLog.setCollectorId(agent.getCollectorId());
+				callLog.setAgent(agent.getAgent());
 				callLog.setExtension(agent.getExtension());
 				
 				callLog.setId(generateId());
