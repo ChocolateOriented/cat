@@ -142,21 +142,30 @@ public class CollectorCallLogService extends BaseService {
 	 * @param tel
 	 * @return
 	 */
-	private String prependDialTel(String agent, String tel) {
+	public String prependDialTel(String agent, String tel) {
+		DialRule dialRule = null;
+		
 		for (DialRule rule : dialRules) {
 			if (!Pattern.matches(rule.agentPattern, agent)) {
 				continue;
 			}
 			
-			if (StringUtils.isNotEmpty(rule.nonlocalPre) && mobileAddressService.isMobile(tel)
-					&& !mobileAddressService.isLocalMobile(tel)) {
-				tel = rule.nonlocalPre + tel;
-			}
-			
-			tel = rule.preDial + tel;
+			dialRule = rule;
+		}
+		
+		//未匹配则默认使用第一个规则
+		if (dialRule == null && dialRules.size() > 0) {
+			dialRule = dialRules.get(0);
+		} else {
 			return tel;
 		}
 		
+		if (StringUtils.isNotEmpty(dialRule.nonlocalPre) && mobileAddressService.isMobile(tel)
+				&& !mobileAddressService.isLocalMobile(tel)) {
+			tel = dialRule.nonlocalPre + tel;
+		}
+		
+		tel = dialRule.preDial + tel;
 		return tel;
 	}
 
@@ -225,7 +234,7 @@ public class CollectorCallLogService extends BaseService {
 	 * @param endTimestamp
 	 */
 	public void manualSyncCallInfo(long startTimeStamp, long endTimestamp) {
-		logger.info("手动同步电话通话信记录开始");
+		logger.info("手动同步电话通话信记录开始{} ~ {}", startTimeStamp, endTimestamp);
 		syncCallInfoByTime(new Date(startTimeStamp), new Date(endTimestamp));
 		logger.info("手动同步电话通话信记录结束");
 	}
