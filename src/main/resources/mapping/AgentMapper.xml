@@ -98,6 +98,9 @@
 		order_id as orderId
 	from t_collector_call_log 
 	<where>
+	 <if test="orderId != null and orderId != ''">
+         AND order_id = #{order_id}
+     </if>
 	 <if test="collectorId != null and collectorId != ''">
          AND collector_id = #{collectorId}
      </if>
