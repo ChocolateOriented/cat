@@ -234,14 +234,14 @@ public class DisposeOrderAndCustomerInfoService extends BaseService {
             //延期后,应催金额:本金+利息
             taskLog.setCreditamount(dbTask.getLoanAmount().add(dbTask.getInterestValue()));
             //逾期天数
-            taskLog.setOverdueDays(DateUtils.getOverdueDay(repaymentMessage.getPostponeTime(), repaymentMessage.getRepaymentTime()));
+            taskLog.setOverdueDays(DateUtils.getOverdueDay(repaymentMessage.getPostponeTime(), dbTask.getRepaymentTime()));
         } else if (repaymentMessage.getPayoffTime() != null) {
             //催收员行为状态
             taskLog.setBehaviorStatus(BehaviorStatus.FINISHED);
             //还清后应催金额:0
             taskLog.setCreditamount(BigDecimal.ZERO);
             //逾期天数
-            taskLog.setOverdueDays(DateUtils.getOverdueDay(repaymentMessage.getPayoffTime(), repaymentMessage.getRepaymentTime()));
+            taskLog.setOverdueDays(DateUtils.getOverdueDay(repaymentMessage.getPayoffTime(), dbTask.getRepaymentTime()));
         }
         taskLog.setCreateBy("manual_pay".equals(repaymentMessage.getChannel()) ? "manual_pay" : "auto_admin");
         //taskid
