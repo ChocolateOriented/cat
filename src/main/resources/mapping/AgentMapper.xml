@@ -87,7 +87,8 @@
 </update>
 
 <select id="findCollectorCallLogList" resultType="com.cat.module.vo.CollectorCallLogVo">
-	select 
+	select
+		id, 
 		dial_time as dialTime,
 		target_name as targetName,
 		target_tel as targetTel,
