@@ -342,7 +342,7 @@ public class Task  extends BaseEntity {
 		BigDecimal overDueAmount = getOverDueAmount();
 		//订单金额
 		BigDecimal orderAmount = getOrderAmount();
-		return orderAmount.add(overDueAmount).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
+		return orderAmount.add(overDueAmount).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 	}
 
 	/**
@@ -352,7 +352,7 @@ public class Task  extends BaseEntity {
 	public BigDecimal getOverDueAmount() {
 		int betweenDays = DateUtils.getOverdueDay(new Date(), repaymentTime);
 		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays));
-		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
+		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount.setScale(2, BigDecimal.ROUND_HALF_DOWN);
 	}
 
 	/**

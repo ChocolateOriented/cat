@@ -382,7 +382,7 @@ public class TaskService extends BaseService {
 			dayRepaymentOrderVo.setOrderStatus(item.getBehaviorStatus().name());
 			dayRepaymentOrderVo.setOverdueDays(item.getOverdueDays() == null ? 0 : item.getOverdueDays());
 			dayRepaymentOrderVo.setRepaymentAmount(item.getRepaymentAmount());
-			dayRepaymentOrderVo.setRepaymentTime(item.getRepaymentTime());
+			dayRepaymentOrderVo.setRepaymentTime(item.getCreateTime());
 			dayRepaymentOrderVos.add(dayRepaymentOrderVo);
 		});
 		return dayRepaymentOrderVos;
