@@ -99,7 +99,7 @@
 	from t_collector_call_log 
 	<where>
 	 <if test="orderId != null and orderId != ''">
-         AND order_id = #{order_id}
+         AND order_id = #{orderId}
      </if>
 	 <if test="collectorId != null and collectorId != ''">
          AND collector_id = #{collectorId}
