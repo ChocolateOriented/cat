@@ -61,7 +61,7 @@ public class AgentService extends BaseService {
 	public void changAgentStatus(Agent currentAgent, AgentStatus newStatus) throws ServiceException {
 		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(currentAgent.getCollectorId());
 		Date date = new Date();
-		if (agentStatistic == null && newStatus != AgentStatus.LOGGED_OUT) {
+		if (agentStatistic == null && newStatus == AgentStatus.AVAILABLE) {
 			AgentStatistic	statistic = new AgentStatistic();
 			statistic.setId(this.generateId());
 			statistic.setAgent(currentAgent.getAgent());
