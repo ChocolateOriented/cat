@@ -95,7 +95,7 @@ feign:
     enabled: true
 feignClient:
   suona:
-    url: https://www.mo9.com/suonaApi
+    url: https://suona.alpha.mo9.com/suonaApi
     systemCode: BOURSE
     captchaTemplateCode: CAT_CAPTCHA_V1
     resetPasswordTemplateCode: CAT_RESET_PASSWORD_V0.0.1
