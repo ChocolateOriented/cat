@@ -8,7 +8,9 @@ public enum ResultConstant {
     EMPTY_PARAM(4L, "缺少参数或参数错误"),
     EMPTY_ENTITY(5L, "请求的数据不存在"),
     SYSTEM_BUSY(6L, "系统繁忙, 请重试!"),
-    REPEAT_REQUEST(7L,"重复请求, 已处理");
+    REPEAT_REQUEST(7L,"重复请求, 已处理"),
+    NEED_LOGIN(8L, "认证错误, 请重新登录"),
+    INSUFFICIENT_PERMISSIONS(9L, "权限不足");
 
     public final long code;
     public final String message;

@@ -50,7 +50,7 @@ public class AccountService extends BaseService {
   @Value("${feignClient.cat-front-end.url}")
   private String frontEndUrl;
 
-  private static final String PASSWORD_SALT = "356a192b7913b04c54574d1";
+  public static final String PASSWORD_SALT = "356a192b7913b04c54574d1";
   private static final String CACHE_VALIDATE_CODE_PREFIX = "validateCode";
   private static final String CACHE_RESET_PASSWORD_TOKEN_PREFIX = "resetPasswordToken";
 

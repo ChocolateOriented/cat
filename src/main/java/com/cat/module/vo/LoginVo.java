@@ -1,8 +1,7 @@
 package com.cat.module.vo;
 
-import com.cat.module.enums.Role;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.cat.module.entity.Role;
+import com.cat.module.enums.Role_n;
 
 /**
  * Created by jxli on 2018/9/25.

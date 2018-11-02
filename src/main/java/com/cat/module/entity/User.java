@@ -1,12 +1,13 @@
 package com.cat.module.entity;
 
-import com.cat.module.enums.Role;
+import com.cat.module.enums.Role_n;
 import com.cat.module.enums.UserStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,7 +31,7 @@ public class User extends AuditingEntity {
 
   private String collectCycle;
 
-  @Enumerated(EnumType.STRING)
+  @ManyToOne
   private Role role;//角色
 
   private Boolean autoDivision;//是否自动分案
@@ -67,19 +68,6 @@ public class User extends AuditingEntity {
 
   public void setId(String id) {
     Id = id;
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "organizationId=" + organizationId +
-        ", email='" + email + '\'' +
-        ", name='" + name + '\'' +
-        ", status=" + status +
-        ", collectCycle='" + collectCycle + '\'' +
-        ", role=" + role +
-        ", autoDivision=" + autoDivision +
-        "} " + super.toString();
   }
 
   public String getPassword() {
@@ -128,5 +116,13 @@ public class User extends AuditingEntity {
 
   public void setProductType(String productType) {
     this.productType = productType;
+  }
+
+  public Role_n getRoleN() {
+    return Role_n.ADMIN;
+  }
+
+  public void setRoleN(Role_n roleN) {
+
   }
 }

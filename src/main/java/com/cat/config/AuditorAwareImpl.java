@@ -1,9 +1,9 @@
 package com.cat.config;
 
-import com.cat.interceptor.CommonRequestContext;
 import com.cat.module.entity.User;
 import com.cat.repository.UserRepository;
-import com.cat.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
@@ -13,16 +13,17 @@ import org.springframework.stereotype.Component;
  */
 @Component("auditorAware")
 public class AuditorAwareImpl implements AuditorAware<String> {
-  @Autowired
-  UserRepository userRepository;
 
   @Override
   public String getCurrentAuditor() {
-    String userId = CommonRequestContext.getInstance().getCurrentUserId();
-    if (StringUtils.isBlank(userId)) {
+    Subject subject = SecurityUtils.getSubject();
+    if (null == subject){
       return "sys";
     }
-    User current = userRepository.findOne(userId);
-    return current.getName();
+    User user = (User) subject.getPrincipal();
+    if (user == null) {
+      return "sys";
+    }
+    return user.getName();
   }
 }

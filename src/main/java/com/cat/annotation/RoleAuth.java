@@ -1,6 +1,6 @@
 package com.cat.annotation;
 
-import com.cat.module.enums.Role;
+import com.cat.module.enums.Role_n;
 
 import java.lang.annotation.*;
 
@@ -16,11 +16,11 @@ public @interface RoleAuth {
      * 表示可以进入的角色
      * @return
      */
-    Role[] include() default {};
+    Role_n[] include() default {};
 
     /**
      * 表示不可进入的角色
      * @return
      */
-    Role[] exclude() default {};
+    Role_n[] exclude() default {};
 }

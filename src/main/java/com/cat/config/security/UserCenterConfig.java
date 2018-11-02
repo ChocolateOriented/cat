@@ -1,10 +1,6 @@
-package com.cat.config;
+package com.cat.config.security;
 
-import com.cat.interceptor.RequestInfoFetcher;
-import com.mo9.nest.auth.AuthInterceptor;
 import com.mo9.nest.client.AuthClient;
-import com.mo9.nest.client.redis.RedisHolder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UserCenterConfig {
 
-    @Autowired
-    private RedisHolder nestRedisHolder;
     private RequestInfoFetcher requestInfoFetcher = new RequestInfoFetcher();
 
     /**
@@ -34,25 +28,9 @@ public class UserCenterConfig {
                                            @Value("${nest.group}") String systemGroup,
                                            @Value("${nest.mode}") String loginMode) {
         AuthClient client = new AuthClient(baseUrl, key, secret, systemCode, systemGroup, loginMode);
-        //这里的配置后面会说到
         client.setRequestInfoFetcher(requestInfoFetcher);
         return client;
     }
 
-    /**
-     * 认证拦截器
-     * @param excludeUrls 排除拦截的URL, 支持pattern
-     * @return
-     */
-    @Bean
-    public AuthInterceptor authenticationInterceptor(@Value("${nest.exclude.urls}") String[] excludeUrls) {
-        AuthInterceptor authInterceptor = new AuthInterceptor(nestRedisHolder);
-        //这里的配置后面会说到
-        authInterceptor.setRequestInfoFetcher(requestInfoFetcher);
-        if (excludeUrls != null) {
-            authInterceptor.setExcludeUrls(excludeUrls);
-        }
-        return authInterceptor;
-    }
 
 }

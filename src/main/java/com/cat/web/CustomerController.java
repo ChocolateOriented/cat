@@ -3,7 +3,7 @@ package com.cat.web;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
 import com.cat.module.entity.User;
-import com.cat.module.enums.Role;
+import com.cat.module.enums.Role_n;
 import com.cat.module.dto.BlackListDto;
 import com.cat.module.vo.OrderInfo;
 import com.cat.module.vo.PostponeHistoryVo;
@@ -13,7 +13,6 @@ import com.cat.service.DisposeOrderAndCustomerInfoService;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.cat.service.PostponeHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -82,8 +81,8 @@ public class CustomerController extends BaseController{
 			logger.warn("该用户不存在,userID={}",userId);
 			return new Results(-1L,"您没有权限");
 		}
-		Role role = user.getRole() ;
-		if(role == null || role == Role.COLLECTOR ){
+		Role_n roleN = user.getRoleN() ;
+		if(roleN == null || roleN == Role_n.COLLECTOR ){
 			logger.warn("该用户没分配角色,userID={}",userId);
 			return new Results(-1L,"您没有权限");
 		}

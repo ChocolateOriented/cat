@@ -1,13 +1,11 @@
 package com.cat.web;
 
-import com.cat.interceptor.CommonRequestContext;
 import com.cat.module.entity.User;
-import com.cat.repository.UserRepository;
-import com.cat.util.StringUtils;
 import java.util.List;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -15,8 +13,6 @@ import org.springframework.validation.FieldError;
  * Created by jxli on 2018/3/8.
  */
 public abstract class BaseController {
-	@Autowired
-	UserRepository userRepository;
 
 	public static final String DEFAULT_PAGE_SIZE = "10" ;
 	public static final String DEFAULT_PAGE_NUM = "1";
@@ -24,11 +20,12 @@ public abstract class BaseController {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected User getCurrentUser(){
-		String userId = CommonRequestContext.getInstance().getCurrentUserId();
-		if (StringUtils.isBlank(userId)){
+		Subject subject = SecurityUtils.getSubject();
+		if (null == subject){
 			return null;
 		}
-		return userRepository.findOne(userId);
+		User user = (User) subject.getPrincipal();
+		return user;
 	}
 
 	/**
@@ -55,4 +52,5 @@ public abstract class BaseController {
 		}
 		return errorMsg.toString();
 	}
+
 }

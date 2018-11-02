@@ -103,11 +103,7 @@ public class Results {
     }
     @Override
     public String toString() {
-        return "Results{" +
-            "code=" + code +
-            ", message='" + message + '\'' +
-            ", data=" + data +
-            '}';
+      return JSON.toJSONString(this);
     }
 
     //示例

@@ -1,11 +1,13 @@
 package com.cat.web;
 
 
+import com.cat.module.enums.Role_n;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,6 @@ import com.cat.module.dto.PageResponse;
 import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.User;
-import com.cat.module.enums.Role;
 import com.cat.service.ScheduledTaskService;
 import com.cat.service.TaskService;
 import com.cat.util.DateUtils;
@@ -73,7 +74,7 @@ public class TaskController extends BaseController {
 	 * @return
 	 */
 	@PostMapping(value="assign")
-	@RoleAuth(include = Role.ADMIN)
+	@RoleAuth(include = Role_n.ADMIN)
 	public BaseResponse assign(@RequestBody AssignDto assignDto,@RequestHeader("User-Id")String  userId){
 		BaseResponse baseResponse = taskService.assign(assignDto,userId);
 		return baseResponse;

@@ -22,10 +22,4 @@ public class BaseEntity extends AuditingEntity implements Serializable{
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		return "BaseEntity{" +
-				"id=" + id +
-				"} " + super.toString();
-	}
 }

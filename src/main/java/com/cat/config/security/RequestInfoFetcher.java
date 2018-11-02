@@ -1,4 +1,4 @@
-package com.cat.interceptor;
+package com.cat.config.security;
 
 import com.mo9.nest.client.info.DefaultRequestInfoFetcher;
 import javax.servlet.http.HttpServletRequest;
@@ -16,5 +16,13 @@ public class RequestInfoFetcher extends DefaultRequestInfoFetcher {
   @Override
   public String getClientId(HttpServletRequest request) {
     return "503";
+  }
+
+  public String getClientId() {
+    return "503";
+  }
+
+  public long getExpireSeconds() {
+    return 1800L;
   }
 }

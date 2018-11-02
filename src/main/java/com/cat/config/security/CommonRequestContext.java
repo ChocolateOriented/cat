@@ -1,4 +1,4 @@
-package com.cat.interceptor;
+package com.cat.config.security;
 
 import javax.servlet.http.HttpServletRequest;
 

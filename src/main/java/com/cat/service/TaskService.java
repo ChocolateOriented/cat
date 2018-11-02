@@ -1,5 +1,6 @@
 package com.cat.service;
 
+import com.cat.module.enums.Role_n;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,6 @@ import com.cat.module.entity.Organization;
 import com.cat.module.entity.Task;
 import com.cat.module.entity.User;
 import com.cat.module.enums.BehaviorStatus;
-import com.cat.module.enums.Role;
 import com.cat.repository.OrganizationRepository;
 import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
@@ -69,19 +69,19 @@ public class TaskService extends BaseService {
 			logger.warn("该用户不存在,userID={}",userId);
 			return null;
 		}
-		Role role = user.getRole() ;
-		if(role == null){
+		Role_n roleN = user.getRoleN() ;
+		if(roleN == null){
 			logger.warn("该用户没分配角色,userID={}",userId);
 			return null;
 		}
 		
 		//是主管
-		if(role == Role.ORGANIZATION_LEADER){
+		if(roleN == Role_n.ORGANIZATION_LEADER){
 			taskDto.setOrganizationLeaderId(userId);
 			taskDto.setCollectorId(null);
 		 }
 		//是催收员
-		if(role == Role.COLLECTOR){
+		if(roleN == Role_n.COLLECTOR){
 			taskDto.setCollectorId(userId);
 			taskDto.setOrganizationLeaderId(null);
 		}

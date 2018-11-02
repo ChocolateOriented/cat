@@ -1,5 +1,7 @@
 package com.cat.module.entity;
 
+import com.alibaba.fastjson.JSON;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
@@ -14,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AuditingEntity {
+public class AuditingEntity implements Serializable{
   @CreatedBy
   private String createBy;
   @CreatedDate
@@ -58,11 +60,6 @@ public class AuditingEntity {
 
   @Override
   public String toString() {
-    return "AuditingEntity{" +
-        "createBy='" + createBy + '\'' +
-        ", createTime=" + createTime +
-        ", updateBy='" + updateBy + '\'' +
-        ", updateTime=" + updateTime +
-        '}';
+    return JSON.toJSONString(this);
   }
 }

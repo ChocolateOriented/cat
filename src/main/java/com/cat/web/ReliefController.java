@@ -1,5 +1,6 @@
 package com.cat.web;
 
+import com.cat.module.enums.Role_n;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import com.cat.module.dto.EntitiesResponse;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.entity.Relief;
 import com.cat.module.entity.User;
-import com.cat.module.enums.Role;
 import com.cat.service.ReliefService;
 
 @RestController
@@ -36,7 +36,7 @@ public class ReliefController extends BaseController {
 	 * @return
 	 */
 	@PostMapping(value = "relief_amount")
-	@RoleAuth(exclude = Role.COLLECTOR)
+	@RoleAuth(exclude = Role_n.COLLECTOR)
 	public BaseResponse reliefAmount(@RequestBody @Validated Relief relief, BindingResult bindingResul) {
 		if (bindingResul.hasErrors()) {
 			return new BaseResponse((int) ResultConstant.EMPTY_PARAM.code, getFieldErrorsMessages(bindingResul));

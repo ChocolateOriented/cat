@@ -496,7 +496,7 @@
 			and auto_division = #{isAutoAssign}
 		</if>
 		and `status` = 'NORMAL'
-		and role = 'COLLECTOR' 
+		and roleN = 'COLLECTOR'
 		</where>
     
     </select>
@@ -528,7 +528,7 @@
         and collect_cycle LIKE concat('%',#{collectCycle},'%')
         and product_type = #{productType}
 		and `status` = 'NORMAL'
-		and role = 'COLLECTOR' 
+		and roleN = 'COLLECTOR'
     
     </select>
     <update id="batchUpdateAssignTask" >

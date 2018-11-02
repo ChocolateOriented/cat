@@ -1,8 +1,9 @@
 package com.cat.interceptor;
 
 import com.cat.annotation.RoleAuth;
+import com.cat.config.security.CommonRequestContext;
 import com.cat.module.entity.User;
-import com.cat.module.enums.Role;
+import com.cat.module.enums.Role_n;
 import com.cat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,14 +37,16 @@ public class RoleInterceptor extends HandlerInterceptorAdapter {
                 response.setStatus(401);
                 return false;
             }
-            Role role = one.getRole();
+            Role_n roleN = one.getRoleN();
 
-            if (methodAnnotation.include().length != 0 && !Arrays.asList(methodAnnotation.include()).contains(role)) {
+            if (methodAnnotation.include().length != 0 && !Arrays.asList(methodAnnotation.include()).contains(
+                roleN)) {
                 response.setStatus(401);
                 return false;
             }
 
-            if (methodAnnotation.exclude().length != 0 && Arrays.asList(methodAnnotation.exclude()).contains(role)) {
+            if (methodAnnotation.exclude().length != 0 && Arrays.asList(methodAnnotation.exclude()).contains(
+                roleN)) {
                 response.setStatus(401);
                 return false;
             }
