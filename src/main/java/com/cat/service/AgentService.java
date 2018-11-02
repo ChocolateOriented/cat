@@ -61,7 +61,7 @@ public class AgentService extends BaseService {
 	public void changAgentStatus(Agent currentAgent, AgentStatus newStatus) throws ServiceException {
 		AgentStatistic agentStatistic = agentMapper.findByCollectorIdAndDate(currentAgent.getCollectorId());
 		Date date = new Date();
-		if (agentStatistic == null && newStatus != AgentStatus.LOGGED_OUT) {
+		if (agentStatistic == null && newStatus == AgentStatus.AVAILABLE) {
 			AgentStatistic	statistic = new AgentStatistic();
 			statistic.setId(this.generateId());
 			statistic.setAgent(currentAgent.getAgent());
@@ -75,8 +75,7 @@ public class AgentService extends BaseService {
 		AgentStatus currentStatus = currentAgent.getStatus();
 		if (agentStatistic != null ) {
 			//在线变离线
-			if ((currentStatus == AgentStatus.AVAILABLE || currentStatus == AgentStatus.ON_BREAK) 
-					&& newStatus == AgentStatus.LOGGED_OUT ) {
+			if (currentStatus == AgentStatus.AVAILABLE && newStatus == AgentStatus.LOGGED_OUT ) {
 				agentStatistic.setLastLogoutTime(date);
 				int lineTime = (int) ((date.getTime() - agentStatistic.getLastLoginTime().getTime()) / 1000
 						+ agentStatistic.getAccumulativeTime());
@@ -85,8 +84,7 @@ public class AgentService extends BaseService {
 				agentMapper.updateAgentStatisticById(agentStatistic);
 			}
 			//离线变在线
-			if ((newStatus == AgentStatus.AVAILABLE || newStatus == AgentStatus.ON_BREAK)
-					&& currentStatus == AgentStatus.LOGGED_OUT) {
+			if (newStatus == AgentStatus.AVAILABLE && currentStatus == AgentStatus.LOGGED_OUT) {
 				agentStatistic.setLastLoginTime(date);
 				agentMapper.updateAgentStatisticById(agentStatistic);
 			}
