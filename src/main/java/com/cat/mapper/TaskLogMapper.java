@@ -6,6 +6,7 @@ package com.cat.mapper;
 import java.util.List;
 
 import com.cat.module.dto.CurrentOrderDto;
+import com.cat.module.dto.OrderDetailsReportDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.cat.module.entity.TaskLog;
@@ -48,4 +49,6 @@ public interface TaskLogMapper  {
 	 * @return
 	 */
 	List<TaskLog> getListOfDayOrder(String collectorId);
+
+    List<OrderDetailsReportDto> getAllOrderDetails();
 }

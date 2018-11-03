@@ -37,6 +37,8 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="last_payment_time" property="lastPaymentTime"/>
+        <result column="postpone_time" property="postponeTime"/>
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_task_log
@@ -76,7 +78,9 @@
         platformext,
         creditamount,
         create_by,
-        update_by
+        update_by,
+        last_payment_time,
+        postpone_time
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -113,6 +117,8 @@
             , #{item.creditamount}
             , #{item.createBy}
             , #{item.updateBy}
+            , #{item.lastPaymentTime}
+            , #{item.postponeTime}
             )
         </foreach>
     </insert>
@@ -127,7 +133,8 @@
         postpone_count, behavior_status, collect_task_status,
         task_id, overdue_days, platformext,
         creditamount, create_by,
-        update_by, remark
+        update_by, remark,last_payment_time,
+        postpone_time
         )
         values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},#{productType},#{orderType}, #{collectorId,jdbcType=VARCHAR},
         #{collectorName,jdbcType=VARCHAR}, #{collectCycle,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR},
@@ -139,7 +146,7 @@
         #{postponeCount,jdbcType=INTEGER}, #{behaviorStatus,jdbcType=VARCHAR}, #{collectTaskStatus,jdbcType=VARCHAR},
         #{taskId,jdbcType=BIGINT}, #{overdueDays,jdbcType=INTEGER}, #{platformext,jdbcType=VARCHAR},
         #{creditamount,jdbcType=INTEGER},  #{createBy,jdbcType=VARCHAR},
-        #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+        #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{lastPaymentTime}, #{postponeTime}
         )
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.TaskLog">
@@ -175,7 +182,9 @@
         creditamount = #{creditamount,jdbcType=INTEGER},       
         create_by = #{createBy,jdbcType=VARCHAR},
         update_by = #{updateBy,jdbcType=VARCHAR},
-        remark = #{remark,jdbcType=VARCHAR}
+        remark = #{remark,jdbcType=VARCHAR},
+        last_payment_time = #{lastPaymentTime},
+        postpone_time = #{postponeTime}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -184,7 +193,7 @@
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
         overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
-        remark
+        remark, last_payment_time, postpone_time
         from t_task_log
         where id = #{id,jdbcType=BIGINT}
     </select>
@@ -194,7 +203,7 @@
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
         overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
-        remark
+        remark, last_payment_time, postpone_time
         from t_task_log
     </select>
     <select id="getDayTaskCount" resultType="com.cat.module.dto.CurrentOrderDto">
@@ -217,11 +226,14 @@
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
         overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
-        remark
+        remark, last_payment_time, postpone_time
         from t_task_log
         WHERE collector_id = #{collectorId}
         AND TO_DAYS(create_time) = TO_DAYS(NOW())
         AND behavior_status IN ('POSTPONE', 'FINISHED')
         ORDER BY create_time DESC
+    </select>
+    <select id="getAllOrderDetails" resultType="com.cat.module.dto.OrderDetailsReportDto">
+
     </select>
 </mapper>

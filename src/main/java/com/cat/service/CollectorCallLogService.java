@@ -67,11 +67,11 @@ public class CollectorCallLogService extends BaseService {
 	@PostConstruct
 	private void init() {
 		int length = agentPattern.length;
-		
+
 		if (length != preDial.length || length != nonlocalPre.length) {
 			throw new IllegalStateException("CTI拨号规则配置异常");
 		}
-		
+
 		for (int i = 0; i < length; i++) {
 			DialRule rule = new DialRule();
 			rule.agentPattern = agentPattern[i];
@@ -85,13 +85,13 @@ public class CollectorCallLogService extends BaseService {
 	 * 加拨规则实体
 	 */
 	private class DialRule {
-		
+
 		private String agentPattern;
-		
+
 		private String preDial;
-		
+
 		private String nonlocalPre;
-		
+
 	}
 
 	/**
@@ -102,19 +102,19 @@ public class CollectorCallLogService extends BaseService {
 	@Transactional(rollbackFor = Exception.class)
 	public void orignateCall(CollectorCallLog callLog) throws ServiceException {
 		String targetTel = trimInvalidTelNumber(callLog.getTargetTel());
-		
+
 		callLog.setId(generateId());
 		callLog.setCallType(CallType.OUT);
-		
+
 		String customerNo = String.valueOf(callLog.getId());
 		String location = mobileAddressService.getFullAddressByMobile(targetTel);
 		callLog.setLocation(location);
 		callLog.setCustomerNo(customerNo);
 		callLog.setDialTime(new Date());
 		collectorCallLogRepository.save(callLog);
-		
+
 		String dialTarget = prependDialTel(callLog.getAgent(), targetTel);
-		
+
 		try {
 			ctiManager.originate(callLog.getAgent(), dialTarget, customerNo);
 		} catch (ApiException e) {
@@ -142,29 +142,26 @@ public class CollectorCallLogService extends BaseService {
 	 * @param tel
 	 * @return
 	 */
-	private String prependDialTel(String agent, String tel) {
+	public String prependDialTel(String agent, String tel) {
 		DialRule dialRule = null;
-		
+
 		for (DialRule rule : dialRules) {
 			if (!Pattern.matches(rule.agentPattern, agent)) {
 				continue;
 			}
-			
+
 			dialRule = rule;
 		}
-		
-		//未匹配则默认使用第一个规则
-		if (dialRule == null && dialRules.size() > 0) {
-			dialRule = dialRules.get(0);
-		} else {
+
+		if (dialRule == null) {
 			return tel;
 		}
-		
+
 		if (StringUtils.isNotEmpty(dialRule.nonlocalPre) && mobileAddressService.isMobile(tel)
 				&& !mobileAddressService.isLocalMobile(tel)) {
 			tel = dialRule.nonlocalPre + tel;
 		}
-		
+
 		tel = dialRule.preDial + tel;
 		return tel;
 	}
@@ -183,7 +180,7 @@ public class CollectorCallLogService extends BaseService {
 		calendar.add(Calendar.MINUTE, -5);
 		calendar.add(Calendar.SECOND, -1);
 		Date start = calendar.getTime();
-		
+
 		syncCallInfoByTime(start, end);
 		logger.info("5分钟定时同步电话通话信记录结束");
 	}
@@ -203,7 +200,7 @@ public class CollectorCallLogService extends BaseService {
 		c.add(Calendar.HOUR_OF_DAY, -1);
 		c.add(Calendar.SECOND, -1);
 		Date start = c.getTime();
-		
+
 		syncCallInfoByTime(start, end);
 		logger.info("每小时同步电话通话信记录结束");
 	}
@@ -223,7 +220,7 @@ public class CollectorCallLogService extends BaseService {
 		c.add(Calendar.DATE, -1);
 		c.add(Calendar.SECOND, -1);
 		Date start = c.getTime();
-		
+
 		syncCallInfoByTime(start, end);
 		logger.info("每日时同步电话通话信记录结束");
 	}
@@ -248,24 +245,24 @@ public class CollectorCallLogService extends BaseService {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		String starttime = dateFormat.format(start);
 		String endtime = dateFormat.format(end);
-		
+
 		CallInfoQueryCommand command = new CallInfoQueryCommand();
 		command.setStarttime(starttime);
 		command.setEndtime(endtime);
-		
+
 		command.setCmd(RequestCommand.CALLOUT_INFO);
-		
+
 		List<Agent> agents = agentRepository.findAll();
 		if (agents == null || agents.isEmpty()) {
 			logger.info("没有需要同步通话记录的坐席");
 			return;
 		}
-		
+
 		for (Agent agent : agents) {
 			if (StringUtils.isEmpty(agent.getCollectorId())) {
 				continue;
 			}
-			
+
 			logger.info("同步坐席{}", agent.getAgent());
 			command.setAgent(null);
 			command.setQueue(agent.getQueue());
@@ -294,33 +291,33 @@ public class CollectorCallLogService extends BaseService {
 				logger.info("获取{}通话信息失败", callType.getDesc());
 				return callInfos;
 			}
-			
+
 			Page<CallInfo> page = first.getData();
 			if (page == null || page.isEmpty()) {
 				return callInfos;
 			}
-			
+
 			callInfos.addAll(page.getEntities());
-			
+
 			long total = page.getTotal();
 			long totalPage = total / 10;
 			if (total % 10 > 0) {
 				totalPage++;
 			}
 			logger.info("获取{}通话信息页数{}", callType.getDesc(), totalPage);
-			
+
 			for (int i = 2; i <= totalPage; i++) {
 				command.setPage(String.valueOf(i));
 				PageResponse<CallInfo> next = ctiManager.queryCallInfo(command, callType);
 				if (next == null) {
 					continue;
 				}
-				
+
 				List<CallInfo> nextEntities = next.getEntities();
 				if (nextEntities == null) {
 					return callInfos;
 				}
-				
+
 				callInfos.addAll(nextEntities);
 			}
 		} catch (Exception e) {
@@ -339,7 +336,7 @@ public class CollectorCallLogService extends BaseService {
 		try {
 			for (CallInfo callInfo : callInfos) {
 				CollectorCallLog current;
-				
+
 				switch (callType) {
 					case OUT:
 						String customNo = callInfo.getCustomNo();
@@ -357,26 +354,26 @@ public class CollectorCallLogService extends BaseService {
 					default:
 						break;
 				}
-				
+
 				CollectorCallLog callLog = CollectorCallLog.buildFromCallInfo(callInfo);
-				
+
 				String targetTel = callLog.getTargetTel();
 				targetTel = CtiManager.trimCtiCallInfoTel(targetTel);
 				callLog.setTargetTel(targetTel);
-				
+
 				String location = mobileAddressService.getFullAddressByMobile(targetTel);
 				callLog.setLocation(location);
-				
+
 				Task task = taskService.findLastOrderTaskByMobile(targetTel);
 				if (task != null) {
 					callLog.setOrderId(task.getOrderId());
 					callLog.setTargetName(task.getCustomerName());
 				}
-				
+
 				callLog.setCollectorId(agent.getCollectorId());
 				callLog.setAgent(agent.getAgent());
 				callLog.setExtension(agent.getExtension());
-				
+
 				callLog.setId(generateId());
 				collectorCallLogRepository.save(callLog);
 			}
@@ -395,19 +392,19 @@ public class CollectorCallLogService extends BaseService {
 		if (!StringUtils.isNumeric(customNo)) {
 			return;
 		}
-		
+
 		CollectorCallLog current = collectorCallLogRepository.findOne(Long.parseLong(customNo));
 		if (current == null) {
 			return;
 		}
-		
+
 		if (current.getCtiUuid() != null) {
 			return;
 		}
-		
+
 		current.supplementFromCallInfo(callInfo);
-		
+
 		collectorCallLogRepository.save(current);
-		
+
 	}
 }
