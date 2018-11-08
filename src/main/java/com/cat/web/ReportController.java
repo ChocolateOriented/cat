@@ -10,6 +10,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +32,7 @@ public class ReportController extends BaseController{
     @GetMapping("down_operation_record")
     @RoleAuth(include = Role.ADMIN)
     public Results downloadRecord(HttpServletResponse response) {
+
         SXSSFWorkbook workbook = reportService.getAllOrderRecordWorkbook();
         String fileName = "所有订单延期还清记录" + DateUtils.getDate() + ".xls";
         response.setContentType("application/octet-stream");
