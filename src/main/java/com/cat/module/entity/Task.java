@@ -69,11 +69,6 @@ public class Task  extends BaseEntity {
 	private String  collectCycle;//催收队列
 	private String collectRulesType;		// 催收分案策略规则
 	private String  remark;//e
-	private String platformext; // 渠道
-	/**
-	 * 审核方式
-	 */
-	private String reviewMode;
 	private boolean ispayoff;		// 任务所对应的订单是否还清
 
 	public String getBankNo() {
@@ -82,23 +77,6 @@ public class Task  extends BaseEntity {
 	@JSONField(name = "bankCard")
 	public void setBankNo(String bankNo) {
 		this.bankNo = bankNo;
-	}
-
-	public String getPlatformext() {
-		return platformext;
-	}
-
-	@JSONField(name = "channel")
-	public void setPlatformext(String platformext) {
-		this.platformext = platformext;
-	}
-
-	public String getReviewMode() {
-		return reviewMode;
-	}
-
-	public void setReviewMode(String reviewMode) {
-		this.reviewMode = reviewMode;
 	}
 
 	public BigDecimal getPostponeTotalAmount() {

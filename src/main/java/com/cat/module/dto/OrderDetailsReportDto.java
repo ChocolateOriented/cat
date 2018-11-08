@@ -25,10 +25,6 @@ public class OrderDetailsReportDto {
      */
     private String  productType;
     /**
-     * 审核方式
-     */
-    private String reviewMode;
-    /**
      * 产品渠道
      */
     private String platformext;
@@ -129,14 +125,6 @@ public class OrderDetailsReportDto {
 
     public void setProductType(String productType) {
         this.productType = productType;
-    }
-
-    public String getReviewMode() {
-        return reviewMode;
-    }
-
-    public void setReviewMode(String reviewMode) {
-        this.reviewMode = reviewMode;
     }
 
     public String getPlatformext() {

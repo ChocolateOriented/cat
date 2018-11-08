@@ -1,7 +1,9 @@
 package com.cat.web;
 
+import com.cat.annotation.RoleAuth;
 import com.cat.module.dto.result.ResultConstant;
 import com.cat.module.dto.result.Results;
+import com.cat.module.enums.Role;
 import com.cat.service.ReportService;
 import com.cat.util.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,6 +29,7 @@ public class ReportController extends BaseController{
     @Autowired
     private ReportService reportService;
     @GetMapping("down_operation_record")
+    @RoleAuth(include = Role.ADMIN)
     public Results downloadRecord(HttpServletResponse response) {
         SXSSFWorkbook workbook = reportService.getAllOrderRecordWorkbook();
         String fileName = "所有订单延期还清记录" + DateUtils.getDate() + ".xls";
