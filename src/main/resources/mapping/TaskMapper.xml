@@ -43,6 +43,8 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="platformext" property="platformext"/>
+        <result column="review_mode" property="reviewMode"/>
     </resultMap>
     <sql id="baseSql">
         id, order_id, customer_id, customer_name, mobile, order_type, product_type,
@@ -51,7 +53,7 @@
     lend_time, payoff_time, repayment_time, ispayoff, collector_id, collector_name, task_start_time,
     task_end_time, collect_period_begin, collect_period_end, collect_task_status, collect_tel_remark,
     action_feedback, collect_time, collect_cycle, create_time, create_by, update_time,
-    update_by, remark
+    update_by, remark, platformext, review_mode
     </sql>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_task
@@ -71,7 +73,8 @@
         collect_task_status, collect_tel_remark, action_feedback,
         collect_time, collect_cycle,
         create_by,  update_by,
-        remark)
+        remark, platformext, review_mode
+        )
         values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
         #{customerName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR},
         #{productType,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR},
@@ -85,7 +88,7 @@
         #{collectTaskStatus,jdbcType=VARCHAR}, #{collectTelRemark,jdbcType=VARCHAR}, #{actionFeedback,jdbcType=VARCHAR},
         #{collectTime,jdbcType=TIMESTAMP}, #{collectCycle,jdbcType=VARCHAR},
         #{createBy,jdbcType=VARCHAR},  #{updateBy,jdbcType=VARCHAR},
-        #{remark,jdbcType=VARCHAR})
+        #{remark,jdbcType=VARCHAR},#{platformext}, #{reviewMode})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.Task">
         update t_task
@@ -126,7 +129,9 @@
         collect_cycle = #{collectCycle,jdbcType=VARCHAR},
         create_by = #{createBy,jdbcType=VARCHAR},
         update_by = #{updateBy,jdbcType=VARCHAR},
-        remark = #{remark,jdbcType=VARCHAR}
+        remark = #{remark,jdbcType=VARCHAR},
+        platformext = #{platformext},
+        review_mode = #{reviewMode}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

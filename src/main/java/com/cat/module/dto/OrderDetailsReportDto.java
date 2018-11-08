@@ -85,6 +85,20 @@ public class OrderDetailsReportDto {
      */
     private Date createdTime;
 
+    /**
+     * 手机
+     * @return
+     */
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public Date getReportTime() {
         return reportTime;
     }

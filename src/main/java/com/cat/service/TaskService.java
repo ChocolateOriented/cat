@@ -387,4 +387,8 @@ public class TaskService extends BaseService {
 		});
 		return dayRepaymentOrderVos;
 	}
+
+	public Integer getInOrderCount(String collectorId) {
+		return taskLogMapper.getInOrderCount(collectorId);
+	}
 }

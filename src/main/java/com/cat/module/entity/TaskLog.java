@@ -44,7 +44,10 @@ public class TaskLog extends BaseEntity {
 	private BigDecimal  chargeValue;//服务费值
 	private BigDecimal  repaymentAmount;//本次还款金额
 	private Integer  postponeCount;//延期次数
-	
+	/**
+	 * 审核方式
+	 */
+	private String reviewMode;
 		private BehaviorStatus behaviorStatus;		// 催收员行为状态（in,out,finished,partial,postpone）
 		private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 		private Long taskId;	 // 任务ID
@@ -79,6 +82,13 @@ public class TaskLog extends BaseEntity {
 		this.behaviorStatus = behaviorStatus;
 	}
 
+	public String getReviewMode() {
+		return reviewMode;
+	}
+
+	public void setReviewMode(String reviewMode) {
+		this.reviewMode = reviewMode;
+	}
 
 	public Date getLastPaymentTime() {
 		return lastPaymentTime;

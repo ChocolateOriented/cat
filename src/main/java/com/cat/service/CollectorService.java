@@ -63,13 +63,14 @@ public class CollectorService {
         CurrentOrderDto finishedOrder = getStatusOrder(currentOrder, BehaviorStatus.FINISHED.name());
         //延期的订单
         CurrentOrderDto postponeOrder = getStatusOrder(currentOrder, BehaviorStatus.POSTPONE.name());
-        //所有新增的订单
-        CurrentOrderDto inOrder = getStatusOrder(currentOrder, BehaviorStatus.IN.name());
-        //出去的订单
-        CurrentOrderDto outOrder = getStatusOrder(currentOrder, BehaviorStatus.OUT.name());
-        //真实新增的订单=所有新增的订单-移除的订单
-        inOrder.setSumRepaymentAmount(inOrder.getSumRepaymentAmount().subtract(outOrder.getSumRepaymentAmount()));
-        inOrder.setCount(inOrder.getCount() - outOrder.getCount());
+        Integer inOrder = taskService.getInOrderCount(collectorId);
+//        //所有新增的订单
+//        CurrentOrderDto inOrder = getStatusOrder(currentOrder, BehaviorStatus.IN.name());
+//        //出去的订单
+//        CurrentOrderDto outOrder = getStatusOrder(currentOrder, BehaviorStatus.OUT.name());
+//        //真实新增的订单=所有新增的订单-移除的订单
+//        inOrder.setSumRepaymentAmount(inOrder.getSumRepaymentAmount().subtract(outOrder.getSumRepaymentAmount()));
+//        inOrder.setCount(inOrder.getCount() - outOrder.getCount());
 
 
         //获取应催订单
@@ -92,7 +93,7 @@ public class CollectorService {
         dayTask.setPostponeOrder(postponeOrder.getCount());
         //催回总金额=完成总金额+延期总金额
         dayTask.setCollectAmount(postponeOrder.getSumRepaymentAmount().add(finishedOrder.getSumRepaymentAmount()));
-        dayTask.setNewOrder(inOrder.getCount());
+        dayTask.setNewOrder(inOrder);
         //今日已还款订单 = 完成订单数量 + 延期订单数量
         dayTask.setRepaymentOrder(allPayCount);
         //应催订单总数量

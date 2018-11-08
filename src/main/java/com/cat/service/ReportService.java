@@ -6,10 +6,14 @@ import com.cat.util.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -27,32 +31,46 @@ public class ReportService {
      * @return
      */
     @Transactional
-    public HSSFWorkbook getAllOrderRecordWorkbook() {
+    public SXSSFWorkbook getAllOrderRecordWorkbook() {
         List<OrderDetailsReportDto> reportDtos = getAllOrderDetails();
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet(SHEETNAME);
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+        Sheet sheet = workbook.createSheet(SHEETNAME);
         createTitle(sheet);
         int rowNum = 2;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         for (OrderDetailsReportDto detailsReportDto : reportDtos) {
-            HSSFRow row = sheet.createRow(rowNum);
+            Row row = sheet.createRow(rowNum);
             row.createCell(0).setCellValue(detailsReportDto.getCollectorName());
             row.createCell(1).setCellValue(detailsReportDto.getCollectCycle());
             row.createCell(2).setCellValue(detailsReportDto.getProductType());
             row.createCell(3).setCellValue(detailsReportDto.getReviewMode());
             row.createCell(4).setCellValue(detailsReportDto.getPlatformext());
             row.createCell(5).setCellValue(detailsReportDto.getOrderId());
-            row.createCell(6).setCellValue(detailsReportDto.getLendTime());
+            if (detailsReportDto.getLendTime() != null) {
+                row.createCell(6).setCellValue(simpleDateFormat.format(detailsReportDto.getLendTime()));
+            }
             row.createCell(7).setCellValue(detailsReportDto.getCreditamount().toString());
-            row.createCell(8).setCellValue(detailsReportDto.getOverdueDays());
-            row.createCell(9).setCellValue(detailsReportDto.getBorrowTime());
-            row.createCell(10).setCellValue(detailsReportDto.getPostponeCount());
-            row.createCell(11).setCellValue(detailsReportDto.getPostponeTime());
-            row.createCell(12).setCellValue(detailsReportDto.getRepaymentTime());
-            row.createCell(13).setCellValue(detailsReportDto.getPostponeAmount().toString());
-            row.createCell(14).setCellValue(detailsReportDto.getPayoffTime());
-            row.createCell(15).setCellValue(detailsReportDto.getRepaymentAmount().toString());
+            row.createCell(8).setCellValue(detailsReportDto.getOverdueDays() == null ? 0 : detailsReportDto.getOverdueDays());
+            if (detailsReportDto.getBorrowTime() != null) {
+                row.createCell(9).setCellValue(simpleDateFormat.format(detailsReportDto.getBorrowTime()));
+            }
+            row.createCell(10).setCellValue(detailsReportDto.getPostponeCount() == null ? 0 : detailsReportDto.getPostponeCount());
+            if (detailsReportDto.getPostponeTime() != null) {
+                row.createCell(11).setCellValue(simpleDateFormat.format(detailsReportDto.getPostponeTime()));
+            }
+            if (detailsReportDto.getRepaymentTime() != null) {
+                row.createCell(12).setCellValue(simpleDateFormat.format(detailsReportDto.getRepaymentTime()));
+            }
+            row.createCell(13).setCellValue(detailsReportDto.getPostponeAmount() == null ? "0" : detailsReportDto.getPostponeAmount().toString());
+            if (detailsReportDto.getPayoffTime() != null) {
+                row.createCell(14).setCellValue(simpleDateFormat.format(detailsReportDto.getPayoffTime()));
+            }
+            row.createCell(15).setCellValue(detailsReportDto.getRepaymentAmount() == null ? "0" : detailsReportDto.getRepaymentAmount().toString());
             row.createCell(16).setCellValue(detailsReportDto.getOrderStatus());
-            row.createCell(17).setCellValue(detailsReportDto.getCreatedTime());
+            if (detailsReportDto.getCreatedTime() != null) {
+                row.createCell(17).setCellValue(simpleDateFormat.format(detailsReportDto.getCreatedTime()));
+            }
+            row.createCell(18).setCellValue(detailsReportDto.getMobile());
             rowNum++;
         }
 
@@ -63,12 +81,12 @@ public class ReportService {
         return taskLogMapper.getAllOrderDetails();
     }
 
-    private void createTitle(HSSFSheet sheet) {
-        HSSFRow row = sheet.createRow(0);
+    private void createTitle(Sheet sheet) {
+        Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("报表日期");
         row.createCell(1).setCellValue(DateUtils.getDateTime());
 
-        HSSFRow row1 = sheet.createRow(1);
+        Row row1 = sheet.createRow(1);
         row1.createCell(0).setCellValue("催收员");
         row1.createCell(1).setCellValue("队列");
         row1.createCell(2).setCellValue("产品名称");
@@ -87,5 +105,6 @@ public class ReportService {
         row1.createCell(15).setCellValue("还清金额");
         row1.createCell(16).setCellValue("订单状态");
         row1.createCell(17).setCellValue("入催日期");
+        row1.createCell(18).setCellValue("手机号");
     }
 }

@@ -51,4 +51,6 @@ public interface TaskLogMapper  {
 	List<TaskLog> getListOfDayOrder(String collectorId);
 
     List<OrderDetailsReportDto> getAllOrderDetails();
+
+	Integer getInOrderCount(String collectorId);
 }
