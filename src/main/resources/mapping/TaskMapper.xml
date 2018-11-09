@@ -195,8 +195,11 @@
             <if test="orderId != null and orderId != ''">
                 AND t.order_id = #{orderId}
             </if>
-            <if test="collectorName != null and collectorName != ''">
-                AND t.collector_name LIKE concat('%',#{collectorName},'%') 
+            <if test="collectorNames != null">
+                AND t.collector_name in
+                <foreach collection="collectorNames" index="index" item="item" open="(" separator="," close=")">
+                	#{item}
+                </foreach>
             </if>
             <if test="actionFeedback != null and actionFeedback != ''">
                 AND t.action_feedback = #{actionFeedback}
