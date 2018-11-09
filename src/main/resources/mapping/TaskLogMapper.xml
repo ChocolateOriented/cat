@@ -246,7 +246,7 @@
         TO_DAYS(tb.create_time) - TO_DAYS(tb.repayment_time) AS overdueDays,
         ts.lend_time AS borrowTime,
         tb.postpone_count AS postponeCount,
-        tb.create_time AS postponeTime,
+        IF(tb.behavior_status = 'POSTPONE',tb.create_time,NULL)AS postponeTime,
         tb.repayment_time AS repaymentTime,
         IF(tb.behavior_status = 'POSTPONE',tb.repayment_amount,0) AS postponeAmount,
         tb.payoff_time AS payoffTime,
@@ -274,7 +274,12 @@
         TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) AS overdueDays,
         t.lend_time AS borrowTime,
         t.postpone_count AS postponeCount,
-        DATE_SUB(t.repayment_time,INTERVAL 7 DAY) AS postponeTime,
+        (
+        SELECT tt.create_time FROM t_task_log tt
+        WHERE tt.order_id = t.order_id AND tt.behavior_status = 'POSTPONE'
+        order by tt.create_time DESC
+        limit 1
+        ) AS postponeTime,
         t.repayment_time AS repaymentTime,
         t.postpone_total_amount AS postponeAmount,
         t.payoff_time AS payoffTime,
