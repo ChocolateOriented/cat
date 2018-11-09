@@ -32,9 +32,9 @@ public class ContactController extends BaseController {
 	 * @return
 	 */
 	@GetMapping(value = "/list_call_log")
-	public PageResponse<CallLogVo> listCallLog(String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
+	public PageResponse<CallLogVo> listCallLog(String customerId,String mobile, @RequestParam(defaultValue = BaseController.DEFAULT_PAGE_NUM) Integer pageNum,
 			@RequestParam(defaultValue = BaseController.DEFAULT_PAGE_SIZE) Integer pageSize) {
-		Page<CallLogVo> page = contactService.findCalllog(mobile, pageNum, pageSize);
+		Page<CallLogVo> page = contactService.findCalllog(customerId,mobile, pageNum, pageSize);
 		PageResponse<CallLogVo> pageResp = new PageResponse<>();
 		pageResp.setData(page);
 		return pageResp;
