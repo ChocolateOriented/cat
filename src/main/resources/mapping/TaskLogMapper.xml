@@ -235,16 +235,16 @@
         ORDER BY create_time DESC
     </select>
     <select id="getAllOrderDetails" resultType="com.cat.module.dto.OrderDetailsReportDto">
-        SELECT
-        tb.order_id AS orderId,
+        select
         tb.collector_name AS collectorName,
         tb.collect_cycle as collectCycle,
         tb.product_type as productType,
         tb.platformext as platformext,
-        tt.lend_time as lendTime,
+        tb.order_id AS orderId,
+        ts.lend_time as lendTime,
         IF(tb.behavior_status = 'POSTPONE',tb.creditamount + IFNULL(tb.relief_amount,0),1007)  AS creditamount,
         TO_DAYS(tb.create_time) - TO_DAYS(tb.repayment_time) AS overdueDays,
-        tt.lend_time AS borrowTime,
+        ts.lend_time AS borrowTime,
         tb.postpone_count AS postponeCount,
         tb.create_time AS postponeTime,
         tb.repayment_time AS repaymentTime,
@@ -252,92 +252,25 @@
         tb.payoff_time AS payoffTime,
         IF(tb.behavior_status = 'FINISHED',tb.repayment_amount,0) AS repaymentAmount,
         IF(tb.behavior_status = 'FINISHED','还清','正常') AS orderStatus,
-        tc.create_time AS createdTime,
+        (select t2.create_time from t_task_log t2
+        where t2.order_id = tb.order_id and t2.behavior_status = 'IN' and
+        collect_task_status in ('UNOPEND_TASK', 'TASK_POSTPONE')
+        and t2.create_time <![CDATA[<]]> tb.create_time
+                             order by t2.create_time DESC
+                             limit 1
+        ) as createdTime,
         tb.mobile as mobile
-        FROM
-        (
-        SELECT
-        *
-        FROM
-        t_task_log
-        WHERE
-        (
-        (
-        behavior_status = 'IN'
-        AND collect_task_status = 'UNOPEND_TASK'
-        )
-        OR (
-        behavior_status = 'IN'
-        AND collect_task_status = 'TASK_POSTPONE'
-        )
-        OR behavior_status = 'FINISHED'
-        OR behavior_status = 'POSTPONE'
-        )
-        ORDER BY
-        order_id,
-        create_time
-        ) AS tb
-        LEFT JOIN (
-        SELECT
-        *
-        FROM
-        t_task_log
-        WHERE
-        (
-        behavior_status = 'IN'
-        AND collect_task_status = 'UNOPEND_TASK'
-        )
-        OR (
-        behavior_status = 'IN'
-        AND collect_task_status = 'TASK_POSTPONE'
-        )
-        ) AS tc ON tb.order_id = tc.order_id
-        LEFT JOIN t_task tt
-        on tb.order_id = tt.order_id
-        WHERE
-        tb.behavior_status IN ("POSTPONE", "FINISHED")
-        AND tc.id = (
-        SELECT
-        t2.id
-        FROM
-        (
-        SELECT
-        *
-        FROM
-        t_task_log
-        WHERE
-        (
-        (
-        behavior_status = 'IN'
-        AND collect_task_status = 'UNOPEND_TASK'
-        )
-        OR (
-        behavior_status = 'IN'
-        AND collect_task_status = 'TASK_POSTPONE'
-        )
-        OR behavior_status = 'FINISHED'
-        OR behavior_status = 'POSTPONE'
-        )
-        ORDER BY
-        order_id,
-        create_time
-        ) t2
-        WHERE
-        t2.order_id = tb.order_id
-        AND t2.create_time &lt; tb.create_time
-                             ORDER BY
-                             create_time DESC
-                             LIMIT 1
-        )
+        from t_task_log tb LEFT JOIN t_task ts ON tb.order_id = ts.order_id
+        where tb.behavior_status in ('POSTPONE', 'FINISHED')
         UNION ALL
         SELECT
-        DISTINCT t.order_id AS orderId,
         t.collector_name AS collectorName,
         t.collect_cycle as collectCycle,
         t.product_type as productType,
         b.channel as platformext,
+        t.order_id AS orderId,
         t.lend_time as lendTime,
-        t.loan_amount + t.interest_value + IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) &lt; 0,0,TO_DAYS(NOW()) - TO_DAYS(t.repayment_time)) * t.penalty_value  AS creditamount,
+        t.loan_amount + t.interest_value + IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[<]]> 0,0,TO_DAYS(NOW()) - TO_DAYS(t.repayment_time)) * t.penalty_value  AS creditamount,
         TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) AS overdueDays,
         t.lend_time AS borrowTime,
         t.postpone_count AS postponeCount,
@@ -346,11 +279,19 @@
         t.postpone_total_amount AS postponeAmount,
         t.payoff_time AS payoffTime,
         NULL AS repaymentAmount,
-        IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) &gt; 0,'逾期','正常') AS orderStatus,
-        t.task_start_time AS createdTime,
+        IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[>]]> 0,'逾期','正常') AS orderStatus,
+        (
+        SELECT tt.create_time FROM t_task_log tt
+        WHERE tt.order_id = t.order_id AND tt.behavior_status = 'IN' and
+        tt.collect_task_status in ('UNOPEND_TASK', 'TASK_POSTPONE')
+        order by tt.create_time DESC
+        limit 1
+        ) AS createdTime,
         t.mobile
         FROM t_task t LEFT JOIN t_bank b ON t.bank_no = b.bank_card
-        WHERE t.order_status = 'PAYMENT' AND t.collect_task_status <![CDATA[ <> ]]> 'UNOPEND_TASK';
+        WHERE
+        t.order_status = 'PAYMENT' AND t.collect_task_status <![CDATA[<>]]> 'UNOPEND_TASK'
+
 
     </select>
 
