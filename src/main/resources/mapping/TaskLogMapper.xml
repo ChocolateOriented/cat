@@ -285,19 +285,18 @@
         t.payoff_time AS payoffTime,
         NULL AS repaymentAmount,
         IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[>]]> 0,'逾期','正常') AS orderStatus,
+        IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[>=]]> 0,
         (
         SELECT tt.create_time FROM t_task_log tt
         WHERE tt.order_id = t.order_id AND tt.behavior_status = 'IN' and
         tt.collect_task_status in ('UNOPEND_TASK', 'TASK_POSTPONE')
         order by tt.create_time DESC
         limit 1
-        ) AS createdTime,
+        ),NULL) AS createdTime,
         t.mobile
         FROM t_task t LEFT JOIN t_bank b ON t.bank_no = b.bank_card
         WHERE
         t.order_status = 'PAYMENT' AND t.collect_task_status <![CDATA[<>]]> 'UNOPEND_TASK'
-
-
     </select>
 
     <select id="getInOrderCount" resultType="java.lang.Integer" >

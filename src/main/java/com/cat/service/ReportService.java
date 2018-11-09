@@ -37,7 +37,7 @@ public class ReportService {
         Sheet sheet = workbook.createSheet(SHEETNAME);
         createTitle(sheet);
         int rowNum = 2;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (OrderDetailsReportDto detailsReportDto : reportDtos) {
             Row row = sheet.createRow(rowNum);
             row.createCell(0).setCellValue(detailsReportDto.getCollectorName());
