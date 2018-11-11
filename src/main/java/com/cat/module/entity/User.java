@@ -1,6 +1,5 @@
 package com.cat.module.entity;
 
-import com.cat.module.enums.Role_n;
 import com.cat.module.enums.UserStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -118,11 +117,4 @@ public class User extends AuditingEntity {
     this.productType = productType;
   }
 
-  public Role_n getRoleN() {
-    return Role_n.ADMIN;
-  }
-
-  public void setRoleN(Role_n roleN) {
-
-  }
 }
