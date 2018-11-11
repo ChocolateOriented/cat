@@ -3,6 +3,7 @@ package com.tmp;
 import com.alibaba.fastjson.JSON;
 import com.cat.CatApplication;
 import com.cat.module.dto.BlackListDto;
+import com.cat.module.dto.RoleDto;
 import com.cat.module.entity.Role;
 import com.cat.module.entity.RolePermission;
 import com.cat.module.entity.User;
@@ -14,6 +15,7 @@ import com.cat.repository.TaskRepository;
 import com.cat.repository.UserRepository;
 import com.cat.service.AccountService;
 import com.cat.service.CustomerService;
+import com.cat.service.RoleService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,9 +51,10 @@ public class UserTester {
   @Autowired
   private RoleRepository roleRepository;
   @Autowired
-  private RolePermissionRepository rolePermissionRepository;
+  private RoleService roleService;
   @Autowired
-  private RequestMappingHandlerMapping requestMappingHandlerMapping;
+  private RolePermissionRepository rolePermissionRepository;
+
 
   @Test
   public void insetRole() {
@@ -114,39 +117,12 @@ public class UserTester {
   }
 
   @Test
-  public void menulist() {
-    Map<String, List<String>> permissionMapping = new HashMap<>();
-
-    Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
-    for (Entry<RequestMappingInfo, HandlerMethod> entry : map.entrySet()) {
-      PatternsRequestCondition p = entry.getKey().getPatternsCondition();
-      HandlerMethod handlerMethod = entry.getValue();
-      for (String url : p.getPatterns()) {
-
-        RequiresPermissions permissionsAnnotation = handlerMethod.getMethodAnnotation
-            (RequiresPermissions.class);
-        if (permissionsAnnotation != null) {
-          for (String permission : permissionsAnnotation.value()) {
-            putPermissionMapping(permissionMapping, permission,url);
-          }
-        }else {
-          putPermissionMapping(permissionMapping,"anonymous",url);
-        }
-      }
-    }
-    System.out.println(JSON.toJSONString(permissionMapping));
-  }
-
-  private void putPermissionMapping(
-      Map<String, List<String>> permissionMapping,
-      String permission, String url) {
-
-    List<String> urls = permissionMapping.get(permission);
-    if (urls == null) {
-      urls = new ArrayList<>();
-      permissionMapping.put(permission, urls);
-    }
-    urls.add(url);
+  public void saveRole() {
+    RoleDto roleDto = new RoleDto();
+    roleDto.setName("内部催收员");
+    List<String> permissions = new ArrayList<>();
+    permissions.add("permission:edit");
+    permissions.add("test:run");
   }
 
   public static void main(String[] args) {

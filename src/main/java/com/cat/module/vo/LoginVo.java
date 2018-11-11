@@ -1,15 +1,16 @@
 package com.cat.module.vo;
 
+import com.cat.module.dto.RoleDto;
 import com.cat.module.entity.Role;
-import com.cat.module.enums.Role_n;
 
 /**
  * Created by jxli on 2018/9/25.
  */
 public class LoginVo {
+
   private String userId;
   private String name;
-  private Role role;
+  private RoleDto role;
   private String organizationName;
   private String accessToken;
 
@@ -46,12 +47,19 @@ public class LoginVo {
     this.name = name;
   }
 
-  public Role getRole() {
+  public RoleDto getRole() {
     return role;
   }
 
-  public void setRole(Role role) {
+  public void setRole(RoleDto role) {
     this.role = role;
+  }
+
+  public void setRole(Role role) {
+    if (role == null||!role.getEnabled()){
+      return;
+    }
+    this.role = new RoleDto(role);
   }
 
   public String getOrganizationName() {
@@ -61,4 +69,6 @@ public class LoginVo {
   public void setOrganizationName(String organizationName) {
     this.organizationName = organizationName;
   }
+
+
 }

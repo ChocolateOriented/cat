@@ -1,12 +1,12 @@
 package com.cat.module.entity;
 
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by jxli on 2018/10/29.
@@ -14,12 +14,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_role")
 public class Role extends BaseEntity {
-
+  @NotBlank
   private String name;
 
   private Boolean enabled;
 
-  @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "roleId")
   private List<RolePermission> permissions;
 

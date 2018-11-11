@@ -17,6 +17,14 @@ public class RolePermission extends AuditingEntity {
   @Id
   private String permission;
 
+  public RolePermission() {
+  }
+
+  public RolePermission(Long roleId, String permission) {
+    this.roleId = roleId;
+    this.permission = permission;
+  }
+
   public Long getRoleId() {
     return roleId;
   }

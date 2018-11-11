@@ -35,4 +35,12 @@ public class GlobalExceptionHandler {
     logger.info(req.getRequestURI()+"失败",e);
     return new Results(ResultConstant.INNER_ERROR);
   }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public Results handleIllegalArgumentException(HttpServletRequest req, HttpServletResponse rsp, Exception e) {
+    logger.info(req.getRequestURI()+"失败",e);
+    return new Results(ResultConstant.EMPTY_PARAM);
+  }
 }

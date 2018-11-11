@@ -53,4 +53,15 @@ public abstract class BaseController {
 		return errorMsg.toString();
 	}
 
+	/**
+	 * @Description 校验字段有效性
+	 * @param bindingResult
+	 * @return void
+	 */
+	protected static void validateField(BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			throw new IllegalArgumentException( getFieldErrorsMessages(bindingResult));
+		}
+	}
+
 }
