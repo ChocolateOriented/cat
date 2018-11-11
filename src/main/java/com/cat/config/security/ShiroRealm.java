@@ -54,7 +54,7 @@ public class ShiroRealm extends AuthorizingRealm {
   }
 
   /**
-   * @Description 由用户中心实现认证
+   * @Description 获取用户中心生成的AccessToken
    * @author jxli
    * @version 2018/10/31
    */
