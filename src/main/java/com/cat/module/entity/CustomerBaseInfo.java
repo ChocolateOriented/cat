@@ -86,6 +86,20 @@ public class CustomerBaseInfo extends BaseEntity {
 
     private String blacklistReason;
 
+    /**
+     * 产品类型
+     * @return
+     */
+    private String productType;
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
     public String getContactsList() {
         return contactsList;
     }

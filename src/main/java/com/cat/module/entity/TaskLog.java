@@ -44,12 +44,21 @@ public class TaskLog extends BaseEntity {
 	private BigDecimal  chargeValue;//服务费值
 	private BigDecimal  repaymentAmount;//本次还款金额
 	private Integer  postponeCount;//延期次数
-	
+
 		private BehaviorStatus behaviorStatus;		// 催收员行为状态（in,out,finished,partial,postpone）
 		private CollectTaskStatus  collectTaskStatus;//催款任务状态(未开启任务，任务进行中，任务结束，延期)
 		private Long taskId;	 // 任务ID
 		private Integer overdueDays;		// 逾期天数========需要计算
-	
+	/**
+	 * 上次还款日期
+	 */
+	private Date lastPaymentTime;
+	/**
+	 * 创建延期时间
+	 * @return
+	 */
+	private Date postponeTime;
+
 	private String platformext; // 渠道
 	private BigDecimal creditamount;		// 实际应还金额 (当前应催金额)
 	private String remark;
@@ -69,7 +78,22 @@ public class TaskLog extends BaseEntity {
 		this.collectRulesType = collectRulesType;
 		this.behaviorStatus = behaviorStatus;
 	}
-	
+
+	public Date getLastPaymentTime() {
+		return lastPaymentTime;
+	}
+
+	public void setLastPaymentTime(Date lastPaymentTime) {
+		this.lastPaymentTime = lastPaymentTime;
+	}
+
+	public Date getPostponeTime() {
+		return postponeTime;
+	}
+
+	public void setPostponeTime(Date postponeTime) {
+		this.postponeTime = postponeTime;
+	}
 
 	public String getCollectRulesType() {
 		return collectRulesType;
@@ -79,17 +103,6 @@ public class TaskLog extends BaseEntity {
 	public void setCollectRulesType(String collectRulesType) {
 		this.collectRulesType = collectRulesType;
 	}
-
-
-	/**
-	 *  获取当前逾期天数,计算逾期天数，不满一天按一天计算
-	 * @return
-	 */
-	public int calculateOverdueDays()
-	{
-		return DateUtils.getOverdueDay(repaymentTime);
-	}
-
 
 	public String getRemark() {
 		return remark;

@@ -44,16 +44,16 @@ public class ContactService extends BaseService {
 	/**
 	 * 查询风控通话记录
 	 * @param mobile
+	 * @param mobile2 
 	 * @param pageNum
 	 * @param pageSize
 	 * @return
 	 */
-	public Page<CallLogVo> findCalllog(String mobile, int pageNum, int pageSize) {
+	public Page<CallLogVo> findCalllog(String customerId, String mobile, int pageNum, int pageSize) {
 		List<CallLogBean> callLogBeans = callLogService.findCallLogList(mobile);
 		int from = (pageNum - 1) * pageSize;
 		int to = Math.min(pageNum * pageSize, callLogBeans.size());
 		List<CallLogBean> list = callLogBeans.subList(from, to);
-		String customerId = customerMapper.findCustomerIdByMobile(mobile);
 		List<CallLogVo> callLogVos = new ArrayList<>();
 		for (CallLogBean callLogBean : list) {
 			String callTel = callLogBean.getCallTel();

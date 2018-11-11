@@ -37,6 +37,9 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="last_payment_time" property="lastPaymentTime"/>
+        <result column="postpone_time" property="postponeTime"/>
+
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_task_log
@@ -76,7 +79,9 @@
         platformext,
         creditamount,
         create_by,
-        update_by
+        update_by,
+        last_payment_time,
+        postpone_time
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -113,6 +118,8 @@
             , #{item.creditamount}
             , #{item.createBy}
             , #{item.updateBy}
+            , #{item.lastPaymentTime}
+            , #{item.postponeTime}
             )
         </foreach>
     </insert>
@@ -127,7 +134,8 @@
         postpone_count, behavior_status, collect_task_status,
         task_id, overdue_days, platformext,
         creditamount, create_by,
-        update_by, remark
+        update_by, remark,last_payment_time,
+        postpone_time
         )
         values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},#{productType},#{orderType}, #{collectorId,jdbcType=VARCHAR},
         #{collectorName,jdbcType=VARCHAR}, #{collectCycle,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR},
@@ -139,7 +147,7 @@
         #{postponeCount,jdbcType=INTEGER}, #{behaviorStatus,jdbcType=VARCHAR}, #{collectTaskStatus,jdbcType=VARCHAR},
         #{taskId,jdbcType=BIGINT}, #{overdueDays,jdbcType=INTEGER}, #{platformext,jdbcType=VARCHAR},
         #{creditamount,jdbcType=INTEGER},  #{createBy,jdbcType=VARCHAR},
-        #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+        #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{lastPaymentTime}, #{postponeTime}
         )
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.cat.module.entity.TaskLog">
@@ -175,7 +183,9 @@
         creditamount = #{creditamount,jdbcType=INTEGER},       
         create_by = #{createBy,jdbcType=VARCHAR},
         update_by = #{updateBy,jdbcType=VARCHAR},
-        remark = #{remark,jdbcType=VARCHAR}
+        remark = #{remark,jdbcType=VARCHAR},
+        last_payment_time = #{lastPaymentTime},
+        postpone_time = #{postponeTime}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -184,7 +194,7 @@
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
         overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
-        remark
+        remark, last_payment_time, postpone_time
         from t_task_log
         where id = #{id,jdbcType=BIGINT}
     </select>
@@ -194,7 +204,131 @@
         interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
         repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
         overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
-        remark
+        remark, last_payment_time, postpone_time
         from t_task_log
+    </select>
+    <select id="getDayTaskCount" resultType="com.cat.module.dto.CurrentOrderDto">
+        SELECT collector_id AS collectorId,
+        behavior_status AS behaviorStatus,
+        IFNULL(count(*),0) AS `count`,
+        IFNULL(SUM(repayment_amount),0) AS sumRepaymentAmount
+        FROM t_task_log
+        WHERE  collector_id = #{collectorId} AND TO_DAYS(create_time) = TO_DAYS(NOW())
+        GROUP BY behavior_status
+    </select>
+    <select id="getShouldPayOrder" resultType="INTEGER">
+        SELECT count(*)
+        FROM t_task
+        WHERE collector_id = #{collectorId} AND order_status = #{orderStatus}
+    </select>
+    <select id="getListOfDayOrder" resultMap="BaseResultMap">
+        select id, order_id,product_type,order_type, collector_id, collector_name, collect_cycle, order_status, payoff_time,
+        loan_term, customer_id, customer_name, mobile, repayment_time, loan_amount, lent_amount,
+        interest_mode, interest_value, penalty_mode, penalty_value, relief_amount, charge_value,
+        repayment_amount, postpone_count, behavior_status, collect_task_status, task_id,
+        overdue_days, platformext, creditamount, create_time, create_by, update_time, update_by,
+        remark, last_payment_time, postpone_time
+        from t_task_log
+        WHERE collector_id = #{collectorId}
+        AND TO_DAYS(create_time) = TO_DAYS(NOW())
+        AND behavior_status IN ('POSTPONE', 'FINISHED')
+        ORDER BY create_time DESC
+    </select>
+    <select id="getAllOrderDetails" resultType="com.cat.module.dto.OrderDetailsReportDto">
+        select
+        tb.collector_name AS collectorName,
+        tb.collect_cycle as collectCycle,
+        tb.product_type as productType,
+        tb.platformext as platformext,
+        tb.order_id AS orderId,
+        ts.lend_time as lendTime,
+        IF(tb.behavior_status = 'POSTPONE',tb.creditamount + IFNULL(tb.relief_amount,0),1007)  AS creditamount,
+        TO_DAYS(tb.create_time) - TO_DAYS(tb.repayment_time) AS overdueDays,
+        ts.lend_time AS borrowTime,
+        tb.postpone_count AS postponeCount,
+        IF(tb.behavior_status = 'POSTPONE',tb.create_time,NULL)AS postponeTime,
+        tb.repayment_time AS repaymentTime,
+        IF(tb.behavior_status = 'POSTPONE',tb.repayment_amount,0) AS postponeAmount,
+        tb.payoff_time AS payoffTime,
+        IF(tb.behavior_status = 'FINISHED',tb.repayment_amount,0) AS repaymentAmount,
+        IF(tb.behavior_status = 'FINISHED','还清','正常') AS orderStatus,
+        (select t2.create_time from t_task_log t2
+        where t2.order_id = tb.order_id and t2.behavior_status = 'IN' and
+        collect_task_status in ('UNOPEND_TASK', 'TASK_POSTPONE')
+        and t2.create_time <![CDATA[<]]> tb.create_time
+                             order by t2.create_time DESC
+                             limit 1
+        ) as createdTime,
+        tb.mobile as mobile
+        from t_task_log tb LEFT JOIN t_task ts ON tb.order_id = ts.order_id
+        where tb.behavior_status in ('POSTPONE', 'FINISHED')
+        UNION ALL
+        SELECT
+        t.collector_name AS collectorName,
+        t.collect_cycle as collectCycle,
+        t.product_type as productType,
+        b.channel as platformext,
+        t.order_id AS orderId,
+        t.lend_time as lendTime,
+        t.loan_amount + t.interest_value + IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[<]]> 0,0,TO_DAYS(NOW()) - TO_DAYS(t.repayment_time)) * t.penalty_value  AS creditamount,
+        TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) AS overdueDays,
+        t.lend_time AS borrowTime,
+        t.postpone_count AS postponeCount,
+        (
+        SELECT tt.create_time FROM t_task_log tt
+        WHERE tt.order_id = t.order_id AND tt.behavior_status = 'POSTPONE'
+        order by tt.create_time DESC
+        limit 1
+        ) AS postponeTime,
+        t.repayment_time AS repaymentTime,
+        t.postpone_total_amount AS postponeAmount,
+        t.payoff_time AS payoffTime,
+        NULL AS repaymentAmount,
+        IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[>]]> 0,'逾期','正常') AS orderStatus,
+        IF(TO_DAYS(NOW()) - TO_DAYS(t.repayment_time) <![CDATA[>=]]> 0,
+        (
+        SELECT tt.create_time FROM t_task_log tt
+        WHERE tt.order_id = t.order_id AND tt.behavior_status = 'IN' and
+        tt.collect_task_status in ('UNOPEND_TASK', 'TASK_POSTPONE')
+        order by tt.create_time DESC
+        limit 1
+        ),NULL) AS createdTime,
+        t.mobile
+        FROM t_task t LEFT JOIN t_bank b ON t.bank_no = b.bank_card
+        WHERE
+        t.order_status = 'PAYMENT' AND t.collect_task_status <![CDATA[<>]]> 'UNOPEND_TASK'
+    </select>
+
+    <select id="getInOrderCount" resultType="java.lang.Integer" >
+        SELECT
+	      count(DISTINCT order_id)
+        FROM
+            t_task_log
+        WHERE
+            collector_id = #{collectorId}
+        AND behavior_status = 'IN'
+        AND TO_DAYS(create_time) = TO_DAYS(NOW())
+        AND
+            order_id NOT IN (
+            SELECT l.order_id FROM(
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            *
+                        FROM
+                            t_task_log
+                        WHERE
+                            collector_id = #{collectorId}
+                        AND TO_DAYS(create_time) = TO_DAYS(NOW())
+                        ORDER BY
+                            create_time DESC
+                    ) AS t
+                GROUP BY
+                    t.order_id
+                HAVING
+                    t.behavior_status = 'OUT'
+            ) AS l )
     </select>
 </mapper>

@@ -87,6 +87,10 @@ public class OrderInfo implements Serializable {
      */
     private BigDecimal interest;
     /**
+     * 订单状态
+     */
+    private String orderStatus;
+    /**
      * 账期
      */
     private Integer loanTerm;
@@ -110,6 +114,14 @@ public class OrderInfo implements Serializable {
      * @return
      */
     private Boolean blacklist;
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
     public Boolean getBlacklist() {
         return blacklist;

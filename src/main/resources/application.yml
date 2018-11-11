@@ -5,7 +5,7 @@ spring:
   datasource:
     default:
       name: datasource
-      url: jdbc:mysql://localhost:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true&allowMultiQueries=true
+      url: jdbc:mysql://192.168.3.17:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=true&allowMultiQueries=true
       username: root
       password: rootroot
       type: com.alibaba.druid.pool.DruidDataSource
@@ -35,9 +35,9 @@ spring:
     testOnBorrow: false
     testOnReturn: false
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: none
+    show-sql: true
   rabbitmq:
     username: user_cln
     password: mo9.com
@@ -55,6 +55,7 @@ spring:
 #          concurrency: 5
 #          max-concurrency: 10
 #          #acknowledge-mode: manual
+
 redis:
   default:
     database: 20
@@ -106,9 +107,17 @@ feignClient:
     primaryKey: TWlBfbVtgmJb6tlYeWuTl2N26xtKT5SX
   cat-front-end:
     url: https://bkcln.mo9.com/raptoradmin/
+  cti:
+    url: https://cti.mo9.com:8443
 
 logging:
   level:
     root: debug
     org.springframework.amqp: info
     com.cat.manager.MessageSender: debug
+
+cti:
+  dialRule:
+    agentPattern: '61[0-5][0-9]|6160,61[6-9][0-9]|620[0-9]'
+    preDial: '9,8'
+    nonlocalPre: '0,'

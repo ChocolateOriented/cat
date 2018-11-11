@@ -34,7 +34,7 @@ public class PostponeHistoryService {
                 PostponeHistoryVo vo = new PostponeHistoryVo();
                 vo.setId(item.getId());
                 vo.setPostponeAmount(item.getRepayAmount());
-                vo.setPostponeTime(item.getCreatedTime());
+                vo.setPostponeTime(item.getPostponeTime() == null ? item.getCreatedTime() : item.getPostponeTime());
                 voList.add(vo);
             });
         }

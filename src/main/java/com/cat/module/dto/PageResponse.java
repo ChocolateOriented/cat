@@ -124,6 +124,37 @@ public class PageResponse<T> extends BaseResponse {
 			this.total = total;
 		}
 
+		@JsonIgnore
+		public boolean isEmpty() {
+			return total == 0 || entities == null || entities.isEmpty();
+		}
+
+		/**
+		 * equals {@link Page#setEntities(List)}
+		 * <p>just use for jackson unserialize</p>
+		 * @param entities
+		 */
+		public void setResults(List<K> entities) {
+			this.entities = entities;
+		}
+
+		/**
+		 * equals {@link Page#setPageNum(Integer)}
+		 * <p>just use for jackson unserialize</p>
+		 * @param entities
+		 */
+		public void setPage(Integer pageNum) {
+			this.pageNum = pageNum;
+		}
+
+		/**
+		 * equals {@link Page#setPageSize(Integer)}
+		 * <p>just use for jackson unserialize</p>
+		 * @param entities
+		 */
+		public void setPagesize(Integer pageSize) {
+			this.pageSize = pageSize;
+		}
 	}
 
 }

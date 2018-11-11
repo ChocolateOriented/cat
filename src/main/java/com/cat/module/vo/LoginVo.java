@@ -69,6 +69,4 @@ public class LoginVo {
   public void setOrganizationName(String organizationName) {
     this.organizationName = organizationName;
   }
-
-
 }

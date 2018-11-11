@@ -4,53 +4,85 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PostponeHistory {
+
     private Long id;
 
     private String orderId;
 
     private String customerId;
 
-    private String payType;
-
     private Integer postponeCount;
-
-    private String payOrderId;
 
     private BigDecimal repayAmount;
 
     private Date repaymentTime;
 
-    private BigDecimal channelRepayMumber;
-
     private String channel;
-
-    private String clientId;
-
-    private String clientVersion;
 
     private String bankNo;
 
-    private String bankMobile;
+    private String collectorName;
 
-    private String customerName;
+    private String collectorId;
 
-    private String idcard;
-
-    private String dealCode;
-
-    private String postponeDays;
-
-    private String isEntryDone;
-
-    private Date payoffTime;
-
-    private BigDecimal totalReliefAmount;
+    private int postponeDays;
 
     private String productType;
+    /**
+     * 创建延期时间
+     * @return
+     */
+    private Date postponeTime;
+
+    private BigDecimal reliefAmount;
+    /**
+     * 上次还款日期
+     */
+    private Date lastPaymentTime;
 
     private Date createdTime;
 
     private Date updatedTime;
+
+    public BigDecimal getReliefAmount() {
+        return reliefAmount;
+    }
+
+    public void setReliefAmount(BigDecimal reliefAmount) {
+        this.reliefAmount = reliefAmount;
+    }
+
+    public String getCollectorName() {
+        return collectorName;
+    }
+
+    public void setCollectorName(String collectorName) {
+        this.collectorName = collectorName;
+    }
+
+    public String getCollectorId() {
+        return collectorId;
+    }
+
+    public void setCollectorId(String collectorId) {
+        this.collectorId = collectorId;
+    }
+
+    public Date getLastPaymentTime() {
+        return lastPaymentTime;
+    }
+
+    public void setLastPaymentTime(Date lastPaymentTime) {
+        this.lastPaymentTime = lastPaymentTime;
+    }
+
+    public Date getPostponeTime() {
+        return postponeTime;
+    }
+
+    public void setPostponeTime(Date postponeTime) {
+        this.postponeTime = postponeTime;
+    }
 
     public Long getId() {
         return id;
@@ -76,28 +108,12 @@ public class PostponeHistory {
         this.customerId = customerId;
     }
 
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
     public Integer getPostponeCount() {
         return postponeCount;
     }
 
     public void setPostponeCount(Integer postponeCount) {
         this.postponeCount = postponeCount;
-    }
-
-    public String getPayOrderId() {
-        return payOrderId;
-    }
-
-    public void setPayOrderId(String payOrderId) {
-        this.payOrderId = payOrderId;
     }
 
     public BigDecimal getRepayAmount() {
@@ -116,36 +132,12 @@ public class PostponeHistory {
         this.repaymentTime = repaymentTime;
     }
 
-    public BigDecimal getChannelRepayMumber() {
-        return channelRepayMumber;
-    }
-
-    public void setChannelRepayMumber(BigDecimal channelRepayMumber) {
-        this.channelRepayMumber = channelRepayMumber;
-    }
-
     public String getChannel() {
         return channel;
     }
 
     public void setChannel(String channel) {
         this.channel = channel;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getClientVersion() {
-        return clientVersion;
-    }
-
-    public void setClientVersion(String clientVersion) {
-        this.clientVersion = clientVersion;
     }
 
     public String getBankNo() {
@@ -156,69 +148,14 @@ public class PostponeHistory {
         this.bankNo = bankNo;
     }
 
-    public String getBankMobile() {
-        return bankMobile;
-    }
-
-    public void setBankMobile(String bankMobile) {
-        this.bankMobile = bankMobile;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getIdcard() {
-        return idcard;
-    }
-
-    public void setIdcard(String idcard) {
-        this.idcard = idcard;
-    }
-
-    public String getDealCode() {
-        return dealCode;
-    }
-
-    public void setDealCode(String dealCode) {
-        this.dealCode = dealCode;
-    }
-
-    public String getPostponeDays() {
+    public int getPostponeDays() {
         return postponeDays;
     }
 
-    public void setPostponeDays(String postponeDays) {
+    public void setPostponeDays(int postponeDays) {
         this.postponeDays = postponeDays;
     }
 
-    public String getIsEntryDone() {
-        return isEntryDone;
-    }
-
-    public void setIsEntryDone(String isEntryDone) {
-        this.isEntryDone = isEntryDone;
-    }
-
-    public Date getPayoffTime() {
-        return payoffTime;
-    }
-
-    public void setPayoffTime(Date payoffTime) {
-        this.payoffTime = payoffTime;
-    }
-
-    public BigDecimal getTotalReliefAmount() {
-        return totalReliefAmount;
-    }
-
-    public void setTotalReliefAmount(BigDecimal totalReliefAmount) {
-        this.totalReliefAmount = totalReliefAmount;
-    }
 
     public String getProductType() {
         return productType;

@@ -38,7 +38,7 @@ public class RepaymentMessage implements Serializable {
     /**
      * 还款日期
      */
-    private Date repaymentDate;
+    private Date repaymentTime;
     /**
      * 渠道返回的还款数目
      */
@@ -99,6 +99,33 @@ public class RepaymentMessage implements Serializable {
      */
     private String productType;
 
+    /**
+     * 创建延期时间
+     * @return
+     */
+    private Date postponeTime;
+
+    /**
+     * 单次减免金额
+     * @return
+     */
+    private BigDecimal reliefAmount;
+
+    public BigDecimal getReliefAmount() {
+        return reliefAmount;
+    }
+
+    public void setReliefAmount(BigDecimal reliefAmount) {
+        this.reliefAmount = reliefAmount;
+    }
+
+    public Date getPostponeTime() {
+        return postponeTime;
+    }
+    @JSONField(name = "createTime")
+    public void setPostponeTime(Date postponeTime) {
+        this.postponeTime = postponeTime;
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -149,12 +176,12 @@ public class RepaymentMessage implements Serializable {
         this.payoffTime = payoffTime;
     }
 
-    public Date getRepaymentDate() {
-        return repaymentDate;
+    public Date getRepaymentTime() {
+        return repaymentTime;
     }
-
-    public void setRepaymentDate(Date repaymentDate) {
-        this.repaymentDate = repaymentDate;
+    @JSONField(name = "repaymentDate")
+    public void setRepaymentTime(Date repaymentTime) {
+        this.repaymentTime = repaymentTime;
     }
 
     public String getOrderId() {

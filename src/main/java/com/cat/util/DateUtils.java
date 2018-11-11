@@ -344,9 +344,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	 * @param repaymentDate 还款日
 	 * @return
 	 */
-	public static int getOverdueDay(Date repaymentDate)
+	public static int getOverdueDay(Date now, Date repaymentDate)
 	{
-		Date now = new Date();
+		if (now == null) {
+			now = new Date();
+		}
 		long timeSub = toDate(now).getTime()-toDate(repaymentDate).getTime();
 		double dayTimes = 24*60*60*1000d;
 		return (int)Math.floor(timeSub/dayTimes);

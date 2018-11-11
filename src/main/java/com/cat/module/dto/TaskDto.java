@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -40,6 +41,15 @@ public class TaskDto implements Serializable{
 	private Long payoffTimeEnd;//还清日期第二个值
 	private Long collectTimeStart;//最近催收时间第一个值
 	private Long collectTimeEnd;//最近催收时间第二个值
+	private List<String> collectorNames;//最近催收时间第二个值
+	
+	
+	public List<String> getCollectorNames() {
+		return collectorNames;
+	}
+	public void setCollectorNames(List<String> collectorNames) {
+		this.collectorNames = collectorNames;
+	}
 	public String getOrderId() {
 		return orderId;
 	}

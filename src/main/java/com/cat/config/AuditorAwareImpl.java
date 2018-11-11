@@ -1,10 +1,8 @@
 package com.cat.config;
 
 import com.cat.module.entity.User;
-import com.cat.repository.UserRepository;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 

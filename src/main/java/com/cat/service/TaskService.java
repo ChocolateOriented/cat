@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.cat.module.dto.*;
 import com.cat.module.entity.TaskLog;
 
+import com.cat.module.vo.DayRepaymentOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,6 @@ import com.cat.annotation.ClustersSchedule;
 import com.cat.mapper.TaskLogMapper;
 import com.cat.mapper.TaskMapper;
 import com.cat.module.bean.Dict;
-import com.cat.module.dto.AddressBook;
-import com.cat.module.dto.AssignDto;
-import com.cat.module.dto.BaseResponse;
-import com.cat.module.dto.CollectDto;
-import com.cat.module.dto.PageResponse;
-import com.cat.module.dto.TaskDto;
 import com.cat.module.entity.Contact;
 import com.cat.module.entity.Organization;
 import com.cat.module.entity.Task;
@@ -51,8 +47,6 @@ public class TaskService extends BaseService {
 	private TaskLogMapper taskLogMapper;
 	@Autowired
 	private	ScheduledTaskByFixedService scheduledTaskByFixedService;
-	@Autowired
-	private	ScheduledTaskService scheduledTaskService ;
 
 	/**
 	 * 获取任务列表
@@ -104,6 +98,15 @@ public class TaskService extends BaseService {
 	 */
 	public Task findTaskByOrderId(String orderId) {
 		return taskRepository.findTopByOrderId(orderId);
+	}
+
+	/**
+	 * 根据手机号查询最新的一条订单任务
+	 * @param mobile
+	 * @return
+	 */
+	public Task findLastOrderTaskByMobile(String mobile) {
+		return taskRepository.findTopByMobileOrderByOrderIdDesc(mobile);
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class TaskService extends BaseService {
 			Task task = listOrders.get(i);
 			task.setUpdateBy(createBy);
 			
-			int overdueDay =DateUtils.getOverdueDay(task.getRepaymentTime());
+			int overdueDay =DateUtils.getOverdueDay(new Date(), task.getRepaymentTime());
 			
 			//案件从旧催收员名下移出的tasklog
 			TaskLog taskLogOut = new TaskLog(task);
@@ -350,4 +353,42 @@ public class TaskService extends BaseService {
 		}
 	}
 
+	/**
+	 * 获取催收员每天任务次数
+	 * @param collectorId
+	 * @return
+	 */
+	public List<CurrentOrderDto> getTaskCount(String collectorId) {
+		return taskLogMapper.getDayTaskCount(collectorId);
+	}
+
+	public Integer getShouldPayOrder(String collectorId, String status) {
+		return taskLogMapper.getShouldPayOrder(collectorId, status);
+	}
+
+	public PageInfo<DayRepaymentOrderVo> getDayOrderPage(String collectorId, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<TaskLog> list = taskLogMapper.getListOfDayOrder(collectorId);
+		List<DayRepaymentOrderVo> DayRepaymentOrderVo = convertToDayRepaymentOrderVoList(list);
+		PageInfo<DayRepaymentOrderVo> pageInfo = new PageInfo<>(DayRepaymentOrderVo);
+		return pageInfo;
+	}
+
+	private List<DayRepaymentOrderVo> convertToDayRepaymentOrderVoList(List<TaskLog> list) {
+		List<DayRepaymentOrderVo> dayRepaymentOrderVos = new ArrayList<>();
+		list.forEach(item -> {
+			DayRepaymentOrderVo dayRepaymentOrderVo = new DayRepaymentOrderVo();
+			dayRepaymentOrderVo.setOrderId(item.getOrderId());
+			dayRepaymentOrderVo.setOrderStatus(item.getBehaviorStatus().name());
+			dayRepaymentOrderVo.setOverdueDays(item.getOverdueDays() == null ? 0 : item.getOverdueDays());
+			dayRepaymentOrderVo.setRepaymentAmount(item.getRepaymentAmount());
+			dayRepaymentOrderVo.setRepaymentTime(item.getCreateTime());
+			dayRepaymentOrderVos.add(dayRepaymentOrderVo);
+		});
+		return dayRepaymentOrderVos;
+	}
+
+	public Integer getInOrderCount(String collectorId) {
+		return taskLogMapper.getInOrderCount(collectorId);
+	}
 }

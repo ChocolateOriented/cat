@@ -14,6 +14,8 @@ public interface RaptorManager {
 
   @PostMapping(consumes="application/json", value="/coupon/create")
   BaseResponse send( String jsonString);
+  @PostMapping(consumes="application/json", value="/coupon/cancel")
+  BaseResponse cancel( String jsonString);
 
   @GetMapping("/outside/to_black_user")
   Results blacklistCustomer(@RequestParam("userCode") String userCode

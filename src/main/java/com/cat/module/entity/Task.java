@@ -69,7 +69,6 @@ public class Task  extends BaseEntity {
 	private String  collectCycle;//催收队列
 	private String collectRulesType;		// 催收分案策略规则
 	private String  remark;//e
-	
 	private boolean ispayoff;		// 任务所对应的订单是否还清
 
 	public String getBankNo() {
@@ -342,7 +341,7 @@ public class Task  extends BaseEntity {
 		BigDecimal overDueAmount = getOverDueAmount();
 		//订单金额
 		BigDecimal orderAmount = getOrderAmount();
-		return orderAmount.add(overDueAmount).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
+		return orderAmount.add(overDueAmount).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 	}
 
 	/**
@@ -350,9 +349,19 @@ public class Task  extends BaseEntity {
 	 * @return
 	 */
 	public BigDecimal getOverDueAmount() {
-		int betweenDays = DateUtils.getOverdueDay(repaymentTime);
+		int betweenDays = DateUtils.getOverdueDay(new Date(), repaymentTime);
 		BigDecimal overDueAmount = penaltyValue.multiply(new BigDecimal(betweenDays));
-		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount;
+		return overDueAmount.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : overDueAmount.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+	}
+
+	/**
+	 * 延期金额=延期费+利息+逾期费-减免金额
+	 * @return
+	 */
+	public BigDecimal getPostponeAmount() {
+		postponeUnitCharge = postponeUnitCharge == null ? BigDecimal.ZERO : postponeUnitCharge;
+		interestValue = interestValue == null ? BigDecimal.ZERO : interestValue;
+		return postponeUnitCharge.add(interestValue).add(getOverDueAmount()).subtract(reliefAmount == null ? BigDecimal.ZERO : reliefAmount);
 	}
 
 	/**

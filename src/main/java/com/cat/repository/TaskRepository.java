@@ -36,4 +36,6 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
       Date collectTime);
 
   Task findTopByOrderId(String orderId);
+
+  Task findTopByMobileOrderByOrderIdDesc(String mobile);
 }

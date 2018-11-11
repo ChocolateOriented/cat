@@ -34,7 +34,7 @@ public class CallLogVo {
 		}
 		Long hour = callDuration /3600; 
 		Long minute = callDuration % 3600 / 60;
-		Long second = callDuration % 3600 / 60 %60 ;
+		Long second = callDuration % 3600 %60;
 		return hour+"时"+minute+"分"+second+"秒";
 	}
 
